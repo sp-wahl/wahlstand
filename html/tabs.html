@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>wahlstand</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Diagram -->
+	<style>
+	#diagram{
+		width: 800px;
+		margin-left: auto;
+		margin-right:auto;
+		margin-top: 3em;
+		/*border: 1px solid gray;
+		border-radius: 5px;*/
+		padding: 5px;
+		text-align: center;
+	}
+	#content{
+		margin-bottom: 1em;
+	}
+	.slice text {
+		font-size: 10pt;
+		font-family: Arial;
+		font-weight: bold;
+	}
+	.table .list{
+		text-align: right;
+	}
+	
+	.axis text {
+		font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+	}
+	
+	path .domain {
+		font-weight: 100;
+	}
+
+	.x.axis path {
+		display: none;
+	}
+	
+	td, th {
+		text-align: center;
+	}
+	
+	body {
+		padding-top: 70px;
+	}
+	
+	</style>
+	<script src="js/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navi-top">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">wahlstand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navi-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
+			<li class=""><a href="index.html">Übersicht</a></li>
+			<li class="active"><a href="tabs.html">Urnenergebnisse</a></li>
+			<!--<li class=""><a href="einzel.html">Einzelkandidierende</a></li>-->
+		</ul>
+		<button type="button" id="rotatetoggle" class="btn btn-default navbar-btn">Rotation: ja</button>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2015-12-15 21:45:16</small></p>
+	</div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id='content' class='container'>
+
+<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong></div>-->
+
+	<!-- Nav tabs -->
+	<ul id="urnentabs" class="nav nav-pills">
+	<li><a href="#start" data-toggle="tab">Start</a></li>
+	<li><a href="#urne1" data-toggle="tab" class="hasdata">1</a></li>
+<li><a href="#urne2" data-toggle="tab" class="hasdata">2</a></li>
+<li><a href="#urne3" data-toggle="tab" class="hasdata">3</a></li>
+<li><a href="#urne4" data-toggle="tab" class="hasdata">4</a></li>
+<li><a href="#urne5" data-toggle="tab" class="hasdata">5</a></li>
+<li><a href="#urne6" data-toggle="tab" class="hasdata">6</a></li>
+<li><a href="#urne7" data-toggle="tab" class="hasdata">7</a></li>
+<li><a href="#urne8" data-toggle="tab" class="hasdata">8</a></li>
+<li><a href="#urne9" data-toggle="tab" class="hasdata">9</a></li>
+<li><a href="#urne10" data-toggle="tab" class="hasdata">10</a></li>
+<li><a href="#urne11" data-toggle="tab" class="hasdata">11</a></li>
+<li><a href="#urne12" data-toggle="tab" class="hasdata">12</a></li>
+<li><a href="#urne13" data-toggle="tab" class="hasdata">13</a></li>
+<li><a href="#urne14" data-toggle="tab" class="hasdata">14</a></li>
+<li><a href="#urne15" data-toggle="tab" class="hasdata">15</a></li>
+<li><a href="#urne16" data-toggle="tab" class="hasdata">16</a></li>
+<li><a href="#urne17" data-toggle="tab" class="hasdata">17</a></li>
+<li><a href="#urne18" data-toggle="tab" class="hasdata">18</a></li>
+<li><a href="#urne19" data-toggle="tab" class="hasdata">19</a></li>
+<li><a href="#urne20" data-toggle="tab" class="hasdata">20</a></li>
+<li><a href="#urne21" data-toggle="tab" class="hasdata">21</a></li>
+<li><a href="#urne22" data-toggle="tab" class="hasdata">22</a></li>
+<li><a href="#urne23" data-toggle="tab" class="hasdata">23</a></li>
+<li><a href="#urne24" data-toggle="tab" class="hasdata">24</a></li>
+<li><a href="#urne25" data-toggle="tab" class="hasdata">25</a></li>
+
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+	<div class="tab-pane fade in active" id="start">
+		<div class="jumbotron">
+			<h1>Zwischenstand</h1>
+			
+			<div id='diagram'>
+		
+			</div>
+			
+		</div>
+
+	</div>
+	<div class="tab-pane fade" id="urne1">
+		<div class="jumbotron">
+			<h1>Juridicum 1 <small>Urne 1</small> </h1>
+			
+			<svg class="chart1"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>87</td>
+<td>87</td>
+<td>58</td>
+<td>12</td>
+<td>8</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne2">
+		<div class="jumbotron">
+			<h1>Juridicum 2 <small>Urne 2</small> </h1>
+			
+			<svg class="chart2"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>194</td>
+<td>131</td>
+<td>80</td>
+<td>27</td>
+<td>22</td>
+<td>9</td>
+<td>19</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne3">
+		<div class="jumbotron">
+			<h1>Mensa Nassestr. 1 <small>Urne 3</small> </h1>
+			
+			<svg class="chart3"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>31</td>
+<td>18</td>
+<td>4</td>
+<td>13</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne4">
+		<div class="jumbotron">
+			<h1>Mensa Nassestr. 2 <small>Urne 4</small> </h1>
+			
+			<svg class="chart4"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>153</td>
+<td>84</td>
+<td>58</td>
+<td>63</td>
+<td>38</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne5">
+		<div class="jumbotron">
+			<h1>Hauptgebäude 1 <small>Urne 5</small> </h1>
+			
+			<svg class="chart5"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>146</td>
+<td>33</td>
+<td>22</td>
+<td>60</td>
+<td>20</td>
+<td>6</td>
+<td>4</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne6">
+		<div class="jumbotron">
+			<h1>Hauptgebäude 2 <small>Urne 6</small> </h1>
+			
+			<svg class="chart6"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>151</td>
+<td>64</td>
+<td>34</td>
+<td>89</td>
+<td>18</td>
+<td>10</td>
+<td>6</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne7">
+		<div class="jumbotron">
+			<h1>Hauptgebäude 3 <small>Urne 7</small> </h1>
+			
+			<svg class="chart7"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>62</td>
+<td>43</td>
+<td>16</td>
+<td>16</td>
+<td>7</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne8">
+		<div class="jumbotron">
+			<h1>FAZ-Café<br>Hauptgebäude 4 <small>Urne 8</small> </h1>
+			
+			<svg class="chart8"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>30</td>
+<td>29</td>
+<td>5</td>
+<td>15</td>
+<td>5</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne9">
+		<div class="jumbotron">
+			<h1>Historisches Seminar<br>Anglistik <small>Urne 9</small> </h1>
+			
+			<svg class="chart9"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>57</td>
+<td>23</td>
+<td>12</td>
+<td>13</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne10">
+		<div class="jumbotron">
+			<h1>Math.-Nat. 1 <small>Urne 10</small> </h1>
+			
+			<svg class="chart10"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>34</td>
+<td>56</td>
+<td>13</td>
+<td>14</td>
+<td>8</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne11">
+		<div class="jumbotron">
+			<h1>Math.-Nat. 2 <small>Urne 11</small> </h1>
+			
+			<svg class="chart11"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>80</td>
+<td>23</td>
+<td>22</td>
+<td>50</td>
+<td>11</td>
+<td>5</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne12">
+		<div class="jumbotron">
+			<h1>Math.-Nat. 3 <small>Urne 12</small> </h1>
+			
+			<svg class="chart12"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>46</td>
+<td>25</td>
+<td>21</td>
+<td>11</td>
+<td>8</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne13">
+		<div class="jumbotron">
+			<h1>Math.-Nat. 4 <small>Urne 13</small> </h1>
+			
+			<svg class="chart13"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>30</td>
+<td>12</td>
+<td>11</td>
+<td>19</td>
+<td>7</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne14">
+		<div class="jumbotron">
+			<h1>Pop-Mensa 1 <small>Urne 14</small> </h1>
+			
+			<svg class="chart14"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>120</td>
+<td>112</td>
+<td>53</td>
+<td>46</td>
+<td>35</td>
+<td>7</td>
+<td>9</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne15">
+		<div class="jumbotron">
+			<h1>Pop-Mensa 2 <small>Urne 15</small> </h1>
+			
+			<svg class="chart15"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>39</td>
+<td>37</td>
+<td>13</td>
+<td>11</td>
+<td>5</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne16">
+		<div class="jumbotron">
+			<h1>Mathematik <small>Urne 16</small> </h1>
+			
+			<svg class="chart16"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>51</td>
+<td>61</td>
+<td>15</td>
+<td>15</td>
+<td>7</td>
+<td>5</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne17">
+		<div class="jumbotron">
+			<h1>MNL <small>Urne 17</small> </h1>
+			
+			<svg class="chart17"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>78</td>
+<td>60</td>
+<td>45</td>
+<td>18</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne18">
+		<div class="jumbotron">
+			<h1>Venusberg Kantine <small>Urne 18</small> </h1>
+			
+			<svg class="chart18"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>22</td>
+<td>23</td>
+<td>6</td>
+<td>5</td>
+<td>9</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne19">
+		<div class="jumbotron">
+			<h1>Informatik, Sportanlage Römerstraße <small>Urne 19</small> </h1>
+			
+			<svg class="chart19"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>38</td>
+<td>18</td>
+<td>15</td>
+<td>11</td>
+<td>44</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne20">
+		<div class="jumbotron">
+			<h1>ULB <small>Urne 20</small> </h1>
+			
+			<svg class="chart20"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>90</td>
+<td>46</td>
+<td>17</td>
+<td>41</td>
+<td>14</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne21">
+		<div class="jumbotron">
+			<h1>Sprachlernzentrum<br>Medienwissenschaften <small>Urne 21</small> </h1>
+			
+			<svg class="chart21"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>41</td>
+<td>13</td>
+<td>7</td>
+<td>13</td>
+<td>7</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne22">
+		<div class="jumbotron">
+			<h1>Venusberg <small>Urne 22</small> </h1>
+			
+			<svg class="chart22"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>26</td>
+<td>25</td>
+<td>16</td>
+<td>7</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne23">
+		<div class="jumbotron">
+			<h1>Physik<br>Anatomie <small>Urne 23</small> </h1>
+			
+			<svg class="chart23"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>41</td>
+<td>43</td>
+<td>12</td>
+<td>9</td>
+<td>5</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne24">
+		<div class="jumbotron">
+			<h1>Sportanlage Venusberg<br>Psychologie <small>Urne 24</small> </h1>
+			
+			<svg class="chart24"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>36</td>
+<td>10</td>
+<td>5</td>
+<td>16</td>
+<td>11</td>
+<td>5</td>
+<td>4</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+<div class="tab-pane fade" id="urne25">
+		<div class="jumbotron">
+			<h1>Wahlbüro (Briefwahl) <small>Urne 25</small> </h1>
+			
+			<svg class="chart25"></svg>
+			
+			<table class="table table-bordered">
+				<tr><td>2</td>
+<td>2</td>
+<td>2</td>
+<td>8</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr></tr>
+<tr><th>JUSOS</th>
+<th>RCDS</th>
+<th>LHG</th>
+<th>LUST</th>
+<th>PIRATEN</th>
+<th>Ungültig</th>
+<th>Enthaltung</th>
+</tr>
+</table>
+		</div>
+
+	</div>
+
+	</div>
+	
+	<div class="alert alert-danger text-center"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong></div>
+	
+	</div>
+	
+	<script>
+	function hidenotice(){
+		$('#notice-top').fadeOut();
+	}
+	
+	$(function () {
+		var rotate = true;
+		var i = 0;
+		var delay = 7;
+		var interval;
+		
+		$('#urnentabs a:first').tab('show');
+		tabs = $('#urnentabs a.hasdata');
+		
+		$('#rotatetoggle').click(function() {
+			if(rotate){
+				rotate = false;
+				$('#rotatetoggle').html("Rotation: nein");
+				clearInterval(interval);
+			} else {
+				rotate = true;
+				$('#rotatetoggle').html("Rotation: ja");
+				interval = setInterval(function(){
+					if(i >= tabs.length){
+						location.reload();
+					} else {
+						$(tabs[(i++)]).tab('show');
+					}
+				}, delay*1000);
+			}
+		});
+		if(rotate){
+			$('#rotatetoggle').click();
+		}
+		
+		//setTimeout("hidenotice()", 5000);
+		
+		
+	})
+	</script>
+	
+	<!-- Seat Chart -->
+	<script type="text/javascript">
+	
+		function min(a,b) {
+			if(a > b){
+				return b;
+			} else {
+				return a;
+			}
+		}
+	
+		var w = 800, //width
+		h = 380, //height
+		r = 300, //radius
+		color = d3.scale.category20c(); //builtin range of colors
+		
+		data = [{'label': 'JUSOS', 'value': 17, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 11, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 6, 'color': '#ffd200'}, {'label': 'LUST', 'value': 6, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 3, 'color': '#ff9900'}];
+		
+		var vis = d3.select("#diagram")
+			.append("svg:svg") //create the SVG element inside the <body>
+			.attr("id", "diagramsvg")
+			.data([data]) //associate our data with the document
+			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
+			.attr("height", h)
+			.append("svg:g") //make a group to hold our pie chart
+			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
+			.attr("transform", "translate(" + w/2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+		
+		var arc = d3.svg.arc() //this will create <path> elements for us using arc data
+			.outerRadius(r)
+			.innerRadius(2*r/5);
+		
+		var pie = d3.layout.pie() //this will create arc data for us given a list of values
+			.value(function(d) { return d.value; })
+			.sort(null); //we must tell it out to access the value of each element in our data array
+		
+		pie.startAngle(-Math.PI/2);
+		pie.endAngle(Math.PI/2);
+		
+		var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+			.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
+			.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
+			.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+			.attr("class", "slice"); //allow us to style things in the slices (like text)
+						arcs.append("svg:path")
+			.attr("fill", function(d, i) { return d.data.color; } ) //set the color for each slice to be chosen from the color function defined above
+			.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+						arcs.append("svg:text") //add a label to each slice
+			.attr("transform", function(d) { //set the label's origin to the center of the arc
+				//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
+				var c = arc.centroid(d),
+				x = c[0],
+				y = c[1],
+				// pythagorean theorem for hypotenuse
+				h = Math.sqrt(x*x + y*y);
+				return "translate(" + (x/h * r*1.1) +  ',' + (y/h * r*1.1+5) +  ")";
+				})
+			.attr("text-anchor", function(d) { 
+				var c = arc.centroid(d),
+				x = c[0];
+				if(x < -1/4*r) return "end";
+				if(x > 1/4*r) return "start";
+				return "middle";
+				}) //center the text on it's origin
+			.text(function(d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
+			
+		$( window ).resize(function() {
+			var g = $('#diagramsvg');
+			divwidth = $('.jumbotron').width() - 40;
+			svgwidth = g.width();
+			scale = divwidth / svgwidth;
+			g.attr("transform", "scale("+scale+")");
+		});
+	</script>
+	
+	<!-- Bar Charts -->
+	<script>
+	
+	var charts = $("svg[class^='chart']");
+	
+	//alert(charts.length);
+	
+	var data = [[{'label': 'JUSOS', 'value': 87, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 87, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 58, 'color': '#ffd200'}, {'label': 'LUST', 'value': 12, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 8, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 1, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 5, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 194, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 131, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 80, 'color': '#ffd200'}, {'label': 'LUST', 'value': 27, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 22, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 9, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 19, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 31, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 18, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 4, 'color': '#ffd200'}, {'label': 'LUST', 'value': 13, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 3, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 0, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 153, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 84, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 58, 'color': '#ffd200'}, {'label': 'LUST', 'value': 63, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 38, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 8, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 4, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 146, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 33, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 22, 'color': '#ffd200'}, {'label': 'LUST', 'value': 60, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 20, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 6, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 4, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 151, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 64, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 34, 'color': '#ffd200'}, {'label': 'LUST', 'value': 89, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 18, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 10, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 6, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 62, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 43, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 16, 'color': '#ffd200'}, {'label': 'LUST', 'value': 16, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 7, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 2, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 4, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 30, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 29, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 5, 'color': '#ffd200'}, {'label': 'LUST', 'value': 15, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 5, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 1, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 2, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 57, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 23, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 12, 'color': '#ffd200'}, {'label': 'LUST', 'value': 13, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 4, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 2, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 2, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 34, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 56, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 13, 'color': '#ffd200'}, {'label': 'LUST', 'value': 14, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 8, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 2, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 1, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 80, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 23, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 22, 'color': '#ffd200'}, {'label': 'LUST', 'value': 50, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 11, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 5, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 46, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 25, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 21, 'color': '#ffd200'}, {'label': 'LUST', 'value': 11, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 8, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 3, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 30, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 12, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 11, 'color': '#ffd200'}, {'label': 'LUST', 'value': 19, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 7, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 1, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 1, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 120, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 112, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 53, 'color': '#ffd200'}, {'label': 'LUST', 'value': 46, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 35, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 7, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 9, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 39, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 37, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 13, 'color': '#ffd200'}, {'label': 'LUST', 'value': 11, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 5, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 1, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 4, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 51, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 61, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 15, 'color': '#ffd200'}, {'label': 'LUST', 'value': 15, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 7, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 5, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 78, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 60, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 45, 'color': '#ffd200'}, {'label': 'LUST', 'value': 18, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 2, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 3, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 5, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 22, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 23, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 6, 'color': '#ffd200'}, {'label': 'LUST', 'value': 5, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 9, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 2, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 38, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 18, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 15, 'color': '#ffd200'}, {'label': 'LUST', 'value': 11, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 44, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 0, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 90, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 46, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 17, 'color': '#ffd200'}, {'label': 'LUST', 'value': 41, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 14, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 5, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 2, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 41, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 13, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 7, 'color': '#ffd200'}, {'label': 'LUST', 'value': 13, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 7, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 3, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 8, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 26, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 25, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 16, 'color': '#ffd200'}, {'label': 'LUST', 'value': 7, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 1, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 1, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 3, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 41, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 43, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 12, 'color': '#ffd200'}, {'label': 'LUST', 'value': 9, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 5, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 3, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 1, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 36, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 10, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 5, 'color': '#ffd200'}, {'label': 'LUST', 'value': 16, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 11, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 5, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 4, 'color': '#c0c0c0'}], [{'label': 'JUSOS', 'value': 2, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 2, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 2, 'color': '#ffd200'}, {'label': 'LUST', 'value': 8, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 2, 'color': '#ff9900'}, {'label': 'Ungültig', 'value': 0, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}]];
+	
+	for(i=0; i<charts.length; i=i+1){
+	
+	
+		var margin = {top: 20, right: 30, bottom: 30, left: 40},
+		height = 500 - margin.top - margin.bottom,
+		width = min($('.jumbotron:first').width(), 960);
+		width = width - margin.left - margin.right;
+
+		var x = d3.scale.ordinal()
+		.rangeRoundBands([0, width], .1);
+
+		var y = d3.scale.linear()
+		.range([height, 0]);
+		
+
+		var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+		var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left");
+			
+		var chart = d3.select((".chart"+(i+1)))
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+
+		x.domain(data[i].map(function(d) { return d.label; }));
+		var maxval = d3.max(data[i], function(d) { return d.value; });
+		y.domain([0, maxval * 1.1]);
+			chart.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis);
+
+		chart.append("g")
+			.attr("class", "y axis")
+			.call(yAxis);
+
+		chart.selectAll(".bar")
+			.data(data[i])
+		.enter().append("rect")
+			.attr("class", "bar")
+			.attr("x", function(d) { return x(d.label); })
+			.attr("y", function(d) { return y(d.value); })
+			.attr("height", function(d) { return height - y(d.value); })
+			.attr("width", x.rangeBand())
+			.attr("fill", function(d, i) { return d.color; } );
+	}
+	
+	
+	$( window ).resize(function() {
+		for(i=0; i<charts.length; i=i+1){
+			var g = $('.chart'+(i+1));
+			divwidth = $('.jumbotron:visible').width();
+			svgwidth = g.width();
+			scale = divwidth / svgwidth;
+			g.attr("transform", "scale("+scale+")");
+		}
+	});
+
+	function type(d) {
+	d.value = +d.value; // coerce to number
+	return d;
+	}
+
+
+	</script>
+
+</body>
+</html>

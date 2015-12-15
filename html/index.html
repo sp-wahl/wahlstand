@@ -6,10 +6,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Bootstrap -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<!-- Diagram -->
 	<style>
 	#diagram{
-		width: 800px;
+		max-width: 900px;
 		margin-left: auto;
 		margin-right:auto;
 		margin-top: 3em;
@@ -18,69 +20,170 @@
 		padding: 5px;
 		text-align: center;
 	}
-	.container{
+	h1 {
+		text-align: center;
+	}
+	#content{
 		margin-bottom: 1em;
 	}
 	.slice text {
-		font-size: 10pt;
+		font-size: 13pt;
 		font-family: Arial;
 		font-weight: bold;
 	}
 	.table .list{
 		text-align: right;
 	}
+	body { 
+		padding-top: 70px;
+	}
 	</style>
 	<script src="js/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navi-top">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">wahlstand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navi-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
+			<li class="active"><a href="index.html">Übersicht</a></li>
+			<li class=""><a href="tabs.html">Urnenergebnisse</a></li>
+			<!--<li class=""><a href="einzel.html">Einzelkandidierende</a></li>-->
+		</ul>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2015-12-15 21:45:16</small></p>
+	</div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
 <div id='content' class='container'>
-<p class="pull-right">Letzte Aktualisierung: 2014-01-18 16:42:06</p>
-<table class='table table-hover table-condensed'>
-<thead>	<tr><th>Nr.</th><th>Urne</th><th class='list'>GHG</th><th class='list'>RCDS</th><th class='list'>JUSOS</th><th class='list'>LUST</th><th class='list'>PIRATEN</th><th class='list'>LHG</th></tr>
+
+<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>-->
+
+	<h1>Urnenergebnisse</h1>
+
+	<table class='table table-hover table-condensed'>
+<thead>	<tr><th>Nr.</th><th>Urne</th><th class='list'>JUSOS</th><th class='list'>RCDS</th><th class='list'>LHG</th><th class='list'>LUST</th><th class='list'>PIRATEN</th><th class='list'>Ungültig</th><th class='list'>Enthaltung</th></tr>
 </thead>
-<tbody>	<tr class='success'><td>1</td><td>Juridicum 1</td><td class='list'>46</td><td class='list'>129</td><td class='list'>81</td><td class='list'>6</td><td class='list'>2</td><td class='list'>15</td></tr>
-	<tr><td>2</td><td>Juridicum 2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>3</td><td>Mensa Nassestr. 1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>4</td><td>Mensa Nassestr. 2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>5</td><td>Hauptgebäude 1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>6</td><td>Hauptgebäude 2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>7</td><td>Hauptgebäude 3</td><td class='list'>75</td><td class='list'>30</td><td class='list'>38</td><td class='list'>11</td><td class='list'>10</td><td class='list'>7</td></tr>
-	<tr><td>8</td><td>Hauptgebäude 4</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>9</td><td>Historisches Seminar<br>Anglistik</td><td class='list'>39</td><td class='list'>24</td><td class='list'>29</td><td class='list'>7</td><td class='list'>1</td><td class='list'>4</td></tr>
-	<tr><td>10</td><td>Math.-Nat. 1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>11</td><td>Math.-Nat. 2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr class='success'><td>12</td><td>Math.-Nat. 3</td><td class='list'>52</td><td class='list'>27</td><td class='list'>33</td><td class='list'>10</td><td class='list'>9</td><td class='list'>13</td></tr>
-	<tr><td>13</td><td>Math.-Nat. 4</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>14</td><td>Pop-Mensa 1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>15</td><td>Pop-Mensa 2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>16</td><td>Mathematik</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>17</td><td>Abt.Bibl. MNL</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>18</td><td>Venusberg Kantine</td><td class='list'>28</td><td class='list'>19</td><td class='list'>16</td><td class='list'>0</td><td class='list'>3</td><td class='list'>2</td></tr>
-	<tr><td>19</td><td>Psychologisches Inst.<br>Informatik</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-	<tr><td>20</td><td>ULB</td><td class='list'>94</td><td class='list'>44</td><td class='list'>59</td><td class='list'>17</td><td class='list'>5</td><td class='list'>15</td></tr>
-	<tr><td>21</td><td>Sprachlernzentrum</td><td class='list'>50</td><td class='list'>18</td><td class='list'>23</td><td class='list'>4</td><td class='list'>3</td><td class='list'>4</td></tr>
-	<tr class='success'><td>22</td><td>Venusberg<br>Medienwiss.</td><td class='list'>37 </td><td class='list'>31 </td><td class='list'>23 </td><td class='list'>3 </td><td class='list'>2 </td><td class='list'>4</td></tr>
-	<tr><td>23</td><td>Briefwahl</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tbody>	<tr><td>1</td><td>Juridicum 1</td><td class='list'>87</td><td class='list'>87</td><td class='list'>58</td><td class='list'>12</td><td class='list'>8</td><td class='list'>1</td><td class='list'>5</td></tr>
+	<tr><td>2</td><td>Juridicum 2</td><td class='list'>194</td><td class='list'>131</td><td class='list'>80</td><td class='list'>27</td><td class='list'>22</td><td class='list'>9</td><td class='list'>19</td></tr>
+	<tr><td>3</td><td>Mensa Nassestr. 1</td><td class='list'>31</td><td class='list'>18</td><td class='list'>4</td><td class='list'>13</td><td class='list'>3</td><td class='list'>0</td><td class='list'>3</td></tr>
+	<tr><td>4</td><td>Mensa Nassestr. 2</td><td class='list'>153</td><td class='list'>84</td><td class='list'>58</td><td class='list'>63</td><td class='list'>38</td><td class='list'>8</td><td class='list'>4</td></tr>
+	<tr><td>5</td><td>Hauptgebäude 1</td><td class='list'>146</td><td class='list'>33</td><td class='list'>22</td><td class='list'>60</td><td class='list'>20</td><td class='list'>6</td><td class='list'>4</td></tr>
+	<tr><td>6</td><td>Hauptgebäude 2</td><td class='list'>151</td><td class='list'>64</td><td class='list'>34</td><td class='list'>89</td><td class='list'>18</td><td class='list'>10</td><td class='list'>6</td></tr>
+	<tr><td>7</td><td>Hauptgebäude 3</td><td class='list'>62</td><td class='list'>43</td><td class='list'>16</td><td class='list'>16</td><td class='list'>7</td><td class='list'>2</td><td class='list'>4</td></tr>
+	<tr><td>8</td><td>FAZ-Café<br>Hauptgebäude 4</td><td class='list'>30</td><td class='list'>29</td><td class='list'>5</td><td class='list'>15</td><td class='list'>5</td><td class='list'>1</td><td class='list'>2</td></tr>
+	<tr><td>9</td><td>Historisches Seminar<br>Anglistik</td><td class='list'>57</td><td class='list'>23</td><td class='list'>12</td><td class='list'>13</td><td class='list'>4</td><td class='list'>2</td><td class='list'>2</td></tr>
+	<tr><td>10</td><td>Math.-Nat. 1</td><td class='list'>34</td><td class='list'>56</td><td class='list'>13</td><td class='list'>14</td><td class='list'>8</td><td class='list'>2</td><td class='list'>1</td></tr>
+	<tr><td>11</td><td>Math.-Nat. 2</td><td class='list'>80</td><td class='list'>23</td><td class='list'>22</td><td class='list'>50</td><td class='list'>11</td><td class='list'>5</td><td class='list'>3</td></tr>
+	<tr><td>12</td><td>Math.-Nat. 3</td><td class='list'>46</td><td class='list'>25</td><td class='list'>21</td><td class='list'>11</td><td class='list'>8</td><td class='list'>3</td><td class='list'>0</td></tr>
+	<tr><td>13</td><td>Math.-Nat. 4</td><td class='list'>30</td><td class='list'>12</td><td class='list'>11</td><td class='list'>19</td><td class='list'>7</td><td class='list'>1</td><td class='list'>1</td></tr>
+	<tr><td>14</td><td>Pop-Mensa 1</td><td class='list'>120</td><td class='list'>112</td><td class='list'>53</td><td class='list'>46</td><td class='list'>35</td><td class='list'>7</td><td class='list'>9</td></tr>
+	<tr><td>15</td><td>Pop-Mensa 2</td><td class='list'>39</td><td class='list'>37</td><td class='list'>13</td><td class='list'>11</td><td class='list'>5</td><td class='list'>1</td><td class='list'>4</td></tr>
+	<tr><td>16</td><td>Mathematik</td><td class='list'>51</td><td class='list'>61</td><td class='list'>15</td><td class='list'>15</td><td class='list'>7</td><td class='list'>5</td><td class='list'>3</td></tr>
+	<tr><td>17</td><td>MNL</td><td class='list'>78</td><td class='list'>60</td><td class='list'>45</td><td class='list'>18</td><td class='list'>2</td><td class='list'>3</td><td class='list'>5</td></tr>
+	<tr><td>18</td><td>Venusberg Kantine</td><td class='list'>22</td><td class='list'>23</td><td class='list'>6</td><td class='list'>5</td><td class='list'>9</td><td class='list'>2</td><td class='list'>3</td></tr>
+	<tr><td>19</td><td>Informatik, Sportanlage Römerstraße</td><td class='list'>38</td><td class='list'>18</td><td class='list'>15</td><td class='list'>11</td><td class='list'>44</td><td class='list'>0</td><td class='list'>3</td></tr>
+	<tr><td>20</td><td>ULB</td><td class='list'>90</td><td class='list'>46</td><td class='list'>17</td><td class='list'>41</td><td class='list'>14</td><td class='list'>5</td><td class='list'>2</td></tr>
+	<tr><td>21</td><td>Sprachlernzentrum<br>Medienwissenschaften</td><td class='list'>41</td><td class='list'>13</td><td class='list'>7</td><td class='list'>13</td><td class='list'>7</td><td class='list'>3</td><td class='list'>8</td></tr>
+	<tr><td>22</td><td>Venusberg</td><td class='list'>26</td><td class='list'>25</td><td class='list'>16</td><td class='list'>7</td><td class='list'>1</td><td class='list'>1</td><td class='list'>3</td></tr>
+	<tr><td>23</td><td>Physik<br>Anatomie</td><td class='list'>41</td><td class='list'>43</td><td class='list'>12</td><td class='list'>9</td><td class='list'>5</td><td class='list'>3</td><td class='list'>1</td></tr>
+	<tr><td>24</td><td>Sportanlage Venusberg<br>Psychologie</td><td class='list'>36</td><td class='list'>10</td><td class='list'>5</td><td class='list'>16</td><td class='list'>11</td><td class='list'>5</td><td class='list'>4</td></tr>
+	<tr><td>25</td><td>Wahlbüro (Briefwahl)</td><td class='list'>2</td><td class='list'>2</td><td class='list'>2</td><td class='list'>8</td><td class='list'>2</td><td class='list'>0</td><td class='list'>0</td></tr>
+</tbody>
+</table>
+
+	
+	<h1>Gewinne/Verluste <small>(zu 2014)</small></h1>
+
+	<table class='table table-hover table-condensed'>
+<thead>	<tr><th>Nr.</th><th>Urne</th><th class='list'>JUSOS</th><th class='list'>RCDS</th><th class='list'>LHG</th><th class='list'>LUST</th><th class='list'>PIRATEN</th><th class='list'>Ungültig</th><th class='list'>Enthaltung</th></tr>
+</thead>
+<tbody>	<tr><td>1</td><td>Juridicum 1</td><td class='list text-success'>+7</td><td class='list text-danger'>-15</td><td class='list text-success'>+23</td><td class='list text-success'>+7</td><td class='list text-success'>+4</td><td class='list text-success'>+1</td><td class='list text-danger'>-2</td></tr>
+	<tr><td>2</td><td>Juridicum 2</td><td class='list text-success'>+34</td><td class='list text-danger'>-18</td><td class='list text-success'>+23</td><td class='list text-success'>+23</td><td class='list text-success'>+13</td><td class='list text-success'>+8</td><td class='list text-success'>+12</td></tr>
+	<tr><td>3</td><td>Mensa Nassestr. 1</td><td class='list text-success'>+8</td><td class='list text-danger'>-4</td><td class='list text-danger'>-3</td><td class='list text-success'>+6</td><td class='list text-danger'>-1</td><td class='list text-danger'>-1</td><td class='list text-success'>+2</td></tr>
+	<tr><td>4</td><td>Mensa Nassestr. 2</td><td class='list text-success'>+54</td><td class='list text-success'>+18</td><td class='list text-success'>+30</td><td class='list text-success'>+35</td><td class='list text-success'>+23</td><td class='list text-success'>+6</td><td class='list text-success'>+3</td></tr>
+	<tr><td>5</td><td>Hauptgebäude 1</td><td class='list text-success'>+66</td><td class='list text-danger'>-24</td><td class='list text-success'>+14</td><td class='list text-success'>+44</td><td class='list text-success'>+12</td><td class='list text-success'>+6</td><td class='list text-success'>+2</td></tr>
+	<tr><td>6</td><td>Hauptgebäude 2</td><td class='list text-success'>+52</td><td class='list text-success'>+15</td><td class='list text-success'>+24</td><td class='list text-success'>+65</td><td class='list text-success'>+14</td><td class='list text-success'>+10</td><td class='list text-success'>+2</td></tr>
+	<tr><td>7</td><td>Hauptgebäude 3</td><td class='list text-success'>+21</td><td class='list text-success'>+19</td><td class='list text-success'>+6</td><td class='list text-success'>+7</td><td class='list text-success'>+3</td><td class='list text-success'>+1</td><td class='list text-success'>+1</td></tr>
+	<tr><td>8</td><td>FAZ-Café<br>Hauptgebäude 4</td><td class='list text-success'>+6</td><td class='list text-danger'>-21</td><td class='list text-danger'>-1</td><td class='list text-danger'>-3</td><td class='list text-danger'>-2</td><td class='list text-success'>+1</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>9</td><td>Historisches Seminar<br>Anglistik</td><td class='list text-success'>+23</td><td class='list'>0</td><td class='list text-danger'>-1</td><td class='list text-success'>+10</td><td class='list text-danger'>-4</td><td class='list'>0</td><td class='list text-success'>+1</td></tr>
+	<tr><td>10</td><td>Math.-Nat. 1</td><td class='list text-success'>+17</td><td class='list text-success'>+25</td><td class='list text-danger'>-4</td><td class='list text-success'>+9</td><td class='list text-success'>+5</td><td class='list text-success'>+2</td><td class='list text-danger'>-2</td></tr>
+	<tr><td>11</td><td>Math.-Nat. 2</td><td class='list text-success'>+60</td><td class='list text-success'>+8</td><td class='list text-success'>+14</td><td class='list text-success'>+21</td><td class='list text-success'>+1</td><td class='list text-success'>+5</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>12</td><td>Math.-Nat. 3</td><td class='list text-success'>+9</td><td class='list text-success'>+6</td><td class='list text-success'>+1</td><td class='list text-success'>+7</td><td class='list text-danger'>-4</td><td class='list'>0</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>13</td><td>Math.-Nat. 4</td><td class='list text-success'>+1</td><td class='list text-danger'>-1</td><td class='list text-success'>+3</td><td class='list text-success'>+11</td><td class='list text-success'>+3</td><td class='list text-success'>+1</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>14</td><td>Pop-Mensa 1</td><td class='list text-success'>+51</td><td class='list text-success'>+33</td><td class='list text-success'>+8</td><td class='list text-success'>+29</td><td class='list text-success'>+21</td><td class='list text-success'>+6</td><td class='list text-success'>+5</td></tr>
+	<tr><td>15</td><td>Pop-Mensa 2</td><td class='list text-success'>+23</td><td class='list text-success'>+5</td><td class='list text-danger'>-1</td><td class='list text-success'>+8</td><td class='list text-success'>+2</td><td class='list'>0</td><td class='list text-success'>+4</td></tr>
+	<tr><td>16</td><td>Mathematik</td><td class='list text-success'>+28</td><td class='list text-success'>+19</td><td class='list text-danger'>-17</td><td class='list text-success'>+9</td><td class='list text-danger'>-6</td><td class='list'>0</td><td class='list text-danger'>-4</td></tr>
+	<tr><td>17</td><td>MNL</td><td class='list text-success'>+35</td><td class='list text-danger'>-37</td><td class='list text-success'>+3</td><td class='list text-success'>+8</td><td class='list text-danger'>-2</td><td class='list text-success'>+1</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>18</td><td>Venusberg Kantine</td><td class='list text-success'>+12</td><td class='list text-success'>+7</td><td class='list text-success'>+1</td><td class='list text-success'>+4</td><td class='list text-success'>+6</td><td class='list text-success'>+2</td><td class='list text-success'>+3</td></tr>
+	<tr><td>19</td><td>Informatik, Sportanlage Römerstraße</td><td class='list text-success'>+38</td><td class='list text-success'>+18</td><td class='list text-success'>+15</td><td class='list text-success'>+11</td><td class='list text-success'>+44</td><td class='list'>0</td><td class='list text-success'>+3</td></tr>
+	<tr><td>20</td><td>ULB</td><td class='list text-success'>+37</td><td class='list text-danger'>-2</td><td class='list text-success'>+6</td><td class='list text-success'>+21</td><td class='list text-success'>+9</td><td class='list text-success'>+3</td><td class='list text-danger'>-5</td></tr>
+	<tr><td>21</td><td>Sprachlernzentrum<br>Medienwissenschaften</td><td class='list text-success'>+41</td><td class='list text-success'>+13</td><td class='list text-success'>+7</td><td class='list text-success'>+13</td><td class='list text-success'>+7</td><td class='list text-success'>+3</td><td class='list text-success'>+8</td></tr>
+	<tr><td>22</td><td>Venusberg</td><td class='list text-success'>+26</td><td class='list text-success'>+25</td><td class='list text-success'>+16</td><td class='list text-success'>+7</td><td class='list text-success'>+1</td><td class='list text-success'>+1</td><td class='list text-success'>+3</td></tr>
+	<tr><td>23</td><td>Physik<br>Anatomie</td><td class='list text-success'>+24</td><td class='list text-success'>+14</td><td class='list text-success'>+1</td><td class='list text-success'>+3</td><td class='list text-success'>+3</td><td class='list text-success'>+2</td><td class='list text-danger'>-1</td></tr>
+	<tr><td>24</td><td>Sportanlage Venusberg<br>Psychologie</td><td class='list text-success'>+36</td><td class='list text-success'>+10</td><td class='list text-success'>+5</td><td class='list text-success'>+16</td><td class='list text-success'>+11</td><td class='list text-success'>+5</td><td class='list text-success'>+4</td></tr>
+	<tr><td>25</td><td>Wahlbüro (Briefwahl)</td><td class='list text-danger'>-1</td><td class='list text-success'>+1</td><td class='list text-success'>+2</td><td class='list text-success'>+5</td><td class='list text-success'>+2</td><td class='list'>0</td><td class='list'>0</td></tr>
 </tbody>
 </table>
 
 
 	<div id='diagram'>
-	<h3>Derzeitige Sitzverteilung</h3>
+	<h1>Sitzverteilung</h1>
 		
 	</div>
+	
+	<h1>Gesamtergebnis</h1>
+
+	<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
+	<tr><td>Wahlberechtigte</td><td>33581</td><td class="text-success">+1316</td></tr>
+	<tr><td>Abgegebene Stimmen</td><td>4412</td><td class="text-success">+1635</td></tr>
+	<tr><td>Ungültige Stimmen</td><td>85</td><td class="text-success">+63</td></tr>
+	<tr><td>Gültige Stimmen</td><td>4327</td><td class="text-success">+1572</td></tr>
+	<tr><td>Enthaltungen</td><td>99</td><td class="text-success">+34</td></tr>
+	<tr><td>Wahlbeteiligung</td><td>     13.14 %</td><td class="text-danger">     -0.06 </td></tr>
+	</table></div>
+<div class="clearfix"></div>
+
+
+<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
+	<tr><th>Liste</th><th>Stimmen</th><th>+/-</th></tr><tr><td>JUSOS</td><td>1685</td><td class="text-success">+708</td></tr>
+<tr><td>RCDS</td><td>1078</td><td class="text-success">+114</td></tr>
+<tr><td>LHG</td><td>562</td><td class="text-success">+175</td></tr>
+<tr><td>LUST</td><td>602</td><td class="text-success">+376</td></tr>
+<tr><td>PIRATEN</td><td>301</td><td class="text-success">+165</td></tr>
+</table></div>
+<div class="clearfix"></div>
+	
+	<div class="alert alert-danger text-center" id="notice-bottom"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>
 </div>
 
 	<script type="text/javascript">
-		var w = 800, //width
-		h = 280, //height
-		r = 200, //radius
+		var w = 900, //width
+		h = 380, //height
+		r = 300, //radius
 		color = d3.scale.category20c(); //builtin range of colors
 		
-		data = [{'color': '#007419', 'value': 15, 'label': 'GHG'}, {'color': '#1e1e1e', 'value': 12, 'label': 'RCDS'}, {'color': '#bc0000', 'value': 11, 'label': 'JUSOS'}, {'color': '#ffb6b6', 'value': 2, 'label': 'LUST'}, {'color': '#ff9900', 'value': 1, 'label': 'PIRATEN'}, {'color': '#ffd200', 'value': 2, 'label': 'LHG'}];
+		data = [{'label': 'JUSOS', 'value': 17, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 11, 'color': '#1e1e1e'}, {'label': 'LHG', 'value': 6, 'color': '#ffd200'}, {'label': 'LUST', 'value': 6, 'color': '#bf5488'}, {'label': 'PIRATEN', 'value': 3, 'color': '#ff9900'}];
 		
 		var vis = d3.select("#diagram")
 			.append("svg:svg") //create the SVG element inside the <body>
+			.attr("id", "diagramsvg")
 			.data([data]) //associate our data with the document
 			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
 			.attr("height", h)
@@ -126,6 +229,14 @@
 				}) //center the text on it's origin
 			.text(function(d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
 			
+		$( window ).resize(function() {
+			var g = $('#diagramsvg');
+			divwidth = $('#diagram').width() - 40;
+			svgwidth = g.width();
+			scale = divwidth / svgwidth;
+			g.attr("transform", "scale("+scale+")");
+		});
+		
 	</script>
 </body>
 </html>

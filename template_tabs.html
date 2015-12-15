@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>wahlstand</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Diagram -->
+	<style>
+	#diagram{
+		width: 800px;
+		margin-left: auto;
+		margin-right:auto;
+		margin-top: 3em;
+		/*border: 1px solid gray;
+		border-radius: 5px;*/
+		padding: 5px;
+		text-align: center;
+	}
+	#content{
+		margin-bottom: 1em;
+	}
+	.slice text {
+		font-size: 10pt;
+		font-family: Arial;
+		font-weight: bold;
+	}
+	.table .list{
+		text-align: right;
+	}
+	
+	.axis text {
+		font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+	}
+	
+	path .domain {
+		font-weight: 100;
+	}
+
+	.x.axis path {
+		display: none;
+	}
+	
+	td, th {
+		text-align: center;
+	}
+	
+	body {
+		padding-top: 70px;
+	}
+	
+	</style>
+	<script src="js/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navi-top">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">wahlstand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navi-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
+			<li class=""><a href="index.html">Übersicht</a></li>
+			<li class="active"><a href="tabs.html">Urnenergebnisse</a></li>
+			<!--<li class=""><a href="einzel.html">Einzelkandidierende</a></li>-->
+		</ul>
+		<button type="button" id="rotatetoggle" class="btn btn-default navbar-btn">Rotation: ja</button>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: %DATETIME%</small></p>
+	</div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id='content' class='container'>
+
+<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong></div>-->
+
+	<!-- Nav tabs -->
+	<ul id="urnentabs" class="nav nav-pills">
+	<li><a href="#start" data-toggle="tab">Start</a></li>
+	%TABUL%
+	</ul>
+
+	<!-- Tab panes -->
+	<div class="tab-content">
+	<div class="tab-pane fade in active" id="start">
+		<div class="jumbotron">
+			<h1>Zwischenstand</h1>
+			
+			<div id='diagram'>
+		
+			</div>
+			
+		</div>
+
+	</div>
+	%TABCONTENT%
+	</div>
+	
+	<div class="alert alert-danger text-center"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong></div>
+	
+	</div>
+	
+	<script>
+	function hidenotice(){
+		$('#notice-top').fadeOut();
+	}
+	
+	$(function () {
+		var rotate = true;
+		var i = 0;
+		var delay = 7;
+		var interval;
+		
+		$('#urnentabs a:first').tab('show');
+		tabs = $('#urnentabs a.hasdata');
+		
+		$('#rotatetoggle').click(function() {
+			if(rotate){
+				rotate = false;
+				$('#rotatetoggle').html("Rotation: nein");
+				clearInterval(interval);
+			} else {
+				rotate = true;
+				$('#rotatetoggle').html("Rotation: ja");
+				interval = setInterval(function(){
+					if(i >= tabs.length){
+						location.reload();
+					} else {
+						$(tabs[(i++)]).tab('show');
+					}
+				}, delay*1000);
+			}
+		});
+		if(rotate){
+			$('#rotatetoggle').click();
+		}
+		
+		//setTimeout("hidenotice()", 5000);
+		
+		
+	})
+	</script>
+	
+	<!-- Seat Chart -->
+	<script type="text/javascript">
+	
+		function min(a,b) {
+			if(a > b){
+				return b;
+			} else {
+				return a;
+			}
+		}
+	
+		var w = 800, //width
+		h = 380, //height
+		r = 300, //radius
+		color = d3.scale.category20c(); //builtin range of colors
+		
+		data = %DIAGRAMDATA%;
+		
+		var vis = d3.select("#diagram")
+			.append("svg:svg") //create the SVG element inside the <body>
+			.attr("id", "diagramsvg")
+			.data([data]) //associate our data with the document
+			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
+			.attr("height", h)
+			.append("svg:g") //make a group to hold our pie chart
+			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
+			.attr("transform", "translate(" + w/2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+		
+		var arc = d3.svg.arc() //this will create <path> elements for us using arc data
+			.outerRadius(r)
+			.innerRadius(2*r/5);
+		
+		var pie = d3.layout.pie() //this will create arc data for us given a list of values
+			.value(function(d) { return d.value; })
+			.sort(null); //we must tell it out to access the value of each element in our data array
+		
+		pie.startAngle(-Math.PI/2);
+		pie.endAngle(Math.PI/2);
+		
+		var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+			.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
+			.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
+			.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+			.attr("class", "slice"); //allow us to style things in the slices (like text)
+						arcs.append("svg:path")
+			.attr("fill", function(d, i) { return d.data.color; } ) //set the color for each slice to be chosen from the color function defined above
+			.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+						arcs.append("svg:text") //add a label to each slice
+			.attr("transform", function(d) { //set the label's origin to the center of the arc
+				//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
+				var c = arc.centroid(d),
+				x = c[0],
+				y = c[1],
+				// pythagorean theorem for hypotenuse
+				h = Math.sqrt(x*x + y*y);
+				return "translate(" + (x/h * r*1.1) +  ',' + (y/h * r*1.1+5) +  ")";
+				})
+			.attr("text-anchor", function(d) { 
+				var c = arc.centroid(d),
+				x = c[0];
+				if(x < -1/4*r) return "end";
+				if(x > 1/4*r) return "start";
+				return "middle";
+				}) //center the text on it's origin
+			.text(function(d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
+			
+		$( window ).resize(function() {
+			var g = $('#diagramsvg');
+			divwidth = $('.jumbotron').width() - 40;
+			svgwidth = g.width();
+			scale = divwidth / svgwidth;
+			g.attr("transform", "scale("+scale+")");
+		});
+	</script>
+	
+	<!-- Bar Charts -->
+	<script>
+	
+	var charts = $("svg[class^='chart']");
+	
+	//alert(charts.length);
+	
+	var data = %BARDATA%;
+	
+	for(i=0; i<charts.length; i=i+1){
+	
+	
+		var margin = {top: 20, right: 30, bottom: 30, left: 40},
+		height = 500 - margin.top - margin.bottom,
+		width = min($('.jumbotron:first').width(), 960);
+		width = width - margin.left - margin.right;
+
+		var x = d3.scale.ordinal()
+		.rangeRoundBands([0, width], .1);
+
+		var y = d3.scale.linear()
+		.range([height, 0]);
+		
+
+		var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+		var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left");
+			
+		var chart = d3.select((".chart"+(i+1)))
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+
+		x.domain(data[i].map(function(d) { return d.label; }));
+		var maxval = d3.max(data[i], function(d) { return d.value; });
+		y.domain([0, maxval * 1.1]);
+			chart.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis);
+
+		chart.append("g")
+			.attr("class", "y axis")
+			.call(yAxis);
+
+		chart.selectAll(".bar")
+			.data(data[i])
+		.enter().append("rect")
+			.attr("class", "bar")
+			.attr("x", function(d) { return x(d.label); })
+			.attr("y", function(d) { return y(d.value); })
+			.attr("height", function(d) { return height - y(d.value); })
+			.attr("width", x.rangeBand())
+			.attr("fill", function(d, i) { return d.color; } );
+	}
+	
+	
+	$( window ).resize(function() {
+		for(i=0; i<charts.length; i=i+1){
+			var g = $('.chart'+(i+1));
+			divwidth = $('.jumbotron:visible').width();
+			svgwidth = g.width();
+			scale = divwidth / svgwidth;
+			g.attr("transform", "scale("+scale+")");
+		}
+	});
+
+	function type(d) {
+	d.value = +d.value; // coerce to number
+	return d;
+	}
+
+
+	</script>
+
+</body>
+</html>
