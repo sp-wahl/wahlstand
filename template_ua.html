@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>wahlstand</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Diagram -->
+	<style>
+	.diagram{
+		max-width: 900px;
+		margin-left: auto;
+		margin-right:auto;
+		margin-top: 3em;
+		/*border: 1px solid gray;
+		border-radius: 5px;*/
+		padding: 5px;
+		text-align: center;
+	}
+	h1 {
+		text-align: center;
+	}
+	#content{
+		margin-bottom: 1em;
+	}
+	.slice text {
+		font-size: 13pt;
+		font-family: Arial;
+		font-weight: bold;
+	}
+	.table .list{
+		text-align: right;
+	}
+	body { 
+		padding-top: 70px;
+	}
+	
+	h2{
+		font-size: 150%;
+		text-align: center;
+	}
+	h3{
+		font-size: 120%;
+	}
+	</style>
+	<script src="js/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navi-top">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">wahlstand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navi-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
+			<li class=""><a href="index.html">Übersicht</a></li>
+			<li class=""><a href="tabs.html">Urnenergebnisse</a></li>
+			<li class="active"><a href="ua.html">Urabstimmungen</a></li>
+		</ul>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: %DATETIME%</small></p>
+	</div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id='content' class='container'>
+
+<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>-->
+
+	<h1>Urabstimmung</h1>
+	<h2>über die Einführung und Teilfinanzierung der Einführung einer UniCard</h1>
+	
+	<h3>Teilfrage 1</h3>
+	
+	<div id='diagram1' class='diagram'></div>
+	
+	%UA1TABLE%
+	
+	%UA1STATS%
+	
+	<hr>
+	
+	<h3>Teilfrage 2</h3>
+	
+	<div id='diagram2' class='diagram'></div>
+	
+	%UA2TABLE%
+	
+	%UA2STATS%
+	
+	<hr>
+	
+	<h1>Urabstimmung</h1>
+	<h2>über die Mitgliedschaft im Dachverband »freier zusammenschluss von studentInnenschaften«</h2>
+
+	<div id='diagram3' class='diagram'></div>
+	
+	%UA3TABLE%
+	
+	%UA3STATS%
+	
+	
+	<div class="alert alert-danger text-center" id="notice-bottom"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>
+</div>
+
+	<script type="text/javascript">
+		$(function(){
+			var diagram1data = %DIAGRAM1DATA%;
+			var diagram2data = %DIAGRAM2DATA%;
+			var diagram3data = %DIAGRAM3DATA%;
+			
+			makeDiagram('diagram1', diagram1data);
+			makeDiagram('diagram2', diagram2data);
+			makeDiagram('diagram3', diagram3data);
+		});
+		
+		function makeDiagram(diagramid, diagramdata){
+			var w = 900, //width
+			h = 380, //height
+			r = 300, //radius
+			color = d3.scale.category20c(); //builtin range of colors
+			
+			var vis = d3.select("#"+diagramid)
+				.append("svg:svg") //create the SVG element inside the <body>
+				.attr("id", "diagramsvg_"+diagramid)
+				.data([diagramdata]) //associate our data with the document
+				.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
+				.attr("height", h)
+				.append("svg:g") //make a group to hold our pie chart
+				//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
+				.attr("transform", "translate(" + w/2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+			
+			var arc = d3.svg.arc() //this will create <path> elements for us using arc data
+				.outerRadius(r)
+				.innerRadius(2*r/5);
+			
+			var pie = d3.layout.pie() //this will create arc data for us given a list of values
+				.value(function(d) { return d.value; })
+				.sort(null); //we must tell it out to access the value of each element in our data array
+			
+			pie.startAngle(-Math.PI/2);
+			pie.endAngle(Math.PI/2);
+			
+			var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+				.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
+				.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
+				.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+				.attr("class", "slice"); //allow us to style things in the slices (like text)
+							arcs.append("svg:path")
+				.attr("fill", function(d, i) { return d.data.color; } ) //set the color for each slice to be chosen from the color function defined above
+				.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+							arcs.append("svg:text") //add a label to each slice
+				.attr("transform", function(d) { //set the label's origin to the center of the arc
+					//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
+					var c = arc.centroid(d),
+					x = c[0],
+					y = c[1],
+					// pythagorean theorem for hypotenuse
+					h = Math.sqrt(x*x + y*y);
+					return "translate(" + (x/h * r*1.1) +  ',' + (y/h * r*1.1+5) +  ")";
+					})
+				.attr("text-anchor", function(d) { 
+					var c = arc.centroid(d),
+					x = c[0];
+					if(x < -1/4*r) return "end";
+					if(x > 1/4*r) return "start";
+					return "middle";
+					}) //center the text on it's origin
+				.text(function(d, i) { return diagramdata[i].label + " [" + diagramdata[i].value + "]"; }); //get the label from our original data array
+		}
+		
+	</script>
+</body>
+</html>

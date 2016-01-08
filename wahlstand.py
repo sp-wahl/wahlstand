@@ -9,187 +9,227 @@ import re
 import time
 import datetime
 from copy import deepcopy
+import json
+
+config = None
+
+with open('config.json') as jsonfile:
+	config = json.load(jsonfile)
+	
+class Election:
+	def __init__(self):
+		self.bboxes = {}
+		self.lists = {}
+		self.votes = {}
+		
+	def readFromFile(self, filename):
+		with open(filename, 'r') as infile:
+			firstline = infile.readline()
+			listnames = re.split("\t+", firstline.rstrip())
+			
+			
+
+			secondline = infile.readline()
+			colors = re.split("\t+", secondline.rstrip())
+			
+			if(len(listnames) != len(colors)):
+				print("Wrong data format: Not as many colors as lists found. Exiting.")
+				sys.exit(1)
+			
+			listid = 0
+			for i in range(len(listnames)):
+				if(listnames[i][0] != "!"):
+					self.lists[listid] = List(listid, listnames[i], colors[i])
+					listid += 1
+
+			linenr = 2
+			for line in infile:
+				linenr += 1
+				items = re.split("\t+", line.rstrip())
+				
+				if(len(items) < len(self.lists)+2 and len(items) > 1):
+					bboxid = int(items[0])
+					bboxname = items[1]
+					
+					self.bboxes[bboxid] = BallotBox(bboxid, bboxname)
+					self.votes[bboxid] = None
+				elif(len(items) == len(self.lists)+2):
+					bboxid = int(items[0])
+					bboxname = items[1]
+					
+					self.bboxes[bboxid] = BallotBox(bboxid, bboxname)
+					self.votes[bboxid] = {}
+					for i in range(len(items[2:])):
+						self.votes[bboxid][i] = int(items[i+2])
+				else:
+					print("Wrong format at line {0}. Fix or delete {1}.prev and try again".format(linenr, filename))
+					sys.exit(1)
+	def getVoteCount(self):
+		sum = 0
+		for line in self.votes:
+			if(self.votes[line] != None):
+				for listid in self.lists:
+					sum += self.votes[line][listid]
+		return sum
+	
+	def getInvalidCount(self, invalid_key="Ungültig"):
+		invalid_id = 0
+		for listid in self.lists:
+			if(self.lists[listid].name == invalid_key):
+				invalid_id = listid
+		sum = 0
+		for line in self.votes:
+			if(self.votes[line] != None):
+				sum += self.votes[line][invalid_id]
+		return sum
+	
+	def getAbstentionsCount(self, abstentions_key="Enthaltung"):
+		abstentions_id = 0
+		for listid in self.lists:
+			if(self.lists[listid].name == abstentions_key):
+				abstentions_id = listid
+		sum = 0
+		for line in self.votes:
+			if(self.votes[line] != None):
+				sum += self.votes[line][abstentions_id]
+		return sum
+
+class BallotBox:
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+
+class List:
+	def __init__(self, id, name, color):
+		self.id = id
+		self.name = name
+		self.color = color
+		self.auxiliary = False
+		if(name[0] == "#"):
+			self.name = name[1:]
+			self.auxiliary = True
 
 # returns string representation of a HTML table containing the ballot box number,
 # the ballot box name, and the number of votes for each list at each of the ballot
 # boxes.
-def html_table(headers, data, indices, prevdata=None, start=None, end=None):
-	if(prevdata == None):
-		comp = False
-	else:
-		comp = True
-	
-	if(start==None):
-		start = 0
-	if(end==None or end >= len(data)):
-		end = len(data)
-	
-	if indices > len(headers):
-		indices = len(headers)
-	
+def html_table(data):
 	table = ""
 	
 	table += "<table class='table table-hover table-condensed'>\n<thead>"
-	table += "	<tr>"
+	table += "	<tr><td>Nr.</td><td>Urne</td>"
 	
-	i = 0
-	for item in headers:
-		if(i < indices):
-			cls = ""
-		else:
-			cls = " class='list'"
-		i += 1
-		
-		table += "<th{0}>{1}</th>".format(cls, item)
+	for list in data.lists:
+		table += "<th class='list'>{0}</th>".format(data.lists[list].name)
 	table += "</tr>\n</thead>\n<tbody>"
 	
-	keys = list(data.keys())
-	
-	for key in keys[start:end]:
-		line = data[key]
-		if(comp):
-			oldline = prevdata[key]
-			if(len(line) == len(headers) and len(oldline) != len(headers)):
-				table += "	<tr class='success'>"
-			else:
-				table += "	<tr>"
-		else:
-			table += "	<tr>"
-		if(len(line) == len(headers)):
-			i = 0
-			for hi in headers:
-				if(i < indices):
-					cls = ""
-				else:
-					cls = " class='list'"
-				i += 1
-				
-				table += "<td{0}>{1}</td>".format(cls, line[hi])
-		elif(len(line) >= indices):
-			for i in range(indices):
-				table += "<td>{0}</td>".format(line[headers[i]])
-			for i in range(indices, len(headers)):
-				table += "<td> </td>"
-		else:
-			for i in range(len(headers)):
-				table += "<td>ERR</td>"
+	for bboxid in sorted(data.bboxes.keys()):
+		table += "<tr><td>{0.id}</td><td>{0.name}</td>".format(data.bboxes[bboxid])
 		
+		if(data.votes[bboxid] != None):
+			for listid in sorted(data.lists.keys()):
+				table += "<td class='list'>{0}</td>".format(data.votes[bboxid][listid])
+		else:
+			for listid in sorted(data.lists.keys()):
+				table += "<td></td>"
+				
+			
 		table += "</tr>\n"
+		
 	table += "</tbody>\n</table>\n"
 	
 	return table
 
-def html_delta_table(headers, deltadata, indices):	
-	if indices > len(headers):
-		indices = len(headers)
+def html_delta_table(deltadata):
 	
 	table = ""
 	
 	table += "<table class='table table-hover table-condensed'>\n<thead>"
-	table += "	<tr>"
+	table += "	<tr><td>Nr.</td><td>Urne</td>"
 	
-	i = 0
-	for item in headers:
-		if(i < indices):
-			cls = ""
-		else:
-			cls = " class='list'"
-		i += 1
-		
-		table += "<th{0}>{1}</th>".format(cls, item)
+	for list in deltadata.lists:
+		table += "<th class='list'>{0}</th>".format(deltadata.lists[list].name)
 	table += "</tr>\n</thead>\n<tbody>"
 	
-	keys = list(deltadata.keys())
-	
-	for key in keys:
-		line = deltadata[key]
-		table += "	<tr>"
-		if(len(line) == len(headers)):
-			i = 0
-			for hi in headers:
-				item = line[hi]
-				if(i < indices):
-					cls = ""
-				else:
-					cls = " class='list'"
-					item = int(item)
-					if(item < 0):
-						cls = " class='list text-danger'"
-					if(item > 0):
-						cls = " class='list text-success'"
-						item = '+'+str(item)
-				i += 1
-				
-				table += "<td{0}>{1}</td>".format(cls, item)
-		elif(len(line) >= indices):
-			for i in range(indices):
-				table += "<td>{0}</td>".format(line[headers[i]])
-			for i in range(indices, len(headers)):
-				table += "<td> </td>"
-		else:
-			for i in range(len(headers)):
-				table += "<td>ERR</td>"
+	for bboxid in sorted(deltadata.bboxes.keys()):
+		table += "<tr><td>{0.id}</td><td>{0.name}</td>".format(deltadata.bboxes[bboxid])
 		
+		if(deltadata.votes[bboxid] != None):
+			for listid in sorted(deltadata.lists.keys()):
+				colorclass = ""
+				if(deltadata.votes[bboxid][listid] < 0):
+					colorclass = " text-danger"
+				if(deltadata.votes[bboxid][listid] > 0):
+					colorclass = " text-success"
+				table += "<td class='list{1}'>{0}</td>".format(deltadata.votes[bboxid][listid], colorclass)
+		else:
+			for listid in sorted(deltadata.lists.keys()):
+				table += "<td></td>"
+				
+			
 		table += "</tr>\n"
+		
 	table += "</tbody>\n</table>\n"
 	
 	return table
 
-def get_barchart_array(headers, data, colors, indices):
-	lists = headers[indices:]
-	colors = dict(zip(headers[indices:], colors[indices:]))
+def get_barchart_array(data, auxiliary=True):
+	lists = data.lists
 	
 	barlist = list()
 	
-	for key in data:
-		line = data[key]
-		if(len(line) == len(headers)):
+	for bboxid in data.votes:
+		line = data.votes[bboxid]
+		if(line != None):
 			d = list()
-			for listname in lists:
-				d.append({"label" : listname, "value" : int(line[listname]), "color" : colors[listname]})
+			for listid in lists:
+				if(auxiliary or not lists[listid].auxiliary):
+					d.append({"label" : lists[listid].name, "value" : line[listid], "color" : lists[listid].color})
 			barlist.append(d)
 		else:
 			d = list()
 			for listname in lists:
-				d.append({"label" : listname, "value" : 0, "color" : colors[listname]})
+				if(auxiliary or not lists[listid].auxiliary):
+					d.append({"label" : lists[listid].name, "value" : 0, "color" : lists[listid].color})
 			barlist.append(d)
 	return barlist
 
-def get_votetable(headers, data, indices, bbox):
-	lists = headers[indices:]
+def get_votetable(data, bbox):
+	lists = data.lists
 	
-	line = data[bbox]
+	line = data.votes[bbox]
 	
 	table = '''<table class="table table-bordered">
 				<tr>'''
 					
-	if(len(line) == len(headers)):
-		for listname in lists:
-			table += '<td>{0}</td>\n'.format(line[listname])
+	if(line != None):
+		for listid in lists:
+			table += '<td>{0}</td>\n'.format(line[listid])
 		table += '</tr>\n<tr>'
 	else:
-		for listname in lists:
+		for listid in lists:
 			table += '<td>-</td>\n'
 	
 	table += '</tr>\n<tr>' 
-	for listname in lists:
-		table += '<th>{0}</th>\n'.format(listname)
+	for listid in lists:
+		table += '<th>{0}</th>\n'.format(lists[listid].name)
 	
 	table += '</tr>\n</table>'
 	return table
 
 # for each list: calculate total of votes and return in a dictionary
-def bboxsum(headers, data, indices, listcount):
-	lists = headers[indices:indices+listcount]
+def bboxsum(data):
+	
 	
 	bboxsum = {}
-	for list in lists:
-		bboxsum[list] = 0
+	for listid in data.lists:
+		if(not data.lists[listid].auxiliary):
+			bboxsum[listid] = 0
 	
-	for line in data.values():
-		if(len(line) == len(headers)):
-			for list in lists:
-				bboxsum[list] += int(line[list])
+	for bboxid in data.votes:
+		if(data.votes[bboxid] != None):
+			for listid in data.lists:
+				if(not data.lists[listid].auxiliary):
+					bboxsum[listid] += data.votes[bboxid][listid]
 	
 	return bboxsum
 
@@ -250,149 +290,164 @@ def stlgs(bboxsum, seats):
 	return seats
 
 # return a list of dictionaries providing the data for the diagram
-def diagdata(headers, data, colors, indices, listcount, seats):
-	listvotes = bboxsum(headers, data, indices, listcount)
-	seats = stlgs(listvotes, seats)
-	colors = dict(zip(headers[indices:indices+listcount], colors[indices:indices+listcount]))
+def diagdata(data, seats=0, apply_stlgs=True):
+	listvotes = bboxsum(data)
+	if(apply_stlgs):
+		seats = stlgs(listvotes, seats)
+	else:
+		seats = listvotes
 	
 	diagdata = list()
-	for listname in headers[indices:indices+listcount]:
-		diagdata.append({"label" : listname, "value" : seats[listname], "color" : colors[listname]})
+	for listid in data.lists:
+		if(not data.lists[listid].auxiliary):
+			diagdata.append({"label" : data.lists[listid].name, "value" : seats[listid], "color" : data.lists[listid].color})
 	
 	return diagdata
 	
 
-def get_vote_count(data, headers, indices):
-	listheaders = headers[indices:]
-	
-	count = 0
-	for line in data.values():
-		if(len(line) == len(headers)): #data available
-			for header in listheaders:
-				count += int(line[header])
-	return count
+def get_vote_count(data):
+	return data.getVoteCount()
 
 def get_invalid_count(data, invalid_key):
-	count = 0
-	for line in data.values():
-		if(len(line) == len(headers)): #data available
-			count += int(line[invalid_key])
-	return count
+	return data.getInvalidCount(invalid_key)
 
 def get_abstentions_count(data, abstentions_key):
+	return data.getAbstentionsCount(abstentions_key)
+
+def get_list_count(data, list_id):
 	count = 0
-	for line in data.values():
-		if(len(line) == len(headers)): #data available
-			count += int(line[abstentions_key])
+	for bboxid in data.votes:
+		if(data.votes[bboxid] != None):
+			count += data.votes[bboxid][list_id]
 	return count
 
-def get_list_count(data, list_key):
-	count = 0
-	for line in data.values():
-		if(len(line) == len(headers)): #data available
-			count += int(line[list_key])
-	return count
+def get_html_summary_result_table(data, config, deltadata=None, invalid_key="Ungültig", abstentions_key="Enthaltung"):
 
-def get_html_summary_result_table(headers, data, indices, listcount, invalid_key, abstentions_key, deltadata):
-	voters_count = 33581
-	vote_count = get_vote_count(data, headers, indices)
+	voters_count = config['count_voters_current']
+	vote_count = get_vote_count(data)
 	invalid_count = get_invalid_count(data, invalid_key)
 	valid_count = vote_count - invalid_count
 	abstentions_count = get_abstentions_count(data, abstentions_key)
 	participation = vote_count / voters_count * 100
 	
-	d_voters_count = voters_count - 32265
-	d_vote_count = get_vote_count(deltadata, headers, indices)
-	d_invalid_count = get_invalid_count(deltadata, invalid_key)
-	d_valid_count = d_vote_count - d_invalid_count
-	d_abstentions_count = get_abstentions_count(deltadata, abstentions_key)
-	d_participation = participation - 13.2
+	if(deltadata != None):
 	
-	d_voters_count_cls = ''
-	d_vote_count_cls = ''
-	d_invalid_count_cls = ''
-	d_valid_count_cls = ''
-	d_abstentions_count_cls = ''
-	d_participation_cls = ''
-	
-	if(d_voters_count<0):
-		d_voters_count_cls = ' class="text-danger"'
-	elif(d_voters_count>0):
-		d_voters_count_cls = ' class="text-success"'
-		d_voters_count = '+'+str(d_voters_count)
+		d_voters_count = voters_count - config['count_voters_prev']
+		d_vote_count = get_vote_count(deltadata)
+		d_invalid_count = get_invalid_count(deltadata, invalid_key)
+		d_valid_count = d_vote_count - d_invalid_count
+		d_abstentions_count = get_abstentions_count(deltadata, abstentions_key)
+		d_participation = participation - config['participation_prev']
 		
-	if(d_vote_count<0):
-		d_vote_count_cls = ' class="text-danger"'
-	elif(d_vote_count>0):
-		d_vote_count_cls = ' class="text-success"'
-		d_vote_count = '+'+str(d_vote_count)
+		d_voters_count_cls = ''
+		d_vote_count_cls = ''
+		d_invalid_count_cls = ''
+		d_valid_count_cls = ''
+		d_abstentions_count_cls = ''
+		d_participation_cls = ''
 		
-	if(d_invalid_count<0):
-		d_invalid_count_cls = ' class="text-danger"'
-	elif(d_invalid_count>0):
-		d_invalid_count_cls = ' class="text-success"'
-		d_invalid_count = '+'+str(d_invalid_count)
-		
-	if(d_valid_count<0):
-		d_valid_count_cls = ' class="text-danger"'
-	elif(d_valid_count>0):
-		d_valid_count_cls = ' class="text-success"'
-		d_valid_count = '+'+str(d_valid_count)
-		
-	if(d_abstentions_count<0):
-		d_abstentions_count_cls = ' class="text-danger"'
-	elif(d_abstentions_count>0):
-		d_abstentions_count_cls = ' class="text-success"'
-		d_abstentions_count = '+'+str(d_abstentions_count)
-		
-	if(d_participation<0):
-		d_participation_cls = ' class="text-danger"'
-	elif(d_participation>0):
-		d_participation_cls = ' class="text-success"'
-		d_participation = '+'+str(d_participation)
+		if(d_voters_count<0):
+			d_voters_count_cls = ' class="text-danger"'
+		elif(d_voters_count>0):
+			d_voters_count_cls = ' class="text-success"'
+			d_voters_count = '+'+str(d_voters_count)
+			
+		if(d_vote_count<0):
+			d_vote_count_cls = ' class="text-danger"'
+		elif(d_vote_count>0):
+			d_vote_count_cls = ' class="text-success"'
+			d_vote_count = '+'+str(d_vote_count)
+			
+		if(d_invalid_count<0):
+			d_invalid_count_cls = ' class="text-danger"'
+		elif(d_invalid_count>0):
+			d_invalid_count_cls = ' class="text-success"'
+			d_invalid_count = '+'+str(d_invalid_count)
+			
+		if(d_valid_count<0):
+			d_valid_count_cls = ' class="text-danger"'
+		elif(d_valid_count>0):
+			d_valid_count_cls = ' class="text-success"'
+			d_valid_count = '+'+str(d_valid_count)
+			
+		if(d_abstentions_count<0):
+			d_abstentions_count_cls = ' class="text-danger"'
+		elif(d_abstentions_count>0):
+			d_abstentions_count_cls = ' class="text-success"'
+			d_abstentions_count = '+'+str(d_abstentions_count)
+			
+		if(d_participation<0):
+			d_participation_cls = ' class="text-danger"'
+		elif(d_participation>0):
+			d_participation_cls = ' class="text-success"'
+			d_participation = '+'+str(d_participation)
 
 	
 	
-	return '''<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
-	<tr><td>Wahlberechtigte</td><td>{0}</td><td{12}>{6}</td></tr>
-	<tr><td>Abgegebene Stimmen</td><td>{1}</td><td{13}>{7}</td></tr>
-	<tr><td>Ungültige Stimmen</td><td>{2}</td><td{14}>{8}</td></tr>
-	<tr><td>Gültige Stimmen</td><td>{3}</td><td{15}>{9}</td></tr>
-	<tr><td>Enthaltungen</td><td>{4}</td><td{16}>{10}</td></tr>
-	<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11:10.2f} </td></tr>
-	</table></div>\n<div class="clearfix"></div>'''.format(voters_count,
-			  vote_count,
-			  invalid_count,
-			  valid_count,
-			  abstentions_count,
-			  participation,
-			  d_voters_count,
-			  d_vote_count,
-			  d_invalid_count,
-			  d_valid_count,
-			  d_abstentions_count,
-			  d_participation,
-			  d_voters_count_cls,
-			  d_vote_count_cls,
-			  d_invalid_count_cls,
-			  d_valid_count_cls,
-			  d_abstentions_count_cls,
-			  d_participation_cls)
+		return '''<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
+		<tr><td>Wahlberechtigte</td><td>{0}</td><td{12}>{6}</td></tr>
+		<tr><td>Abgegebene Stimmen</td><td>{1}</td><td{13}>{7}</td></tr>
+		<tr><td>Ungültige Stimmen</td><td>{2}</td><td{14}>{8}</td></tr>
+		<tr><td>Gültige Stimmen</td><td>{3}</td><td{15}>{9}</td></tr>
+		<tr><td>Enthaltungen</td><td>{4}</td><td{16}>{10}</td></tr>
+		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11:10.2f} </td></tr>
+		</table></div>\n<div class="clearfix"></div>'''.format(voters_count,
+				vote_count,
+				invalid_count,
+				valid_count,
+				abstentions_count,
+				participation,
+				d_voters_count,
+				d_vote_count,
+				d_invalid_count,
+				d_valid_count,
+				d_abstentions_count,
+				d_participation,
+				d_voters_count_cls,
+				d_vote_count_cls,
+				d_invalid_count_cls,
+				d_valid_count_cls,
+				d_abstentions_count_cls,
+				d_participation_cls)
+	else:
+		return '''<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
+		<tr><td>Wahlberechtigte</td><td>{0}</td></tr>
+		<tr><td>Abgegebene Stimmen</td><td>{1}</td></tr>
+		<tr><td>Ungültige Stimmen</td><td>{2}</td></tr>
+		<tr><td>Gültige Stimmen</td><td>{3}</td></tr>
+		<tr><td>Enthaltungen</td><td>{4}</td></tr>
+		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td></tr>
+		</table></div>\n<div class="clearfix"></div>'''.format(voters_count,
+				vote_count,
+				invalid_count,
+				valid_count,
+				abstentions_count,
+				participation)
 
-def get_html_list_result_table(headers, data, indices, listcount, deltadata):
-	listnames = headers[indices:listcount+indices]
+def get_html_list_result_table(data, deltadata=None):
 	
-	table = '''<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">
-	<tr><th>Liste</th><th>Stimmen</th><th>+/-</th></tr>'''
-	for listname in listnames:
-		delta_value = get_list_count(deltadata, listname)
-		delta_cls = ''
-		if(delta_value<0):
-			delta_cls = ' class="text-danger"'
-		elif(delta_value>0):
-			delta_cls = ' class="text-success"'
-			delta_value = '+'+str(delta_value)
-		table += '<tr><td>{0}</td><td>{1}</td><td{3}>{2}</td></tr>\n'.format(listname, get_list_count(data, listname), delta_value, delta_cls)
+	table = '<div class="col-md-6 col-md-offset-3"><table class="table table-bordered table-hover">'
+	
+	
+	if(deltadata != None):
+		table += '<tr><th>Liste</th><th>Stimmen</th><th>+/-</th></tr>'
+	else:
+		table += '<tr><th>Option</th><th>Stimmen</th></tr>'
+		
+	for listid in data.lists:
+		listname = data.lists[listid].name
+		if(deltadata != None):
+			delta_value = get_list_count(deltadata, listid)
+			delta_cls = ''
+			if(delta_value<0):
+				delta_cls = ' class="text-danger"'
+			elif(delta_value>0):
+				delta_cls = ' class="text-success"'
+				delta_value = '+'+str(delta_value)
+		table += '<tr><td>{0}</td><td>{1}</td>'.format(listname, get_list_count(data, listid))
+		if(deltadata != None):
+			table += '<td{1}>{0}</td>'.format(delta_value, delta_cls)
+		table += '</tr>\n'
 	table += '</table></div>\n<div class="clearfix"></div>'
 	
 	return table
@@ -400,10 +455,10 @@ def get_html_list_result_table(headers, data, indices, listcount, deltadata):
 def data_delta(current, last):
 	delta = deepcopy(current)
 	
-	for linekey in delta:
-		for key in delta[linekey]:
-			if(key not in ('Urne', 'Nr.')):
-				delta[linekey][key] = int(delta[linekey][key]) - int(last[linekey][key])
+	for linekey in delta.votes:
+		if(delta.votes[linekey] != None):
+			for key in delta.votes[linekey]:
+				delta.votes[linekey][key] = int(delta.votes[linekey][key]) - int(last.votes[linekey][key])
 	
 	return delta
 	
@@ -415,10 +470,7 @@ def data_delta(current, last):
 #
 # COMMAND LINE PARAMETERS
 #
-if(len(sys.argv) == 2):
-	filename = sys.argv[1]
-else:
-	filename = "currentelection.csv"
+filename = config['file_sp_current']
 
 if(not os.path.isfile(filename)):
 	print("File {0} not found!".format(filename))
@@ -433,33 +485,9 @@ if(not os.path.isfile(filename+".prev")):
 	prevdata = None
 else:
 	print("Reading {0}".format(filename+".prev"))
-
-	fobj = open(filename+".prev", "r")
-
-	# extract list names
-	firstline = fobj.readline()
-	headers = re.split("\t+", firstline.rstrip())
-
-	secondline = fobj.readline()
-
-
-	prevdata = {} # this holds all data from previous run
-
-	linenr = 1
-	for line in fobj:
-		linenr += 1
-		items = re.split("\t+", line.rstrip())
-		
-		if(len(items) < len(headers) and len(items) > 1):
-			prevdata[int(items[0])] = {headers[0] : items[0], headers[1] : items[1]}
-		elif(len(items) == len(headers)):
-			prevdata[int(items[0])] = dict(zip(headers, items))
-		else:
-			print("Wrong format at line {0}. Fix or delete {1}.prev and try again".format(linenr, filename))
-			fobj.close()
-			sys.exit(1)
-
-	fobj.close()
+	
+	prevdata = Election()
+	prevdata.readFromFile(filename+".prev")
 
 #
 # CREATE DATASTRUCTURE FROM [filename]
@@ -467,80 +495,22 @@ else:
 #
 print("Reading {0}".format(filename))
 
-fobj = open(filename, "r")
-oldfile = open(filename+".prev", "w")
-
-# extract list names
-firstline = fobj.readline()
-headers = re.split("\t+", firstline.rstrip())
-oldfile.write(firstline)
-
-# extract diagram colors of lists
-secondline = fobj.readline()
-colors = re.split("\t+", secondline.rstrip())
-oldfile.write(secondline)
-
-
-data = {} # this holds all the current data
-
-linenr = 1
-for line in fobj:
-	oldfile.write(line)
-	linenr += 1
-	items = re.split("\t+", line.rstrip())
-	
-	if(len(items) < len(headers) and len(items) > 1): # no data for this ballot box yet
-		data[int(items[0])] = {headers[0] : items[0], headers[1] : items[1]}
-		
-	elif(len(items) == len(headers)): # regular line with data for every list
-		data[int(items[0])] = dict(zip(headers, items))
-		
-	else:
-		print("Wrong format at line {0}".format(linenr))
-		fobj.close()
-		oldfile.close()
-		sys.exit(1)
-
-fobj.close()
-oldfile.close()
+data = Election()
+data.readFromFile(filename)
 
 #	
 # CREATE DATASTRUCTURE FROM lastelection.csv IF PRESENT
 # AND STORE AS prevdata
 #
-lastelectionfile = 'lastelection.csv'
+lastelectionfile = config['file_sp_prev']
 
 if(not os.path.isfile(lastelectionfile)):
 	lastelectiondata = None
 else:
 	print("Reading {0}".format(lastelectionfile))
 
-	fobj = open(lastelectionfile, "r")
-
-	# extract list names
-	firstline = fobj.readline()
-	headers = re.split("\t+", firstline.rstrip())
-
-	secondline = fobj.readline()
-
-
-	lastelectiondata = {} # this holds all data from last election
-
-	linenr = 1
-	for line in fobj:
-		linenr += 1
-		items = re.split("\t+", line.rstrip())
-		
-		if(len(items) < len(headers) and len(items) > 1):
-			lastelectiondata[int(items[0])] = {headers[0] : items[0], headers[1] : items[1]}
-		elif(len(items) == len(headers)):
-			lastelectiondata[int(items[0])] = dict(zip(headers, items))
-		else:
-			print("Wrong format at line {0}. Fix or delete {1}.prev and try again".format(linenr, filename))
-			fobj.close()
-			sys.exit(1)
-
-	fobj.close()
+	lastelectiondata = Election()
+	lastelectiondata.readFromFile(lastelectionfile)
 
 deltadata = data_delta(data, lastelectiondata)
 
@@ -549,15 +519,15 @@ deltadata = data_delta(data, lastelectiondata)
 #
 print("Writing single html file from template")
 
-content = html_table(headers, data, 2, prevdata)
+content = html_table(data)
 
-deltatable = html_delta_table(headers, deltadata, 2)
+deltatable = html_delta_table(deltadata)
 
-summary = get_html_summary_result_table(headers, data, 2, 5, "Ungültig", "Enthaltung", deltadata)
+summary = get_html_summary_result_table(data, config, deltadata, "Ungültig", "Enthaltung" )
 summary += "\n\n\n"
-summary += get_html_list_result_table(headers, data, 2, 5, deltadata)
+summary += get_html_list_result_table(data, deltadata)
 
-diagramdata = diagdata(headers, data, colors, 2, 5, 43)
+diagramdata = diagdata(data, 43)
 
 template = open("template_index.html", "r")
 htmlfile = open("html/index.html", "w")
@@ -582,7 +552,7 @@ tabul = '<li><a href="#urne{0}" data-toggle="tab"{1}>{0}</a></li>'
 
 tabcontent = '''<div class="tab-pane fade" id="urne{0}">
 		<div class="jumbotron">
-			<h1>{1} <small>Urne {0}</small> {3}</h1>
+			<h1>{1} <small>Urne {0}</small></h1>
 			
 			<svg class="chart{0}"></svg>
 			
@@ -595,28 +565,22 @@ tabcontent = '''<div class="tab-pane fade" id="urne{0}">
 tabul_all = ''
 tabcontent_all = ''
 
-for key in data:
-	line = data[key]
-	votetable = get_votetable(headers, data, 2, key)
+for bboxid in data.bboxes:
+	bbox = data.bboxes[bboxid]
+	votetable = get_votetable(data, bboxid)
 	
-	isnewlabel = ''
-	if(prevdata != None):
-		currline = data[key]
-		oldline  = prevdata[key] 
-		if(len(currline) != len(oldline)):
-			isnewlabel = ' <span class="label label-primary">Neu</span>'
 	
-	tabcontent_all += (tabcontent.format(key, line[headers[1]], votetable, isnewlabel) + "\n")
+	tabcontent_all += (tabcontent.format(bbox.id, bbox.name, votetable) + "\n")
 	
-	if(len(line) == len(headers)):
+	if(data.votes[bboxid] != None):
 		hasdataclass = ' class="hasdata"'
 	else:
 		hasdataclass = '';
 		
-	tabul_all += (tabul.format(key, hasdataclass) + "\n")
+	tabul_all += (tabul.format(bbox.id, hasdataclass) + "\n")
 	
 	
-bardata = get_barchart_array(headers, data, colors, 2)
+bardata = get_barchart_array(data)
 
 template = open("template_tabs.html", "r")
 htmlfile = open("html/tabs.html", "w")
@@ -633,5 +597,69 @@ for line in template:
 template.close()
 htmlfile.close()
 
+def get_ua_stat_table(data):
+	table = "<table><tr>"
+	for listid in sorted(data.lists):
+		list = data.lists[listid]
+		table += "<th>{0}</th>".format(list.name)
+	table += "</tr>\n<tr>"
+	
+	for listid in sorted(data.lists):
+		list = data.lists[listid]
+		table += "<td>{0}</td>".format(data.votes.name)
+	
+	table += "</table>"
+
+#
+# CREATE UA HTML OUTPUT FROM TEMPLATEs
+#
+print("Writing single html file from UA template")
+
+uatable = []
+uastats = []
+diagramdata = []
+for uafile in config['files_ua']:
+	uadata = Election()
+	uadata.readFromFile(uafile)
+	
+	table = get_html_summary_result_table(uadata, config, None, "Ungültig", "Enthaltung" )
+	uatable.append(table)
+
+	stats = get_html_list_result_table(uadata, None)
+	uastats.append(stats)
+	
+	
+	diagramdata.append(diagdata(uadata, apply_stlgs=False))
+
+
+ua1table = uatable[0]
+ua2table = uatable[1]
+ua3table = uatable[2]
+ua1stats = uastats[0]
+ua2stats = uastats[1]
+ua3stats = uastats[2]
+diagram1data = str(diagramdata[0])
+diagram2data = str(diagramdata[1])
+diagram3data = str(diagramdata[2])
+
+template = open("template_ua.html", "r")
+htmlfile = open("html/ua.html", "w")
+
+for line in template:
+	# replace placeholders
+	line = line.replace("%UA1TABLE%", ua1table)
+	line = line.replace("%UA1STATS%", ua1stats)
+	line = line.replace("%DIAGRAM1DATA%", diagram1data)
+	line = line.replace("%UA2TABLE%", ua2table)
+	line = line.replace("%UA2STATS%", ua2stats)
+	line = line.replace("%DIAGRAM2DATA%", diagram2data)
+	line = line.replace("%UA3TABLE%", ua3table)
+	line = line.replace("%UA3STATS%", ua3stats)
+	line = line.replace("%DIAGRAM3DATA%", diagram3data)
+	line = line.replace("%DATETIME%", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
+	htmlfile.write(line)
+	
+template.close()
+htmlfile.close()
 
 sys.exit(0)
