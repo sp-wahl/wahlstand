@@ -63,8 +63,9 @@
 			<li class="active"><a href="index.html">Übersicht</a></li>
 			<li class=""><a href="tabs.html">Urnenergebnisse</a></li>
 			<li class=""><a href="ua.html">Urabstimmungen</a></li>
+			<li class=""><a href="./raw/">raw</a></li>
 		</ul>
-		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2016-01-09 00:15:47</small></p>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2016-01-09 23:37:14</small></p>
 	</div>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -183,7 +184,7 @@
 		r = 300, //radius
 		color = d3.scale.category20c(); //builtin range of colors
 		
-		data = [{'value': 7, 'color': '#bc0000', 'label': 'JUSOS'}, {'value': 7, 'color': '#1e1e1e', 'label': 'RCDS'}, {'value': 6, 'color': '#bf5488', 'label': 'LUST'}, {'value': 5, 'color': '#ffd200', 'label': 'LHG'}, {'value': 4, 'color': '#ff9900', 'label': 'PHG'}, {'value': 3, 'color': '#ff0093', 'label': 'LISTE'}, {'value': 2, 'color': '#00a417', 'label': 'GHG'}, {'value': 9, 'color': '#6565bd', 'label': 'KULT'}];
+		data = [{'label': 'JUSOS', 'value': 7, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 7, 'color': '#1e1e1e'}, {'label': 'LUST', 'value': 6, 'color': '#bf5488'}, {'label': 'LHG', 'value': 5, 'color': '#ffd200'}, {'label': 'PHG', 'value': 4, 'color': '#ff9900'}, {'label': 'LISTE', 'value': 3, 'color': '#ff0093'}, {'label': 'GHG', 'value': 2, 'color': '#00a417'}, {'label': 'KULT', 'value': 9, 'color': '#6565bd'}];
 		
 		var vis = d3.select("#diagram")
 			.append("svg:svg") //create the SVG element inside the <body>

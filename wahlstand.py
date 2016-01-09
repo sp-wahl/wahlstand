@@ -10,6 +10,7 @@ import time
 import datetime
 from copy import deepcopy
 import json
+import shutil
 
 config = None
 
@@ -108,6 +109,16 @@ class List:
 		if(name[0] == "#"):
 			self.name = name[1:]
 			self.auxiliary = True
+
+def copy_files_raw(config):
+	files = []
+	files.append(config['file_sp_current'])
+	for f in config['files_ua']:
+		files.append(f)
+	
+	for f in files:
+		shutil.copy(f, "./html/raw/")
+	
 
 # returns string representation of a HTML table containing the ballot box number,
 # the ballot box name, and the number of votes for each list at each of the ballot
@@ -661,5 +672,7 @@ for line in template:
 	
 template.close()
 htmlfile.close()
+
+copy_files_raw(config)
 
 sys.exit(0)
