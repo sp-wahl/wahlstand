@@ -90,6 +90,7 @@
 	<h3>Teilfrage 1</h3>
 	
 	<div id='diagram1' class='diagram'></div>
+	<p class="text-right"><small><a id="dldiagram1">Diagramm als svg-Datei herunterladen</a></small></p>
 	
 	%UA1TABLE%
 	
@@ -100,6 +101,7 @@
 	<h3>Teilfrage 2</h3>
 	
 	<div id='diagram2' class='diagram'></div>
+	<p class="text-right"><small><a id="dldiagram2">Diagramm als svg-Datei herunterladen</a></small></p>
 	
 	%UA2TABLE%
 	
@@ -111,6 +113,7 @@
 	<h2>über die Mitgliedschaft im Dachverband »freier zusammenschluss von studentInnenschaften«</h2>
 
 	<div id='diagram3' class='diagram'></div>
+	<p class="text-right"><small><a id="dldiagram3">Diagramm als svg-Datei herunterladen</a></small></p>
 	
 	%UA3TABLE%
 	
@@ -121,6 +124,15 @@
 </div>
 
 	<script type="text/javascript">
+		
+		
+		function setdownload(id, text, name, type) {
+			var a = document.getElementById(id);
+			var file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+		}
+	
 		$(function(){
 			var diagram1data = %DIAGRAM1DATA%;
 			var diagram2data = %DIAGRAM2DATA%;
@@ -184,6 +196,10 @@
 					return "middle";
 					}) //center the text on it's origin
 				.text(function(d, i) { return diagramdata[i].label + " [" + diagramdata[i].value + "]"; }); //get the label from our original data array
+			
+			setdownload("dldiagram1", $('#diagram1').html(), "ua2016-uc-1.svg", "text/svg");
+			setdownload("dldiagram2", $('#diagram2').html(), "ua2016-uc-1.svg", "text/svg");
+			setdownload("dldiagram3", $('#diagram3').html(), "ua2016-fzs.svg", "text/svg");
 		}
 		
 	</script>

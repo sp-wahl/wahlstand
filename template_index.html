@@ -84,10 +84,9 @@
 
 	%DELTATABLE%
 
-	<div id='diagram'>
 	<h1>Sitzverteilung</h1>
-		
-	</div>
+	<div id='diagram'></div>
+	<p class="text-right"><small><a id="dldiagram">Diagramm als svg-Datei herunterladen</a></small></p>
 	
 	<h1>Gesamtergebnis</h1>
 
@@ -97,6 +96,14 @@
 </div>
 
 	<script type="text/javascript">
+		
+		function setdownload(text, name, type) {
+			var a = document.getElementById("dldiagram");
+			var file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+		}
+		
 		var w = 900, //width
 		h = 380, //height
 		r = 300, //radius
@@ -159,6 +166,8 @@
 			scale = divwidth / svgwidth;
 			g.attr("transform", "scale("+scale+")");
 		});
+		
+		setdownload($('#diagram').html(), "spwahl2016diagram.svg", "text/svg");
 		
 	</script>
 </body>
