@@ -1,27 +1,27 @@
-!Nr.	!Urne						JA		NEIN		#Enthaltung	#Ungültig
--	-						#009700		#cc000a		#b3b3b3		#011338
-1	Juridicum 1					750		700		600		500	
-2	Juridicum 2												
-3	Mensa 1 Nassestraße											
-4	Mensa 2 Nassestraße											
-5	Hauptgebäude 1												
-6	Hauptgebäude 2												
-7	Hauptgebäude 3												
-8	FAZ-Café<br>Hauptgebäude 4										
-9	Anglistik<br>Kaiserstraße										
-10	Math.-Nat. 1												
-11	Math.-Nat. 2												
-12	Math.-Nat. 3												
-13	Math.-Nat. 4												
-14	Pop-Mensa												
-15	Anatomie												
-16	Mathematik												
-17	MNL													
-18	Kantine Venusberg											
-19	Informatik, Sportanlage Römerstraße									
-20	ULB													
-21	Sprachlernzentrum<br>Medienwissenschaften								
-22	Venusberg												
-23	Physik<br>IGW												
-24	Psychologie												
-25	Wahlbüro (Briefwahl)											
+!Nr.	!Urne						JA		NEIN		Enthaltung	#Ungültig
+-	-						#00b700		#0a30cc		#b3b3b3		#011338
+1	Juridicum 1					325		71		61		3
+2	Juridicum 2					495		91		112		4
+3	Mensa 1 Nassestraße				121		42		30		3
+4	Mensa 2 Nassestraße				295		104		78		11
+5	Hauptgebäude 1					243		78		75		4
+6	Hauptgebäude 2					249		93		82		5
+7	Hauptgebäude 3					152		40		37		1
+8	FAZ-Café<br>Hauptgebäude 4			64		18		13		0
+9	Anglistik<br>Kaiserstraße			107		14		28		1
+10	Math.-Nat. 1					103		24		32		0
+11	Math.-Nat. 2					152		54		55		2
+12	Math.-Nat. 3					65		13		17		0
+13	Math.-Nat. 4					124		15		26		2
+14	Pop-Mensa					236		45		58		2
+15	Anatomie					226		33		56		1
+16	Mathematik					122		41		41		3
+17	MNL						251		75		73		4
+18	Kantine Venusberg				78		9		11		0
+19	Informatik, Sportanlage Römerstraße		107		35		40		3
+20	ULB						167		53		40		2
+21	Sprachlernzentrum<br>Medienwissenschaften	113		34		21		4
+22	Venusberg					127		25		19		1
+23	Physik<br>IGW					113		20		25		0
+24	Psychologie					67		31		25		1
+25	Wahlbüro (Briefwahl)				36		12		7		0

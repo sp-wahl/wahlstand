@@ -65,6 +65,14 @@ class Election:
 				else:
 					print("Wrong format at line {0}. Fix or delete {1}.prev and try again".format(linenr, filename))
 					sys.exit(1)
+	
+	def getCountedBBoxCount(self):
+		count = 0
+		for boxid in self.votes:
+			if(self.votes[boxid] != None):
+				count += 1
+		return count
+	
 	def getVoteCount(self):
 		sum = 0
 		for line in self.votes:
@@ -118,6 +126,9 @@ def copy_files_raw(config):
 	
 	for f in files:
 		shutil.copy(f, "./html/raw/")
+	
+	with open("./html/raw/timestamp", "w") as f:
+		print(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), file=f)
 	
 
 # returns string representation of a HTML table containing the ballot box number,
@@ -198,7 +209,7 @@ def get_barchart_array(data, auxiliary=True):
 			barlist.append(d)
 		else:
 			d = list()
-			for listname in lists:
+			for listid in lists:
 				if(auxiliary or not lists[listid].auxiliary):
 					d.append({"label" : lists[listid].name, "value" : 0, "color" : lists[listid].color})
 			barlist.append(d)
@@ -391,7 +402,7 @@ def get_html_summary_result_table(data, config, deltadata=None, invalid_key="Ung
 			d_participation_cls = ' class="text-danger"'
 		elif(d_participation>0):
 			d_participation_cls = ' class="text-success"'
-			d_participation = '+'+str(d_participation)
+			d_participation = '+'+"{0:10.2f}".format(d_participation)
 
 	
 	
@@ -401,7 +412,7 @@ def get_html_summary_result_table(data, config, deltadata=None, invalid_key="Ung
 		<tr><td>Ungültige Stimmen</td><td>{2}</td><td{14}>{8}</td></tr>
 		<tr><td>Gültige Stimmen</td><td>{3}</td><td{15}>{9}</td></tr>
 		<tr><td>Enthaltungen</td><td>{4}</td><td{16}>{10}</td></tr>
-		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11:10.2f} </td></tr>
+		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11}</td></tr>
 		</table></div>\n<div class="clearfix"></div>'''.format(voters_count,
 				vote_count,
 				invalid_count,
@@ -565,7 +576,7 @@ tabcontent = '''<div class="tab-pane fade" id="urne{0}">
 		<div class="jumbotron">
 			<h1>{1} <small>Urne {0}</small></h1>
 			
-			<svg class="chart{0}"></svg>
+			<svg id="chart{0}"></svg>
 			
 			{2}
 		</div>
@@ -624,54 +635,63 @@ def get_ua_stat_table(data):
 #
 # CREATE UA HTML OUTPUT FROM TEMPLATEs
 #
-print("Writing single html file from UA template")
+#print("Writing single html file from UA template")
 
-uatable = []
-uastats = []
-diagramdata = []
-for uafile in config['files_ua']:
-	uadata = Election()
-	uadata.readFromFile(uafile)
+#uatable = []
+#uastats = []
+#uacounted = []
+#diagramdata = []
+#for uafile in config['files_ua']:
+	#uadata = Election()
+	#uadata.readFromFile(uafile)
 	
-	table = get_html_summary_result_table(uadata, config, None, "Ungültig", "Enthaltung" )
-	uatable.append(table)
+	#table = get_html_summary_result_table(uadata, config, None, "Ungültig", "Enthaltung" )
+	#uatable.append(table)
 
-	stats = get_html_list_result_table(uadata, None)
-	uastats.append(stats)
+	#stats = get_html_list_result_table(uadata, None)
+	#uastats.append(stats)
 	
 	
-	diagramdata.append(diagdata(uadata, apply_stlgs=False))
-
-
-ua1table = uatable[0]
-ua2table = uatable[1]
-ua3table = uatable[2]
-ua1stats = uastats[0]
-ua2stats = uastats[1]
-ua3stats = uastats[2]
-diagram1data = str(diagramdata[0])
-diagram2data = str(diagramdata[1])
-diagram3data = str(diagramdata[2])
-
-template = open("template_ua.html", "r")
-htmlfile = open("html/ua.html", "w")
-
-for line in template:
-	# replace placeholders
-	line = line.replace("%UA1TABLE%", ua1table)
-	line = line.replace("%UA1STATS%", ua1stats)
-	line = line.replace("%DIAGRAM1DATA%", diagram1data)
-	line = line.replace("%UA2TABLE%", ua2table)
-	line = line.replace("%UA2STATS%", ua2stats)
-	line = line.replace("%DIAGRAM2DATA%", diagram2data)
-	line = line.replace("%UA3TABLE%", ua3table)
-	line = line.replace("%UA3STATS%", ua3stats)
-	line = line.replace("%DIAGRAM3DATA%", diagram3data)
-	line = line.replace("%DATETIME%", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
-	htmlfile.write(line)
+	#diagramdata.append(diagdata(uadata, apply_stlgs=False))
 	
-template.close()
-htmlfile.close()
+	#uacounted.append("{0}/{1}".format(uadata.getCountedBBoxCount(), len(uadata.bboxes)))
+
+
+#ua1table = uatable[0]
+#ua2table = uatable[1]
+#ua3table = uatable[2]
+#ua1stats = uastats[0]
+#ua2stats = uastats[1]
+#ua3stats = uastats[2]
+#ua1counted = uacounted[0]
+#ua2counted = uacounted[1]
+#ua3counted = uacounted[2]
+#diagram1data = str(diagramdata[0])
+#diagram2data = str(diagramdata[1])
+#diagram3data = str(diagramdata[2])
+
+#template = open("template_ua.html", "r")
+#htmlfile = open("html/ua.html", "w")
+
+#for line in template:
+	## replace placeholders
+	#line = line.replace("%UA1TABLE%", ua1table)
+	#line = line.replace("%UA1STATS%", ua1stats)
+	#line = line.replace("%UA1COUNTED%", ua1counted)
+	#line = line.replace("%DIAGRAM1DATA%", diagram1data)
+	#line = line.replace("%UA2TABLE%", ua2table)
+	#line = line.replace("%UA2STATS%", ua2stats)
+	#line = line.replace("%UA2COUNTED%", ua2counted)
+	#line = line.replace("%DIAGRAM2DATA%", diagram2data)
+	#line = line.replace("%UA3TABLE%", ua3table)
+	#line = line.replace("%UA3STATS%", ua3stats)
+	#line = line.replace("%UA3COUNTED%", ua3counted)
+	#line = line.replace("%DIAGRAM3DATA%", diagram3data)
+	#line = line.replace("%DATETIME%", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
+	#htmlfile.write(line)
+	
+#template.close()
+#htmlfile.close()
 
 copy_files_raw(config)
 

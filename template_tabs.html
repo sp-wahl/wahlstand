@@ -59,6 +59,7 @@
 		padding-top: 70px;
 	}
 	
+	
 	</style>
 	<script src="js/d3.v3.min.js" charset="utf-8"></script>
 </head>
@@ -74,7 +75,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">wahlstand</a>
+      <a class="navbar-brand" href="#">wahlstand 2017</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -84,7 +85,7 @@
 			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
 			<li class=""><a href="index.html">Übersicht</a></li>
 			<li class="active"><a href="tabs.html">Urnenergebnisse</a></li>
-			<li class=""><a href="ua.html">Urabstimmungen</a></li>
+			<!--<li class=""><a href="ua.html">Urabstimmungen</a></li>-->
 			<li class=""><a href="./raw/">raw</a></li>
 		</ul>
 		<button type="button" id="rotatetoggle" class="btn btn-default navbar-btn">Rotation: ja</button>
@@ -169,6 +170,13 @@
 	<!-- Seat Chart -->
 	<script type="text/javascript">
 	
+		function setdownload(id, text, name, type) {
+			var a = document.getElementById(id);
+			var file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+		}
+	
 		function min(a,b) {
 			if(a > b){
 				return b;
@@ -244,7 +252,7 @@
 	<!-- Bar Charts -->
 	<script>
 	
-	var charts = $("svg[class^='chart']");
+	var charts = $("svg[id^='chart']");
 	
 	//alert(charts.length);
 	
@@ -273,7 +281,7 @@
 		.scale(y)
 		.orient("left");
 			
-		var chart = d3.select((".chart"+(i+1)))
+		var chart = d3.select(("#chart"+(i+1)))
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
@@ -301,12 +309,15 @@
 			.attr("height", function(d) { return height - y(d.value); })
 			.attr("width", x.rangeBand())
 			.attr("fill", function(d, i) { return d.color; } );
+			
+		$('<p class="text-right"><small><a id="dldiagram'+i+'">Diagramm als svg-Datei herunterladen</a></small></p>').insertAfter(('#chart'+(i+1)));
+		setdownload('dldiagram'+i, $('#chart'+(i+1))[0].outerHTML, "urne"+i+"-2016.svg", "text/svg");
 	}
 	
 	
 	$( window ).resize(function() {
 		for(i=0; i<charts.length; i=i+1){
-			var g = $('.chart'+(i+1));
+			var g = $('#chart'+(i+1));
 			divwidth = $('.jumbotron:visible').width();
 			svgwidth = g.width();
 			scale = divwidth / svgwidth;

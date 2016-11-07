@@ -59,6 +59,7 @@
 		padding-top: 70px;
 	}
 	
+	
 	</style>
 	<script src="js/d3.v3.min.js" charset="utf-8"></script>
 </head>
@@ -74,7 +75,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">wahlstand</a>
+      <a class="navbar-brand" href="#">wahlstand 2017</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -84,11 +85,11 @@
 			<li><a href="http://wahlen.uni-bonn.de" title="wahlen.uni-bonn.de"><span class="glyphicon glyphicon-home"></span></a></li>
 			<li class=""><a href="index.html">Übersicht</a></li>
 			<li class="active"><a href="tabs.html">Urnenergebnisse</a></li>
-			<li class=""><a href="ua.html">Urabstimmungen</a></li>
+			<!--<li class=""><a href="ua.html">Urabstimmungen</a></li>-->
 			<li class=""><a href="./raw/">raw</a></li>
 		</ul>
 		<button type="button" id="rotatetoggle" class="btn btn-default navbar-btn">Rotation: ja</button>
-		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2016-01-09 23:37:14</small></p>
+		<p class="navbar-text navbar-right"><small>Letzte Aktualisierung: 2016-11-07 15:58:13</small></p>
 	</div>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -103,30 +104,30 @@
 	<ul id="urnentabs" class="nav nav-pills">
 	<li><a href="#start" data-toggle="tab">Start</a></li>
 	<li><a href="#urne1" data-toggle="tab" class="hasdata">1</a></li>
-<li><a href="#urne2" data-toggle="tab">2</a></li>
-<li><a href="#urne3" data-toggle="tab">3</a></li>
-<li><a href="#urne4" data-toggle="tab">4</a></li>
-<li><a href="#urne5" data-toggle="tab">5</a></li>
-<li><a href="#urne6" data-toggle="tab">6</a></li>
-<li><a href="#urne7" data-toggle="tab">7</a></li>
-<li><a href="#urne8" data-toggle="tab">8</a></li>
-<li><a href="#urne9" data-toggle="tab">9</a></li>
-<li><a href="#urne10" data-toggle="tab">10</a></li>
-<li><a href="#urne11" data-toggle="tab">11</a></li>
-<li><a href="#urne12" data-toggle="tab">12</a></li>
-<li><a href="#urne13" data-toggle="tab">13</a></li>
-<li><a href="#urne14" data-toggle="tab">14</a></li>
-<li><a href="#urne15" data-toggle="tab">15</a></li>
-<li><a href="#urne16" data-toggle="tab">16</a></li>
-<li><a href="#urne17" data-toggle="tab">17</a></li>
-<li><a href="#urne18" data-toggle="tab">18</a></li>
-<li><a href="#urne19" data-toggle="tab">19</a></li>
-<li><a href="#urne20" data-toggle="tab">20</a></li>
-<li><a href="#urne21" data-toggle="tab">21</a></li>
-<li><a href="#urne22" data-toggle="tab">22</a></li>
-<li><a href="#urne23" data-toggle="tab">23</a></li>
-<li><a href="#urne24" data-toggle="tab">24</a></li>
-<li><a href="#urne25" data-toggle="tab">25</a></li>
+<li><a href="#urne2" data-toggle="tab" class="hasdata">2</a></li>
+<li><a href="#urne3" data-toggle="tab" class="hasdata">3</a></li>
+<li><a href="#urne4" data-toggle="tab" class="hasdata">4</a></li>
+<li><a href="#urne5" data-toggle="tab" class="hasdata">5</a></li>
+<li><a href="#urne6" data-toggle="tab" class="hasdata">6</a></li>
+<li><a href="#urne7" data-toggle="tab" class="hasdata">7</a></li>
+<li><a href="#urne8" data-toggle="tab" class="hasdata">8</a></li>
+<li><a href="#urne9" data-toggle="tab" class="hasdata">9</a></li>
+<li><a href="#urne10" data-toggle="tab" class="hasdata">10</a></li>
+<li><a href="#urne11" data-toggle="tab" class="hasdata">11</a></li>
+<li><a href="#urne12" data-toggle="tab" class="hasdata">12</a></li>
+<li><a href="#urne13" data-toggle="tab" class="hasdata">13</a></li>
+<li><a href="#urne14" data-toggle="tab" class="hasdata">14</a></li>
+<li><a href="#urne15" data-toggle="tab" class="hasdata">15</a></li>
+<li><a href="#urne16" data-toggle="tab" class="hasdata">16</a></li>
+<li><a href="#urne17" data-toggle="tab" class="hasdata">17</a></li>
+<li><a href="#urne18" data-toggle="tab" class="hasdata">18</a></li>
+<li><a href="#urne19" data-toggle="tab" class="hasdata">19</a></li>
+<li><a href="#urne20" data-toggle="tab" class="hasdata">20</a></li>
+<li><a href="#urne21" data-toggle="tab" class="hasdata">21</a></li>
+<li><a href="#urne22" data-toggle="tab" class="hasdata">22</a></li>
+<li><a href="#urne23" data-toggle="tab" class="hasdata">23</a></li>
+<li><a href="#urne24" data-toggle="tab" class="hasdata">24</a></li>
+<li><a href="#urne25" data-toggle="tab" class="hasdata">25</a></li>
 
 	</ul>
 
@@ -147,19 +148,19 @@
 		<div class="jumbotron">
 			<h1>Juridicum 1 <small>Urne 1</small></h1>
 			
-			<svg class="chart1"></svg>
+			<svg id="chart1"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>750</td>
-<td>700</td>
-<td>600</td>
-<td>500</td>
-<td>400</td>
-<td>300</td>
-<td>200</td>
-<td>1000</td>
-<td>9</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
 <td>10</td>
+<td>44</td>
+<td>64</td>
+<td>3</td>
+<td>3</td>
+<td>141</td>
+<td>0</td>
 </tr>
 <tr></tr>
 <tr><th>JUSOS</th>
@@ -181,20 +182,21 @@
 		<div class="jumbotron">
 			<h1>Juridicum 2 <small>Urne 2</small></h1>
 			
-			<svg class="chart2"></svg>
+			<svg id="chart2"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>2</td>
+<td>92</td>
+<td>0</td>
+<td>0</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -214,20 +216,21 @@
 		<div class="jumbotron">
 			<h1>Mensa 1 Nassestraße <small>Urne 3</small></h1>
 			
-			<svg class="chart3"></svg>
+			<svg id="chart3"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>55</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -247,20 +250,21 @@
 		<div class="jumbotron">
 			<h1>Mensa 2 Nassestraße <small>Urne 4</small></h1>
 			
-			<svg class="chart4"></svg>
+			<svg id="chart4"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>53</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -280,20 +284,21 @@
 		<div class="jumbotron">
 			<h1>Hauptgebäude 1 <small>Urne 5</small></h1>
 			
-			<svg class="chart5"></svg>
+			<svg id="chart5"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>24</td>
+<td>6</td>
+<td>17</td>
+<td>0</td>
+<td>36</td>
+<td>0</td>
+<td>0</td>
+<td>129</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -313,20 +318,21 @@
 		<div class="jumbotron">
 			<h1>Hauptgebäude 2 <small>Urne 6</small></h1>
 			
-			<svg class="chart6"></svg>
+			<svg id="chart6"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>1</td>
+<td>316</td>
+<td>0</td>
+<td>0</td>
+<td>33</td>
+<td>11</td>
+<td>43</td>
+<td>2</td>
+<td>3</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -346,20 +352,21 @@
 		<div class="jumbotron">
 			<h1>Hauptgebäude 3 <small>Urne 7</small></h1>
 			
-			<svg class="chart7"></svg>
+			<svg id="chart7"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>3</td>
+<td>2</td>
+<td>3</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>71</td>
+<td>90</td>
+<td>2</td>
+<td>1</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -379,20 +386,21 @@
 		<div class="jumbotron">
 			<h1>FAZ-Café<br>Hauptgebäude 4 <small>Urne 8</small></h1>
 			
-			<svg class="chart8"></svg>
+			<svg id="chart8"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>75</td>
+<td>0</td>
+<td>23</td>
+<td>20</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -412,20 +420,21 @@
 		<div class="jumbotron">
 			<h1>Anglistik<br>Kaiserstraße <small>Urne 9</small></h1>
 			
-			<svg class="chart9"></svg>
+			<svg id="chart9"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>2</td>
+<td>33</td>
+<td>0</td>
+<td>10</td>
+<td>2</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -445,20 +454,21 @@
 		<div class="jumbotron">
 			<h1>Math.-Nat. 1 <small>Urne 10</small></h1>
 			
-			<svg class="chart10"></svg>
+			<svg id="chart10"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>2</td>
+<td>0</td>
+<td>19</td>
+<td>0</td>
+<td>4</td>
+<td>2</td>
+<td>11</td>
+<td>2</td>
+<td>1</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -478,20 +488,21 @@
 		<div class="jumbotron">
 			<h1>Math.-Nat. 2 <small>Urne 11</small></h1>
 			
-			<svg class="chart11"></svg>
+			<svg id="chart11"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>22</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -511,20 +522,21 @@
 		<div class="jumbotron">
 			<h1>Math.-Nat. 3 <small>Urne 12</small></h1>
 			
-			<svg class="chart12"></svg>
+			<svg id="chart12"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>132</td>
+<td>28</td>
+<td>0</td>
+<td>111</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -544,20 +556,21 @@
 		<div class="jumbotron">
 			<h1>Math.-Nat. 4 <small>Urne 13</small></h1>
 			
-			<svg class="chart13"></svg>
+			<svg id="chart13"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>15</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -577,20 +590,21 @@
 		<div class="jumbotron">
 			<h1>Pop-Mensa <small>Urne 14</small></h1>
 			
-			<svg class="chart14"></svg>
+			<svg id="chart14"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -610,20 +624,21 @@
 		<div class="jumbotron">
 			<h1>Anatomie <small>Urne 15</small></h1>
 			
-			<svg class="chart15"></svg>
+			<svg id="chart15"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>3</td>
+<td>3</td>
+<td>30</td>
+<td>4</td>
+<td>0</td>
+<td>29</td>
+<td>0</td>
+<td>14</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -643,20 +658,21 @@
 		<div class="jumbotron">
 			<h1>Mathematik <small>Urne 16</small></h1>
 			
-			<svg class="chart16"></svg>
+			<svg id="chart16"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -676,20 +692,21 @@
 		<div class="jumbotron">
 			<h1>MNL <small>Urne 17</small></h1>
 			
-			<svg class="chart17"></svg>
+			<svg id="chart17"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>25</td>
+<td>4</td>
+<td>7</td>
+<td>16</td>
+<td>3</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -709,20 +726,21 @@
 		<div class="jumbotron">
 			<h1>Kantine Venusberg <small>Urne 18</small></h1>
 			
-			<svg class="chart18"></svg>
+			<svg id="chart18"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>61</td>
+<td>15</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -742,20 +760,21 @@
 		<div class="jumbotron">
 			<h1>Informatik, Sportanlage Römerstraße <small>Urne 19</small></h1>
 			
-			<svg class="chart19"></svg>
+			<svg id="chart19"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>16</td>
+<td>0</td>
+<td>39</td>
+<td>152</td>
+<td>0</td>
+<td>16</td>
+<td>0</td>
+<td>5</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -775,20 +794,21 @@
 		<div class="jumbotron">
 			<h1>ULB <small>Urne 20</small></h1>
 			
-			<svg class="chart20"></svg>
+			<svg id="chart20"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>16</td>
+<td>9</td>
+<td>0</td>
+<td>87</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -808,20 +828,21 @@
 		<div class="jumbotron">
 			<h1>Sprachlernzentrum<br>Medienwissenschaften <small>Urne 21</small></h1>
 			
-			<svg class="chart21"></svg>
+			<svg id="chart21"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>64</td>
+<td>9</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -841,20 +862,21 @@
 		<div class="jumbotron">
 			<h1>Venusberg <small>Urne 22</small></h1>
 			
-			<svg class="chart22"></svg>
+			<svg id="chart22"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>68</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -874,20 +896,21 @@
 		<div class="jumbotron">
 			<h1>Physik<br>IGW <small>Urne 23</small></h1>
 			
-			<svg class="chart23"></svg>
+			<svg id="chart23"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>6</td>
+<td>89</td>
+<td>31</td>
+<td>0</td>
+<td>0</td>
+<td>63</td>
+<td>0</td>
+<td>154</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -907,20 +930,21 @@
 		<div class="jumbotron">
 			<h1>Psychologie <small>Urne 24</small></h1>
 			
-			<svg class="chart24"></svg>
+			<svg id="chart24"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>36</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>22</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -940,20 +964,21 @@
 		<div class="jumbotron">
 			<h1>Wahlbüro (Briefwahl) <small>Urne 25</small></h1>
 			
-			<svg class="chart25"></svg>
+			<svg id="chart25"></svg>
 			
 			<table class="table table-bordered">
-				<tr><td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
+				<tr><td>0</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>20</td>
+<td>8</td>
 </tr>
+<tr></tr>
 <tr><th>JUSOS</th>
 <th>RCDS</th>
 <th>LUST</th>
@@ -1020,6 +1045,13 @@
 	<!-- Seat Chart -->
 	<script type="text/javascript">
 	
+		function setdownload(id, text, name, type) {
+			var a = document.getElementById(id);
+			var file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+		}
+	
 		function min(a,b) {
 			if(a > b){
 				return b;
@@ -1033,7 +1065,7 @@
 		r = 300, //radius
 		color = d3.scale.category20c(); //builtin range of colors
 		
-		data = [{'label': 'JUSOS', 'value': 7, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 7, 'color': '#1e1e1e'}, {'label': 'LUST', 'value': 6, 'color': '#bf5488'}, {'label': 'LHG', 'value': 5, 'color': '#ffd200'}, {'label': 'PHG', 'value': 4, 'color': '#ff9900'}, {'label': 'LISTE', 'value': 3, 'color': '#ff0093'}, {'label': 'GHG', 'value': 2, 'color': '#00a417'}, {'label': 'KULT', 'value': 9, 'color': '#6565bd'}];
+		data = [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 14, 'label': 'LUST', 'color': '#ff0000'}, {'value': 5, 'label': 'LHG', 'color': '#ffff00'}, {'value': 4, 'label': 'PHG', 'color': '#ff8800'}, {'value': 9, 'label': 'LISTE', 'color': '#b91023'}, {'value': 5, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 6, 'label': 'KULT', 'color': '#efd420'}];
 		
 		var vis = d3.select("#diagram")
 			.append("svg:svg") //create the SVG element inside the <body>
@@ -1095,11 +1127,11 @@
 	<!-- Bar Charts -->
 	<script>
 	
-	var charts = $("svg[class^='chart']");
+	var charts = $("svg[id^='chart']");
 	
 	//alert(charts.length);
 	
-	var data = [[{'label': 'JUSOS', 'value': 750, 'color': '#bc0000'}, {'label': 'RCDS', 'value': 700, 'color': '#1e1e1e'}, {'label': 'LUST', 'value': 600, 'color': '#bf5488'}, {'label': 'LHG', 'value': 500, 'color': '#ffd200'}, {'label': 'PHG', 'value': 400, 'color': '#ff9900'}, {'label': 'LISTE', 'value': 300, 'color': '#ff0093'}, {'label': 'GHG', 'value': 200, 'color': '#00a417'}, {'label': 'KULT', 'value': 1000, 'color': '#6565bd'}, {'label': 'Ungültig', 'value': 9, 'color': '#cccccc'}, {'label': 'Enthaltung', 'value': 10, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}], [{'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}, {'label': 'Enthaltung', 'value': 0, 'color': '#c0c0c0'}]];
+	var data = [[{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 10, 'label': 'LHG', 'color': '#ffff00'}, {'value': 44, 'label': 'PHG', 'color': '#ff8800'}, {'value': 64, 'label': 'LISTE', 'color': '#b91023'}, {'value': 3, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 3, 'label': 'KULT', 'color': '#efd420'}, {'value': 141, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 2, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 92, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 4, 'label': 'LISTE', 'color': '#b91023'}, {'value': 3, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 5, 'label': 'KULT', 'color': '#efd420'}, {'value': 1, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 7, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 55, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 5, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 2, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 2, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 5, 'label': 'KULT', 'color': '#efd420'}, {'value': 1, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 53, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 24, 'label': 'LUST', 'color': '#ff0000'}, {'value': 6, 'label': 'LHG', 'color': '#ffff00'}, {'value': 17, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 36, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 129, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 1, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 316, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 33, 'label': 'LISTE', 'color': '#b91023'}, {'value': 11, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 43, 'label': 'KULT', 'color': '#efd420'}, {'value': 2, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 3, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 3, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 2, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 3, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 12, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 71, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 90, 'label': 'KULT', 'color': '#efd420'}, {'value': 2, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 1, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 2, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 75, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 23, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 20, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 2, 'label': 'LUST', 'color': '#ff0000'}, {'value': 33, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 10, 'label': 'LISTE', 'color': '#b91023'}, {'value': 2, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 5, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 2, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 19, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 4, 'label': 'LISTE', 'color': '#b91023'}, {'value': 2, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 11, 'label': 'KULT', 'color': '#efd420'}, {'value': 2, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 1, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 6, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 22, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 132, 'label': 'LUST', 'color': '#ff0000'}, {'value': 28, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 111, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 1, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 6, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 2, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 3, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 15, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 1, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 12, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 2, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 3, 'label': 'LUST', 'color': '#ff0000'}, {'value': 3, 'label': 'LHG', 'color': '#ffff00'}, {'value': 30, 'label': 'PHG', 'color': '#ff8800'}, {'value': 4, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 29, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 14, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 1, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 25, 'label': 'LISTE', 'color': '#b91023'}, {'value': 4, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 7, 'label': 'KULT', 'color': '#efd420'}, {'value': 16, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 3, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 5, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 2, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 61, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 15, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 16, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 39, 'label': 'PHG', 'color': '#ff8800'}, {'value': 152, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 16, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 5, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 6, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 1, 'label': 'PHG', 'color': '#ff8800'}, {'value': 1, 'label': 'LISTE', 'color': '#b91023'}, {'value': 16, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 9, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 87, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 0, 'label': 'LUST', 'color': '#ff0000'}, {'value': 64, 'label': 'LHG', 'color': '#ffff00'}, {'value': 9, 'label': 'PHG', 'color': '#ff8800'}, {'value': 1, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 68, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 8, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 6, 'label': 'LUST', 'color': '#ff0000'}, {'value': 89, 'label': 'LHG', 'color': '#ffff00'}, {'value': 31, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 63, 'label': 'KULT', 'color': '#efd420'}, {'value': 0, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 154, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 36, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 0, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 22, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 0, 'label': 'KULT', 'color': '#efd420'}, {'value': 9, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 0, 'label': 'Enthaltung', 'color': '#c0c0c0'}], [{'value': 0, 'label': 'JUSOS', 'color': '#eb0000'}, {'value': 0, 'label': 'RCDS', 'color': '#0087c1'}, {'value': 8, 'label': 'LUST', 'color': '#ff0000'}, {'value': 0, 'label': 'LHG', 'color': '#ffff00'}, {'value': 3, 'label': 'PHG', 'color': '#ff8800'}, {'value': 0, 'label': 'LISTE', 'color': '#b91023'}, {'value': 0, 'label': 'GHG', 'color': '#6e8b21'}, {'value': 43, 'label': 'KULT', 'color': '#efd420'}, {'value': 20, 'label': 'Ungültig', 'color': '#cccccc'}, {'value': 8, 'label': 'Enthaltung', 'color': '#c0c0c0'}]];
 	
 	for(i=0; i<charts.length; i=i+1){
 	
@@ -1124,7 +1156,7 @@
 		.scale(y)
 		.orient("left");
 			
-		var chart = d3.select((".chart"+(i+1)))
+		var chart = d3.select(("#chart"+(i+1)))
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
@@ -1152,12 +1184,15 @@
 			.attr("height", function(d) { return height - y(d.value); })
 			.attr("width", x.rangeBand())
 			.attr("fill", function(d, i) { return d.color; } );
+			
+		$('<p class="text-right"><small><a id="dldiagram'+i+'">Diagramm als svg-Datei herunterladen</a></small></p>').insertAfter(('#chart'+(i+1)));
+		setdownload('dldiagram'+i, $('#chart'+(i+1))[0].outerHTML, "urne"+i+"-2016.svg", "text/svg");
 	}
 	
 	
 	$( window ).resize(function() {
 		for(i=0; i<charts.length; i=i+1){
-			var g = $('.chart'+(i+1));
+			var g = $('#chart'+(i+1));
 			divwidth = $('.jumbotron:visible').width();
 			svgwidth = g.width();
 			scale = divwidth / svgwidth;
