@@ -1,27 +1,27 @@
-!Nr.	!Urne						JUSOS		RCDS		LUST		LHG		PHG		LISTE		GHG		KULT		#Ungültig	#Enthaltung
--	-						#eb0000		#0087c1		#ff0000		#ffff00		#ff8800		#b91023		#6e8b21		#efd420		#cccccc		#c0c0c0
-1	Juridicum 1					0		0		0		10		44		64		3		3		141		0		
-2	Juridicum 2					0		2		92		0		0		4		3		5		1		0		
-3	Mensa 1 Nassestraße				7		0		0		0		0		55		0		0		0		5		
-4	Mensa 2 Nassestraße				0		0		0		0		2		0		2		5		1		53		
-5	Hauptgebäude 1					0		0		24		6		17		0		36		0		0		129		
-6	Hauptgebäude 2					0		1		316		0		0		33		11		43		2		3		
-7	Hauptgebäude 3					3		2		3		0		12		0		71		90		2		1		
-8	FAZ-Café<br>Hauptgebäude 4			0		0		0		2		0		0		75		0		23		20		
-9	Anglistik<br>Kaiserstraße			0		0		2		33		0		10		2		0		5		0		
-10	Math.-Nat. 1					0		2		0		19		0		4		2		11		2		1		
-11	Math.-Nat. 2					0		0		0		0		6		0		0		0		22		0		
-12	Math.-Nat. 3					0		0		132		28		0		111		0		0		1		0		
-13	Math.-Nat. 4					6		0		0		0		0		2		0		3		0		15		
-14	Pop-Mensa					0		0		0		1		0		12		0		0		2		0		
-15	Anatomie					0		0		3		3		30		4		0		29		0		14		
-16	Mathematik					0		0		1		0		0		0		0		0		0		0		
-17	MNL						0		0		0		0		0		25		4		7		16		3		
-18	Kantine Venusberg				0		0		0		5		0		0		2		0		61		15		
-19	Informatik, Sportanlage Römerstraße		0		0		16		0		39		152		0		16		0		5		
-20	ULB						0		0		6		0		1		1		16		9		0		87		
-21	Sprachlernzentrum<br>Medienwissenschaften	0		0		0		64		9		1		0		0		0		0		
-22	Venusberg					0		0		68		0		0		0		8		0		0		0		
-23	Physik<br>IGW					0		0		6		89		31		0		0		63		0		154		
-24	Psychologie					0		0		36		0		0		0		22		0		9		0		
-25	Wahlbüro (Briefwahl)				0		0		8		0		3		0		0		43		20		8		
+!Nr.	!Urne						RCDS	JUSOS	LHG	LUST	LISTE	KULT	GHGP	SDS	#Ungültig	#Enthaltung
+-	-						#0087c1	#e30513	#ffff00	#ff0000	#b91023	#ff00ff	#339933	#ce291f	#cccccc		#c0c0c0
+1	Juridicum 1					150	111	74	12	15	58	26	3	6		10
+2	Juridicum 2					99	96	88	22	9	53	30	10	1		4
+3	Mensa Nassestraße 1				10	40	16	9	3	5	27	2	0		1
+4	Mensa Nassestraße 2				68	102	52	22	13	24	80	12	0		5
+5	Hauptgebäude 1					90	93	22	17	6	17	54	18	2		6
+6	Hauptgebäude 2					74	84	24	43	13	22	59	20	2		2
+7	Hauptgebäude 3					37	30	6	9	6	7	23	10	0		1
+8	Pop-Mensa 1					71	91	42	10	20	9	60	6	1		4
+9	Anglistik<br>Kaiserstraße			20	36	11	7	4	7	23	4	0		3
+10	Math.-Nat. 1					27	39	11	7	6	3	27	4	4		0
+11	Math.-Nat. 2					18	79	12	49	6	8	54	6	0		6
+12	Math.-Nat. 3					17	28	23	8	9	8	31	3	2		6
+13	Math.-Nat. 4					17	21	14	27	12	7	10	0	1		2
+14	Pop-Mensa 2					47	66	26	23	10	13	42	6	1		3
+15	Anatomie					32	67	52	8	8	11	19	4	2		4
+16	Mathematik					39	49	22	6	9	6	30	2	2		0
+17	MNL						77	111	63	14	12	15	54	6	2		3
+18	Kantine Venusberg<br>Hauptgebäude 4		27	35	12	5	5	10	28	7	1		4
+19	Informatik, Sportanlage Römerstraße		21	39	26	11	15	7	48	5	2		4
+20	ULB						47	77	20	23	9	15	50	11	2		0
+21	Sprachlernzentrum				17	25	15	4	6	3	21	5	1		0
+22	Venusberg					32	65	18	4	2	3	14	0	1		3
+23	Physik<br>IGW					26	27	14	4	4	3	14	6	1		0
+24	Psychologie					9	30	10	7	6	5	33	7	1		1
+25	Wahlbüro (Briefwahl)				7	9	0	8	0	0	3	2	1		0
