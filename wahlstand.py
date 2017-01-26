@@ -355,7 +355,7 @@ def get_html_summary_result_table(data, config, deltadata=None, invalid_key="Ung
 	if(deltadata != None):
 	
 		d_voters_count = voters_count - config['count_voters_prev']
-		d_vote_count = get_vote_count(deltadata)
+		d_vote_count = vote_count - config['count_votes_prev']
 		d_invalid_count = get_invalid_count(deltadata, invalid_key)
 		d_valid_count = d_vote_count - d_invalid_count
 		d_abstentions_count = get_abstentions_count(deltadata, abstentions_key)
@@ -412,7 +412,7 @@ def get_html_summary_result_table(data, config, deltadata=None, invalid_key="Ung
 		<tr><td>Ungültige Stimmen</td><td>{2}</td><td{14}>{8}</td></tr>
 		<tr><td>Gültige Stimmen</td><td>{3}</td><td{15}>{9}</td></tr>
 		<tr><td>Enthaltungen</td><td>{4}</td><td{16}>{10}</td></tr>
-		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11}</td></tr>
+		<tr><td>Wahlbeteiligung</td><td>{5:10.2f} %</td><td{17}>{11:10.2f}</td></tr>
 		</table></div>\n<div class="clearfix"></div>'''.format(voters_count,
 				vote_count,
 				invalid_count,
