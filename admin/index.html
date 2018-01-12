@@ -135,7 +135,7 @@ Wahlbüro (Briefwahl)</textarea>
 						Stimmen
 					</div>
 					<div class="card-body">
-						<table class='table table-hover table-condensed' id="ballotTable">
+						<table class='table table-hover table-sm' id="ballotResultTable">
 							<thead>
 								<tr>
 									<th>Urne</th>
@@ -152,7 +152,7 @@ Wahlbüro (Briefwahl)</textarea>
 						Stimmen (letzte Wahl)
 					</div>
 					<div class="card-body">
-						<table class='table table-hover table-condensed' id="lastElectionBallotTable">
+						<table class='table table-hover table-sm' id="lastElectionballotResultTable">
 							<thead>
 								<tr>
 									<th>Urne</th>
@@ -243,10 +243,10 @@ Wahlbüro (Briefwahl)</textarea>
 		}
 
 		function clearTables() {
-			$('#ballotTable thead tr').empty();
-			$('#ballotTable tbody tr').empty();
-			$('#lastElectionBallotTable thead tr').empty();
-			$('#lastElectionBallotTable tbody tr').empty();
+			$('#ballotResultTable thead tr').empty();
+			$('#ballotResultTable tbody tr').empty();
+			$('#lastElectionballotResultTable thead tr').empty();
+			$('#lastElectionballotResultTable tbody tr').empty();
 		}
 
 		function dateString(timestamp){
@@ -284,46 +284,46 @@ Wahlbüro (Briefwahl)</textarea>
 				$('#lastElectionName').val(result.meta.lastElectionName);
 				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
 
-				$('#ballotTable thead tr').append('<th>Urne</th>');
+				$('#ballotResultTable thead tr').append('<th>Urne</th>');
 				for (l of result.lists) {
-					$('#ballotTable thead tr').append('<th>' + l + '</th>');
+					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
 				}
-				$('#ballotTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotTable thead tr').append('<th>Enthaltung</th>');
+				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
 
 				let ballot_index = 0;
 				for (b of result.ballots) {
-					$('#ballotTable tbody').append('<tr></tr>');
-					$('#ballotTable tbody tr:last').append('<td>' + b + '</td>');
+					$('#ballotResultTable tbody').append('<tr></tr>');
+					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 					let list_index = 0;
 					for (let i = 0; i < (result.lists.length + 2); i++) {
 						let index = ballot_index * (result.lists.length + 2) + list_index;
 						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
+						$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
 						list_index++;
 					}
 					ballot_index++;
 				}
 
-				$('#lastElectionBallotTable thead tr').append('<th>Urne</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
 				for (l of result.lists) {
-					$('#lastElectionBallotTable thead tr').append('<th>' + l + '</th>');
+					$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
 				}
-				$('#lastElectionBallotTable thead tr').append('<th>Ungültig</th>');
-				$('#lastElectionBallotTable thead tr').append('<th>Enthaltung</th>');
-				$('#lastElectionBallotTable thead tr').append('<th>SONSTIGE</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
 
 				let le_ballot_index = 0;
 				let le_ballots = result.ballots.slice();
 				le_ballots.push("SONSTIGE");
 				for (b of le_ballots) {
-					$('#lastElectionBallotTable tbody').append('<tr></tr>');
-					$('#lastElectionBallotTable tbody tr:last').append('<td>' + b + '</td>');
+					$('#lastElectionballotResultTable tbody').append('<tr></tr>');
+					$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 					let le_list_index = 0;
 					for (let i = 0; i < (result.lists.length + 3); i++) {
 						let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
 						let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
-						$('#lastElectionBallotTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+						$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
 						le_list_index++;
 					}
 					le_ballot_index++;
