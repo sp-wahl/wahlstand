@@ -1,212 +1,367 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>wahlstand</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
-	#diagram{
-		max-width: 900px;
-		margin-left: auto;
-		margin-right:auto;
-		margin-top: 3em;
-		/*border: 1px solid gray;
+		#diagram {
+			max-width: 900px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 3em;
+			/*border: 1px solid gray;
 		border-radius: 5px;*/
-		padding: 5px;
-		text-align: center;
-	}
-	h1 {
-		text-align: center;
-	}
-	#content{
-		margin-bottom: 1em;
-	}
-	.slice text {
-		font-size: 13pt;
-		font-family: Arial;
-		font-weight: bold;
-	}
-	.table .list{
-		text-align: right;
-	}
+			padding: 5px;
+			text-align: center;
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		#content {
+			margin-bottom: 1em;
+		}
+
+		.slice text {
+			font-size: 13pt;
+			font-family: Arial;
+			font-weight: bold;
+		}
+
+		.table .list {
+			text-align: right;
+		}
+
+		#summaryTable tr td,
+		#ballotDeltaTable tr td,
+		#ballotResultTable tr td {
+			text-align: right;
+		}
+
+		#summaryTable tr td:first-child,
+		#ballotDeltaTable tr td:first-child,
+		#ballotResultTable tr td:first-child {
+			text-align: left;
+		}
+
+		#summaryTable tr th,
+		#ballotDeltaTable tr th,
+		#ballotResultTable tr th {
+			text-align: center;
+		}
 	</style>
 </head>
+
 <body>
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">wahlstand <span class="thisYear">1970</span></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">wahlstand
+			<span class="thisElectionName">1970</span>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+		 aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">Übersicht</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="tabs.html">Urnenergebnisse</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">raw</a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#"><small>Letzte Aktualisierung: %DATETIME%</small></a>
-      </li>
-    </ul>
-    
-  </div>
-</nav>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="index.html">Übersicht</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="tabs.html">Urnenergebnisse</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">raw</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">
+						<small>Letzte Aktualisierung:
+							<span id="lastSaveTimestamp">-</span>
+						</small>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+	</nav>
 
 
-<div id='content' class='container-fluid'>
+	<div id='content' class='container-fluid'>
 
-<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>-->
+		<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>-->
 
-	<h1>Urnenergebnisse</h1>
+		<h1>Urnenergebnisse</h1>
 
-	<table class='table table-hover table-condensed' id="ballotResultTable">
-	<thead>
-	</thead>
-	<tbody>
-	</tbody>
-	</table>
-	
-	<h1>Gewinne/Verluste <small>(zu 2016)</small></h1>
+		<table class='table table-bordered  table-striped table-sm' id="ballotResultTable">
+			<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 
-	<table class='table table-hover table-condensed' id="ballotDeltaTable">
-	<thead>
-	</thead>
-	<tbody>
-	</tbody>
-	</table>
+		<h1>Gewinne/Verluste
+			<small>(zu
+				<span class="lastElectionName">-</span>)</small>
+		</h1>
 
-	<h1>Sitzverteilung</h1>
-	<div id='diagram'></div>
-	<p class="text-right"><small><a id="dldiagram">Diagramm als svg-Datei herunterladen</a></small></p>
-	
-	<h1>Gesamtergebnis</h1>
+		<table class='table table-bordered table-striped table-sm' id="ballotDeltaTable">
+			<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 
-	<div class='col-6 offset-3'>
-	lala
-	<table class='table table-hover table-condensed' id="summaryTable">
-	<thead>
-	</thead>
-	<tbody>
-	</tbody>
-	</table>
+		<h1>Sitzverteilung</h1>
+		<div id='diagram'></div>
+		<p class="text-right">
+			<small>
+				<a id="dldiagram">Diagramm als svg-Datei herunterladen</a>
+			</small>
+		</p>
+
+		<h1>Gesamtergebnis</h1>
+
+		<div class='col-4 offset-4'>
+			<table class='table table-hover table-condensed' id="summaryTable">
+				<tbody>
+					<tr>
+						<td>Wahlberechtigte</td>
+						<td id="thisElectionVoters">36518</td>
+						<td id="votersDiff">+1351</td>
+					</tr>
+					<tr>
+						<td>Abgegebene Stimmen</td>
+						<td id="thisElectionVotes">5201</td>
+						<td id="votesDiff">-987</td>
+					</tr>
+					<tr>
+						<td>Ungültige Stimmen</td>
+						<td id="thisElectionInvalidVotes">36</td>
+						<td id="invalidVotesDiff">-47</td>
+					</tr>
+					<tr>
+						<td>Gültige Stimmen</td>
+						<td id="thisElectionValidVotes">5165</td>
+						<td id="validVotesDiff">-940</td>
+					</tr>
+					<tr>
+						<td>Enthaltungen</td>
+						<td id="thisElectionAbstentions">74</td>
+						<td id="abstentionsDiff">-224</td>
+					</tr>
+					<tr>
+						<td>Wahlbeteiligung</td>
+						<td id="thisElectionTurnout">14.24 %</td>
+						<td id="turnoutDiff">-3.36</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="alert alert-danger text-center" id="notice-bottom">
+			<strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+			<strong>Achtung!</strong>
+		</div>
 	</div>
-	
-	<div class="alert alert-danger text-center" id="notice-bottom"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>
-</div>
 
-<div><p class="text-center"><a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a><p></div>
+	<div>
+		<p class="text-center">
+			<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
+			<p>
+	</div>
 
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/d3.min.js" charset="utf-8"></script>
 	<script type="text/javascript">
-	
-	function getThisYear(){
-		return (new Date()).getFullYear();
-	}
-	function getLastYear(){
-		return (getThisYear()-1);
-	}
-	
-	function setdownload(text, name, type) {
-		var a = document.getElementById("dldiagram");
-		var file = new Blob([text], {type: type});
-		a.href = URL.createObjectURL(file);
-		a.download = name;
-	
-	
-	}
-	
-	
-	function createDiagram(){
-		var w = 900, //width
-		h = 380, //height
-		r = 300, //radius
-		color = d3.scale.category20c(); //builtin range of colors
-		
-		data = [{'color': '#0087c1', 'value': 9, 'label': 'RCDS'}, {'color': '#e30513', 'value': 12, 'label': 'JUSOS'}, {'color': '#ffff00', 'value': 6, 'label': 'LHG'}, {'color': '#ff0000', 'value': 3, 'label': 'LUST'}, {'color': '#b91023', 'value': 2, 'label': 'LISTE'}, {'color': '#ff00ff', 'value': 3, 'label': 'KULT'}, {'color': '#339933', 'value': 7, 'label': 'GHGP'}, {'color': '#ce291f', 'value': 1, 'label': 'SDS'}];
-		
-		var vis = d3.select("#diagram")
-			.append("svg:svg") //create the SVG element inside the <body>
-			.attr("id", "diagramsvg")
-			.data([data]) //associate our data with the document
-			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
-			.attr("height", h)
-			.append("svg:g") //make a group to hold our pie chart
-			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
-			.attr("transform", "translate(" + w/2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
-		
-		var arc = d3.svg.arc() //this will create <path> elements for us using arc data
-			.outerRadius(r)
-			.innerRadius(2*r/5);
-		
-		var pie = d3.layout.pie() //this will create arc data for us given a list of values
-			.value(function(d) { return d.value; })
-			.sort(null); //we must tell it out to access the value of each element in our data array
-		
-		pie.startAngle(-Math.PI/2);
-		pie.endAngle(Math.PI/2);
-		
-		var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
-			.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
-			.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
-			.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-			.attr("class", "slice"); //allow us to style things in the slices (like text)
-						arcs.append("svg:path")
-			.attr("fill", function(d, i) { return d.data.color; } ) //set the color for each slice to be chosen from the color function defined above
-			.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-						arcs.append("svg:text") //add a label to each slice
-			.attr("transform", function(d) { //set the label's origin to the center of the arc
-				//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
-				var c = arc.centroid(d),
-				x = c[0],
-				y = c[1],
-				// pythagorean theorem for hypotenuse
-				h = Math.sqrt(x*x + y*y);
-				return "translate(" + (x/h * r*1.1) +  ',' + (y/h * r*1.1+5) +  ")";
+
+		var data = null;
+
+		function clearTables() {
+			$('#ballotResultTable thead tr').empty();
+			$('#ballotResultTable tbody tr').empty();
+			$('#ballotDeltaTable thead tr').empty();
+			$('#ballotDeltaTable tbody tr').empty();
+		}
+
+		function setdownload(text, name, type) {
+			var a = document.getElementById("dldiagram");
+			var file = new Blob([text], { type: type });
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+		}
+
+
+		function createDiagram() {
+			var w = 900, //width
+				h = 380, //height
+				r = 300, //radius
+
+				data = [{ 'color': '#0087c1', 'value': 9, 'label': 'RCDS' }, { 'color': '#e30513', 'value': 12, 'label': 'JUSOS' }, { 'color': '#ffff00', 'value': 6, 'label': 'LHG' }, { 'color': '#ff0000', 'value': 3, 'label': 'LUST' }, { 'color': '#b91023', 'value': 2, 'label': 'LISTE' }, { 'color': '#ff00ff', 'value': 3, 'label': 'KULT' }, { 'color': '#339933', 'value': 7, 'label': 'GHGP' }, { 'color': '#ce291f', 'value': 1, 'label': 'SDS' }];
+
+			var vis = d3.select("#diagram")
+				.append("svg:svg") //create the SVG element inside the <body>
+				.attr("id", "diagramsvg")
+				.data([data]) //associate our data with the document
+				.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
+				.attr("height", h)
+				.append("svg:g") //make a group to hold our pie chart
+				//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
+				.attr("transform", "translate(" + w / 2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+
+			var arc = d3.arc() //this will create <path> elements for us using arc data
+				.outerRadius(r)
+				.innerRadius(2 * r / 5);
+
+			var pie = d3.pie() //this will create arc data for us given a list of values
+				.value(function (d) { return d.value; })
+				.sort(null); //we must tell it out to access the value of each element in our data array
+
+			pie.startAngle(-Math.PI / 2);
+			pie.endAngle(Math.PI / 2);
+
+			var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+				.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
+				.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
+				.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+				.attr("class", "slice"); //allow us to style things in the slices (like text)
+			arcs.append("svg:path")
+				.attr("fill", function (d, i) { return d.data.color; }) //set the color for each slice to be chosen from the color function defined above
+				.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+			arcs.append("svg:text") //add a label to each slice
+				.attr("transform", function (d) { //set the label's origin to the center of the arc
+					//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
+					var c = arc.centroid(d),
+						x = c[0],
+						y = c[1],
+						// pythagorean theorem for hypotenuse
+						h = Math.sqrt(x * x + y * y);
+					return "translate(" + (x / h * r * 1.1) + ',' + (y / h * r * 1.1 + 5) + ")";
 				})
-			.attr("text-anchor", function(d) { 
-				var c = arc.centroid(d),
-				x = c[0];
-				if(x < -1/4*r) return "end";
-				if(x > 1/4*r) return "start";
-				return "middle";
+				.attr("text-anchor", function (d) {
+					var c = arc.centroid(d),
+						x = c[0];
+					if (x < -1 / 4 * r) return "end";
+					if (x > 1 / 4 * r) return "start";
+					return "middle";
 				}) //center the text on it's origin
-			.text(function(d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
-			setdownload($('#diagram').html(), "spwahl"+getThisYear()+"diagram.svg", "text/svg");
-	}
-	
-	$(function(){
-		$('.thisYear').text(getThisYear());
-		$('.lastYear').text(getLastYear());
-		
-		createDiagram();
-	
-		$( window ).resize(function() {
-			var g = $('#diagramsvg');
-			divwidth = $('#diagram').width() - 40;
-			svgwidth = g.width();
-			scale = divwidth / svgwidth;
-			g.attr("transform", "scale("+scale+")");
+				.text(function (d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
+			setdownload($('#diagram').html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
+		}
+
+		function reloadData() {
+			$.getJSON("data/data.json", function (result) {
+
+				clearTables();
+
+				$('.thisElectionName').text(result.meta.thisElectionName);
+				$('.lastElectionName').text(result.meta.lastElectionName);
+				$('#lastSaveTimestamp').text(dateString(result.timestamp));
+
+				createDiagram();
+
+
+				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
+				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+
+				$('#ballotResultTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
+
+				let ballot_index = 0;
+				for (b of result.ballots) {
+					$('#ballotResultTable tbody').append('<tr></tr>');
+					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+					let list_index = 0;
+					for (let i = 0; i < (result.lists.length + 2); i++) {
+						let index = ballot_index * (result.lists.length + 2) + list_index;
+						let value = (index < result.votes.length) ? result.votes[index] : "";
+						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">'+ value + '</span>');
+						list_index++;
+					}
+					ballot_index++;
+				}
+
+				$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
+				$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
+
+				let le_ballot_index = 0;
+				let le_ballots = result.ballots.slice();
+				le_ballots.push("SONSTIGE");
+				for (b of le_ballots) {
+					$('#lastElectionballotResultTable tbody').append('<tr></tr>');
+					$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+					let le_list_index = 0;
+					for (let i = 0; i < (result.lists.length + 3); i++) {
+						let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+						let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
+						$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+						le_list_index++;
+					}
+					le_ballot_index++;
+				}
+
+				$('input.votes').on('input', function () { $(this).addClass('changed') });
+			});
+		}
+
+		$(function () {
+			$.ajaxSetup({ cache: false });
+			reloadData();
+
+			$(window).resize(function () {
+				var g = $('#diagramsvg');
+				divwidth = $('#diagram').width() - 40;
+				svgwidth = g.width();
+				scale = divwidth / svgwidth;
+				g.attr("transform", "scale(" + scale + ")");
+			});
 		});
-	});
-		
-		
-		
-			
-		
-		
-		
-		
+
+		function dateString(timestamp) {
+			let value = parseInt(timestamp);
+			let datevalue = new Date(value);
+
+			let year = datevalue.getFullYear();
+			let month = format2(datevalue.getMonth() + 1);
+			let dom = format2(datevalue.getDay());
+			let hours = format2(datevalue.getHours());
+			let minutes = format2(datevalue.getMinutes());
+			let seconds = format2(datevalue.getSeconds());
+
+			return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+		}
+
+		function format2(value) {
+			if (value < 10) {
+				return "0" + value;
+			} else {
+				return "" + value;
+			}
+		}
+
 	</script>
 </body>
+
 </html>
