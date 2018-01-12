@@ -1,1 +1,3 @@
-lastelection.csv
+*.code-workspace
+data/*
+old/*

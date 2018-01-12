@@ -3,12 +3,17 @@ wahlstand
 
 wahlstand shows preliminary results of an election's ongoing counting
 
-usage
+Setup
 -----
 
-1. adapt the contents of config.json to your needs
-2. enter the results of the ballot boxes that have already counted into your "file_sp_current" file
-3. run wahlstand.py
+ - Upload the whole folder to a web server with PHP
+ - Make sure the `data` directory is writable for the web server
+ - Protect the `admin` directory, for example with .htaccess
 
-The contents of the html folder get updated. You may then upload it to a web server of your choice.
+Usage
+-----
 
+ - Open `/admin`
+ - Enter numbers
+ - Press save
+ - The contents of `/` update. Whoo!

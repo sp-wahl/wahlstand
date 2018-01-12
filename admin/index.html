@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>wahlstand</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		textarea {
+			width: 100%;
+		}
+
+		.card {
+			margin-top: 1em;
+			margin-bottom: 1em;
+		}
+
+		input.votes {
+			max-width: 5em;
+			min-width: 3em;
+		}
+
+		input.votes {
+			-webkit-transition: all 0.30s ease-in-out;
+			-moz-transition: all 0.30s ease-in-out;
+			-ms-transition: all 0.30s ease-in-out;
+			-o-transition: all 0.30s ease-in-out;
+			outline: none;
+			padding: 3px 0px 3px 3px;
+			margin: 5px 1px 3px 0px;
+			border: 1px solid #DDDDDD;
+		}
+
+		input.votes.changed {
+			box-shadow: 0 0 1px rgba(81, 203, 238, 1);
+			padding: 3px 0px 3px 3px;
+			margin: 5px 1px 3px 0px;
+			border: 1px solid rgba(81, 203, 238, 1);
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<div id='content' class='container-fluid'>
+
+		<div class="row">
+			<div class="col-3">
+
+				<div class="card">
+					<div class="card-header">
+						Meta
+					</div>
+					<div class="card-body">
+						<button class="btn btn-primary" onclick="saveData()">Save</button>
+
+						<hr>
+
+						<div class="form-group">
+							<label for="thisElectionName">Wahl(-name)</label>
+							<input type="text" class="form-control" id="thisElectionName" value="2018">
+						</div>
+						<div class="form-group">
+							<label for="thisElectionVoters">Wahlberechtigte</label>
+							<input type="number" class="form-control" id="thisElectionVoters" value="38000">
+						</div>
+						<div class="form-group">
+							<label for="lastElectionName">Wahl(-name) letzte Wahl</label>
+							<input type="text" class="form-control" id="lastElectionName" value="2017">
+						</div>
+						<div class="form-group">
+							<label for="lastElectionVoters">Wahlberechtigte letzte Wahl</label>
+							<input type="number" class="form-control" id="lastElectionVoters" value="36518">
+						</div>
+
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						Listen
+					</div>
+					<div class="card-body">
+						<textarea id="listen" rows="10">JUSOS
+RCDS
+LHG
+LUST
+SDS
+GHG
+IYSSE</textarea>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						Urnen
+					</div>
+					<div class="card-body">
+						<textarea id="urnen" rows="30">Juridicum
+Juridicum
+Mensa Nassestraße 1
+Mensa Nassestraße 2
+Hauptgebäude 1
+Hauptgebäude 2
+Hauptgebäude 3
+Pop-Mensa 1
+Pop-Mensa 2
+Anglistik / Kaiserstraße
+Math.-Nat. 1
+Math.-Nat. 2
+Math.-Nat. 3
+Math.-Nat. 4
+Campus Poppelsdorf
+Anatomie
+Mathematik
+MNL
+Kantine Venusberg / Hauptgebäude 4
+Informatik, Sportanlage Römerstraße
+ULB
+Sprachlernzentrum
+Physik / IGW
+Psychologie
+Wahlbüro (Briefwahl)</textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-9">
+				<div class="card">
+					<div class="card-header">
+						Stimmen
+					</div>
+					<div class="card-body">
+						<table class='table table-hover table-condensed' id="ballotTable">
+							<thead>
+								<tr>
+									<th>Urne</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						Stimmen (letzte Wahl)
+					</div>
+					<div class="card-body">
+						<table class='table table-hover table-condensed' id="lastElectionBallotTable">
+							<thead>
+								<tr>
+									<th>Urne</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<p class="text-center">
+				<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
+				<p>
+		</div>
+
+	</div>
+
+	<!-- $('.votes').each(function(){$(this).val(Math.floor(Math.random()*100))}) -->
+
+
+	<script src="../js/jquery-3.2.1.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+
+		function getMeta() {
+			let meta = Object();
+			meta.thisElectionName = $('#thisElectionName').val();
+			meta.thisElectionVoters = $('#thisElectionVoters').val();
+			meta.lastElectionName = $('#lastElectionName').val();
+			meta.lastElectionVoters = $('#lastElectionVoters').val();
+			return meta;
+		}
+
+		function getLists() {
+			let lists = $('#listen').val().split('\n');
+			return lists;
+		}
+		function getBallots() {
+			let ballots = $('#urnen').val().split('\n');
+			return ballots;
+		}
+		function getVotes(listcount, ballotcount) {
+			let votes = [];
+			for (let b = 0; b < ballotcount; b++) {
+				for (let l = 0; l < (listcount + 2); l++) {
+					let value = $('#votes-' + b + '-' + l).val();
+					votes.push(value);
+				}
+			}
+			return votes;
+		}
+		function getLastElectionVotes(listcount, ballotcount) {
+			let lastElectionVotes = [];
+			for (let b = 0; b < ballotcount + 1; b++) {
+				for (let l = 0; l < (listcount + 3); l++) {
+					let value = $('#lastElectionVotes-' + b + '-' + l).val();
+					lastElectionVotes.push(value);
+				}
+			}
+			return lastElectionVotes;
+		}
+
+		function gatherData() {
+			let data = new Object();
+			data.timestamp = Date.now();
+			data.lists = getLists();
+			data.ballots = getBallots();
+			data.votes = getVotes(data.lists.length, data.ballots.length);
+			data.lastElectionVotes = getLastElectionVotes(data.lists.length, data.ballots.length);
+			data.meta = getMeta();
+			return data;
+		}
+
+		function saveData() {
+			let data = gatherData();
+			$.post('save.php', data, function (result) {
+				if (result.status === "ok") {
+					alert("Gespeichert.");
+					reloadData();
+				} else {
+					alert("Ein Fehler ist aufgetreten. Die Änderungen wurden nicht gespeichert. Fehlercode: " + result.status);
+				}
+			}, 'json');
+		}
+
+		function clearTables() {
+			$('#ballotTable thead tr').empty();
+			$('#ballotTable tbody tr').empty();
+			$('#lastElectionBallotTable thead tr').empty();
+			$('#lastElectionBallotTable tbody tr').empty();
+		}
+
+		function reloadData() {
+			$.getJSON("../data/data.json", function (result) {
+				clearTables();
+
+				$('#listen').val(result.lists.join("\n"));
+				$('#urnen').val(result.ballots.join("\n"));
+				$('#thisElectionName').val(result.meta.thisElectionName);
+				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
+				$('#lastElectionName').val(result.meta.lastElectionName);
+				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+
+				$('#ballotTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#ballotTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#ballotTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotTable thead tr').append('<th>Enthaltung</th>');
+
+				let ballot_index = 0;
+				for (b of result.ballots) {
+					$('#ballotTable tbody').append('<tr></tr>');
+					$('#ballotTable tbody tr:last').append('<td>' + b + '</td>');
+					let list_index = 0;
+					for (let i = 0; i < (result.lists.length + 2); i++) {
+						let index = ballot_index * (result.lists.length + 2) + list_index;
+						let value = (index < result.votes.length) ? result.votes[index] : "";
+						$('#ballotTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
+						list_index++;
+					}
+					ballot_index++;
+				}
+
+				$('#lastElectionBallotTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#lastElectionBallotTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#lastElectionBallotTable thead tr').append('<th>Ungültig</th>');
+				$('#lastElectionBallotTable thead tr').append('<th>Enthaltung</th>');
+				$('#lastElectionBallotTable thead tr').append('<th>SONSTIGE</th>');
+
+				let le_ballot_index = 0;
+				let le_ballots = result.ballots.slice();
+				le_ballots.push("SONSTIGE");
+				for (b of le_ballots) {
+					$('#lastElectionBallotTable tbody').append('<tr></tr>');
+					$('#lastElectionBallotTable tbody tr:last').append('<td>' + b + '</td>');
+					let le_list_index = 0;
+					for (let i = 0; i < (result.lists.length + 3); i++) {
+						let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+						let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
+						$('#lastElectionBallotTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+						le_list_index++;
+					}
+					le_ballot_index++;
+				}
+
+				$('input.votes').on('input', function () { $(this).addClass('changed') });
+			});
+		}
+
+		$(function () {
+			$.ajaxSetup({ cache: false });
+			reloadData();
+		});
+
+
+	</script>
+</body>
+
+</html>
