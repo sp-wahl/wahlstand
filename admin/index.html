@@ -54,7 +54,9 @@
 						Meta
 					</div>
 					<div class="card-body">
-						<button class="btn btn-primary" onclick="saveData()">Save</button>
+						<button class="btn btn-primary" onclick="saveData()">Speichern</button>
+						<br>
+						<span class="text-right" id="lastSaveTimestamp"></span>
 
 						<hr>
 
@@ -247,9 +249,33 @@ Wahlbüro (Briefwahl)</textarea>
 			$('#lastElectionBallotTable tbody tr').empty();
 		}
 
+		function dateString(timestamp){
+			let value = parseInt(timestamp);
+			let datevalue = new Date(value);
+
+			let year = datevalue.getFullYear();
+			let month = format2(datevalue.getMonth()+1);
+			let dom = format2(datevalue.getDay());
+			let hours = format2(datevalue.getHours());
+			let minutes = format2(datevalue.getMinutes());
+			let seconds = format2(datevalue.getSeconds());
+
+			return dom+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
+		}
+
+		function format2(value){
+			if(value < 10){
+				return "0"+value;
+			} else{
+				return ""+value;
+			}
+		}
+
 		function reloadData() {
 			$.getJSON("../data/data.json", function (result) {
 				clearTables();
+
+				$('#lastSaveTimestamp').text(dateString(result.timestamp));
 
 				$('#listen').val(result.lists.join("\n"));
 				$('#urnen').val(result.ballots.join("\n"));
