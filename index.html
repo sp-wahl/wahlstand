@@ -53,6 +53,10 @@
 		#ballotResultTable tr th {
 			text-align: center;
 		}
+
+		#content{
+			margin-top: 1em;
+		}
 	</style>
 </head>
 
@@ -93,36 +97,9 @@
 	</nav>
 
 
-	<div id='content' class='container-fluid'>
+	<div id='content' class='container'>
 
-		<!--<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>-->
-
-		<h1>Urnenergebnisse</h1>
-
-		<table class='table table-bordered  table-striped table-sm' id="ballotResultTable">
-			<thead>
-				<tr>
-					<th>Urne</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-
-		<h1>Gewinne/Verluste
-			<small>(zu
-				<span class="lastElectionName">-</span>)</small>
-		</h1>
-
-		<table class='table table-bordered table-striped table-sm' id="ballotDeltaTable">
-			<thead>
-				<tr>
-					<th>Urne</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
+		<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>
 
 		<h1>Sitzverteilung</h1>
 		<div id='diagram'></div>
@@ -134,7 +111,7 @@
 
 		<h1>Gesamtergebnis</h1>
 
-		<div class='col-4 offset-4'>
+		<div class='col-6 offset-3'>
 			<table class='table table-hover table-condensed' id="summaryTable">
 				<tbody>
 					<tr>
@@ -171,6 +148,33 @@
 			</table>
 		</div>
 
+		<h1>Urnenergebnisse</h1>
+
+		<table class='table table-bordered  table-striped table-sm' id="ballotResultTable">
+			<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+
+		<h1>Gewinne/Verluste
+			<small>(zu
+				<span class="lastElectionName">-</span>)</small>
+		</h1>
+
+		<table class='table table-bordered table-striped table-sm' id="ballotDeltaTable">
+			<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+
 		<div class="alert alert-danger text-center" id="notice-bottom">
 			<strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
 			<strong>Achtung!</strong>
@@ -206,13 +210,219 @@
 			a.download = name;
 		}
 
+		function getVotesForLists() {
+			let map = new Map();
+			for (l of data.lists) {
+				map.set(l, 0);
+			}
+			for (let b = 0; b < data.ballots.length; b++) {
+				for (let l = 0; l < data.lists.length; l++) {
+					let currentList = data.lists[l];
+					let voteIndex = b * (data.lists.length + 2) + l;
+					let votes = 0;
+					if (data.votes[voteIndex] != "") {
+						votes = parseInt(data.votes[voteIndex]);
+					}
+					map.set(currentList, (map.get(currentList) + votes))
+				}
+			}
+			return map;
+		}
+		function getAbstentions() {
+			let abstentions = 0;
+			for (let b = 0; b < data.ballots.length; b++) {
+				let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
+				let votes = 0;
+				if (data.votes[voteIndex] != "") {
+					votes = parseInt(data.votes[voteIndex]);
+				}
+				abstentions += votes;
+			}
+			return abstentions;
+		}
+
+		function getInvalidVotes() {
+			let invalidVotes = 0;
+			for (let b = 0; b < data.ballots.length; b++) {
+				let voteIndex = b * (data.lists.length + 2) + data.lists.length;
+				let votes = 0;
+				if (data.votes[voteIndex] != "") {
+					votes = parseInt(data.votes[voteIndex]);
+				}
+				invalidVotes += votes;
+			}
+			return invalidVotes;
+		}
+
+		function getTotalVotes() {
+			let sum = 0;
+			let listVotes = getVotesForLists();
+			for (v of listVotes.values()) {
+				sum += v;
+			}
+			sum += getAbstentions();
+			sum += getInvalidVotes();
+			return sum;
+		}
+
+		function getValidVotes() {
+			let sum = 0;
+			let listVotes = getVotesForLists();
+			for (v of listVotes.values()) {
+				sum += v;
+			}
+			sum += getAbstentions();
+			return sum;
+		}
+
+		function getTurnout() {
+			return getTotalVotes() / parseInt(data.meta.thisElectionVoters) * 100;
+		}
+
+		function getLastElectionVotesForLists() {
+			let map = new Map();
+			for (l of data.lists) {
+				map.set(l, 0);
+			}
+			for (let b = 0; b < data.ballots.length + 1; b++) {
+				for (let l = 0; l < data.lists.length; l++) {
+					let currentList = data.lists[l];
+					let voteIndex = b * (data.lists.length + 3) + l;
+					let votes = 0;
+					if (data.lastElectionVotes[voteIndex] != "") {
+						votes = parseInt(data.lastElectionVotes[voteIndex]);
+					}
+					map.set(currentList, (map.get(currentList) + votes))
+				}
+			}
+			return map;
+		}
+		function getLastElectionAbstentions() {
+			let abstentions = 0;
+			for (let b = 0; b < data.ballots.length; b++) {
+				let voteIndex = b * (data.lists.length + 3) + data.lists.length + 1;
+				let votes = 0;
+				if (data.lastElectionVotes[voteIndex] != "") {
+					votes = parseInt(data.lastElectionVotes[voteIndex]);
+				}
+				abstentions += votes;
+			}
+			return abstentions;
+		}
+
+		function getLastElectionInvalidVotes() {
+			let invalidVotes = 0;
+			for (let b = 0; b < data.ballots.length; b++) {
+				let voteIndex = b * (data.lists.length + 3) + data.lists.length;
+				let votes = 0;
+				if (data.lastElectionVotes[voteIndex] != "") {
+					votes = parseInt(data.lastElectionVotes[voteIndex]);
+				}
+				invalidVotes += votes;
+			}
+			return invalidVotes;
+		}
+
+		function getLastElectionOtherVotes() {
+			let otherVotes = 0;
+			for (let b = 0; b < data.ballots.length; b++) {
+				let voteIndex = b * (data.lists.length + 3) + data.lists.length + 2;
+				let votes = 0;
+				if (data.lastElectionVotes[voteIndex] != "") {
+					votes = parseInt(data.lastElectionVotes[voteIndex]);
+				}
+				otherVotes += votes;
+			}
+			return otherVotes;
+		}
+
+		function getLastElectionTotalVotes() {
+			let sum = 0;
+			let listVotes = getLastElectionVotesForLists();
+			for (v of listVotes.values()) {
+				sum += v;
+			}
+			sum += getLastElectionAbstentions();
+			sum += getLastElectionInvalidVotes();
+			sum += getLastElectionOtherVotes();
+			return sum;
+		}
+
+		function getLastElectionValidVotes() {
+			let sum = 0;
+			let listVotes = getLastElectionVotesForLists();
+			for (v of listVotes.values()) {
+				sum += v;
+			}
+			sum += getLastElectionAbstentions();
+			sum += getLastElectionOtherVotes();
+			return sum;
+		}
+
+		function getLastElectionTurnout() {
+			return getLastElectionTotalVotes() / parseInt(data.meta.lastElectionVoters) * 100;
+		}
+
+		function stlgs(seats, lists) {
+			let totalvotes = 0;
+			for (v of lists.values()) {
+				totalvotes += v;
+			}
+			let factor = Math.floor(totalvotes / (seats + 1));
+
+			while (calculateSeatSum(lists.values(), factor) > seats) {
+				factor += 1;
+			}
+			while (calculateSeatSum(lists.values(), factor) < seats) {
+				factor -= 0.1;
+			}
+			while (calculateSeatSum(lists.values(), factor) > seats) {
+				factor += 0.01;
+			}
+
+			let result = new Map(lists);
+			for (k of lists.keys()) {
+				result.set(k, Math.round(result.get(k) / factor));
+			}
+			console.log(factor);
+			return result;
+		}
+
+		function calculateSeatSum(listvotes, factor) {
+			let sum = 0;
+			for (v of listvotes) {
+				sum += Math.round(v / factor);
+			}
+			return sum;
+			console.log(sum);
+		}
+
+		function getDiagramData() {
+			let votesForLists = getVotesForLists();
+			let seats = stlgs(43, votesForLists);
+			let diagramData = [];
+			for (let i = 0; i < data.lists.length; i++) {
+				let l = new Object();
+				l.color = data.colours[i];
+				l.label = data.lists[i];
+				l.value = seats.get(data.lists[i]);
+				diagramData.push(l);
+			}
+			return diagramData;
+		}
+
+
 
 		function createDiagram() {
+
 			var w = 900, //width
 				h = 380, //height
 				r = 300, //radius
 
-				data = [{ 'color': '#0087c1', 'value': 9, 'label': 'RCDS' }, { 'color': '#e30513', 'value': 12, 'label': 'JUSOS' }, { 'color': '#ffff00', 'value': 6, 'label': 'LHG' }, { 'color': '#ff0000', 'value': 3, 'label': 'LUST' }, { 'color': '#b91023', 'value': 2, 'label': 'LISTE' }, { 'color': '#ff00ff', 'value': 3, 'label': 'KULT' }, { 'color': '#339933', 'value': 7, 'label': 'GHGP' }, { 'color': '#ce291f', 'value': 1, 'label': 'SDS' }];
+				//data = [{ 'color': '#0087c1', 'value': 9, 'label': 'RCDS' }, { 'color': '#e30513', 'value': 12, 'label': 'JUSOS' }, { 'color': '#ffff00', 'value': 6, 'label': 'LHG' }, { 'color': '#ff0000', 'value': 3, 'label': 'LUST' }, { 'color': '#b91023', 'value': 2, 'label': 'LISTE' }, { 'color': '#ff00ff', 'value': 3, 'label': 'KULT' }, { 'color': '#339933', 'value': 7, 'label': 'GHGP' }, { 'color': '#ce291f', 'value': 1, 'label': 'SDS' }];
+				data = getDiagramData();
+
+			console.log(data);
 
 			var vis = d3.select("#diagram")
 				.append("svg:svg") //create the SVG element inside the <body>
@@ -266,6 +476,7 @@
 
 		function reloadData() {
 			$.getJSON("data/data.json", function (result) {
+				data = result;
 
 				clearTables();
 
@@ -294,38 +505,72 @@
 					for (let i = 0; i < (result.lists.length + 2); i++) {
 						let index = ballot_index * (result.lists.length + 2) + list_index;
 						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span>');
+						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
 						list_index++;
 					}
 					ballot_index++;
 				}
 
-				$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
+				$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
 				for (l of result.lists) {
-					$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
+					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
 				}
-				$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
-				$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
+				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
 
 				let le_ballot_index = 0;
 				let le_ballots = result.ballots.slice();
-				le_ballots.push("SONSTIGE");
 				for (b of le_ballots) {
-					$('#lastElectionballotResultTable tbody').append('<tr></tr>');
-					$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+					$('#ballotDeltaTable tbody').append('<tr></tr>');
+					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
 					let le_list_index = 0;
-					for (let i = 0; i < (result.lists.length + 3); i++) {
-						let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
-						let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
-						$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+					for (let i = 0; i < (result.lists.length + 2); i++) {
+						let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
+						let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+						let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
+						let table_value = prefixNumber(value - le_value);
+						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
 						le_list_index++;
 					}
 					le_ballot_index++;
 				}
 
-				$('input.votes').on('input', function () { $(this).addClass('changed') });
+				$('#thisElectionVoters').text(result.thisElectionVoters);
+				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
+				$('#votersDiff').html(prefixNumber(votersDiff));
+				$('#thisElectionVotes').text(getTotalVotes());
+				let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
+				$('#votesDiff').html(prefixNumber(votesDiff));
+				$('#thisElectionInvalidVotes').text(getInvalidVotes());
+				let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
+				$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
+				$('#thisElectionValidVotes').text(getValidVotes());
+				let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
+				$('#validVotesDiff').html(prefixNumber(validVotesDiff));
+				$('#thisElectionAbstentions').text(getAbstentions());
+				let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
+				$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
+				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
+				let turnoutDiff = getTurnout() - getLastElectionTurnout();
+				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
+
+
+
 			});
+		}
+
+		function prefixNumber(number, isFloat) {
+			if (isFloat != undefined && isFloat) {
+				number = number.toFixed(2).replace('.', ',');
+			}
+			if (number > 0) {
+				return "<span class='text-success'>+" + number + "</span>";
+			} else if(number == 0){
+				return "<span>±" + number + "</span>";
+			} else {
+				return "<span class='text-danger'>" + number + "</span>";
+			}
 		}
 
 		$(function () {

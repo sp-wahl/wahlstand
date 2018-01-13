@@ -82,21 +82,6 @@
 
 				<div class="card">
 					<div class="card-header">
-						Listen
-					</div>
-					<div class="card-body">
-						<textarea id="listen" rows="10">JUSOS
-RCDS
-LHG
-LUST
-SDS
-GHG
-IYSSE</textarea>
-					</div>
-				</div>
-
-				<div class="card">
-					<div class="card-header">
 						Urnen
 					</div>
 					<div class="card-body">
@@ -122,9 +107,41 @@ Kantine Venusberg / Hauptgebäude 4
 Informatik, Sportanlage Römerstraße
 ULB
 Sprachlernzentrum
+Venusberg
 Physik / IGW
 Psychologie
 Wahlbüro (Briefwahl)</textarea>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						Listen
+					</div>
+					<div class="card-body">
+						<textarea id="listen" rows="10">JUSOS
+RCDS
+LHG
+LUST
+SDS
+GHG
+IYSSE</textarea>
+					</div>
+				</div>
+
+
+				<div class="card">
+					<div class="card-header">
+						Farben
+					</div>
+					<div class="card-body">
+						<textarea id="colours" rows="10">#e30513
+#0087c1
+#ffff00
+#ff0000
+#ce291f
+#339933
+#8a2be2</textarea>
 					</div>
 				</div>
 			</div>
@@ -190,13 +207,17 @@ Wahlbüro (Briefwahl)</textarea>
 			return meta;
 		}
 
+		function getBallots() {
+			let ballots = $('#urnen').val().split('\n');
+			return ballots;
+		}
 		function getLists() {
 			let lists = $('#listen').val().split('\n');
 			return lists;
 		}
-		function getBallots() {
-			let ballots = $('#urnen').val().split('\n');
-			return ballots;
+		function getColours() {
+			let colours = $('#colours').val().split('\n');
+			return colours;
 		}
 		function getVotes(listcount, ballotcount) {
 			let votes = [];
@@ -222,8 +243,9 @@ Wahlbüro (Briefwahl)</textarea>
 		function gatherData() {
 			let data = new Object();
 			data.timestamp = Date.now();
-			data.lists = getLists();
 			data.ballots = getBallots();
+			data.lists = getLists();
+			data.colours = getColours();
 			data.votes = getVotes(data.lists.length, data.ballots.length);
 			data.lastElectionVotes = getLastElectionVotes(data.lists.length, data.ballots.length);
 			data.meta = getMeta();
@@ -249,25 +271,25 @@ Wahlbüro (Briefwahl)</textarea>
 			$('#lastElectionballotResultTable tbody tr').empty();
 		}
 
-		function dateString(timestamp){
+		function dateString(timestamp) {
 			let value = parseInt(timestamp);
 			let datevalue = new Date(value);
 
 			let year = datevalue.getFullYear();
-			let month = format2(datevalue.getMonth()+1);
+			let month = format2(datevalue.getMonth() + 1);
 			let dom = format2(datevalue.getDay());
 			let hours = format2(datevalue.getHours());
 			let minutes = format2(datevalue.getMinutes());
 			let seconds = format2(datevalue.getSeconds());
 
-			return dom+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
+			return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
 		}
 
-		function format2(value){
-			if(value < 10){
-				return "0"+value;
-			} else{
-				return ""+value;
+		function format2(value) {
+			if (value < 10) {
+				return "0" + value;
+			} else {
+				return "" + value;
 			}
 		}
 
