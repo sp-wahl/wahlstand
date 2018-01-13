@@ -17,3 +17,11 @@ Usage
  - Enter numbers
  - Press save
  - The contents of `/` update. Whoo!
+ 
+
+Music License Information
+-------------------------
+
+"Who Likes to Party" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 3.0 License
+http://creativecommons.org/licenses/by/3.0/

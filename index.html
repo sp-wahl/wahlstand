@@ -183,9 +183,11 @@
 			<p>
 	</div>
 
+
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/d3.min.js" charset="utf-8"></script>
+	<script src="js/d3.min.js"></script>
+	<script src="js/funk.js"></script>
 	<script type="text/javascript">
 
 		var data = null;
@@ -292,7 +294,7 @@
 					for (let i = 0; i < (result.lists.length + 2); i++) {
 						let index = ballot_index * (result.lists.length + 2) + list_index;
 						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">'+ value + '</span>');
+						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span>');
 						list_index++;
 					}
 					ballot_index++;
@@ -360,7 +362,6 @@
 				return "" + value;
 			}
 		}
-
 	</script>
 </body>
 
