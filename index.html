@@ -64,8 +64,8 @@
 
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">wahlstand
-			<span class="thisElectionName">1970</span>
+		<a class="navbar-brand" href="./">wahlstand
+			<span class="thisElectionName"></span>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
 		 aria-expanded="false" aria-label="Toggle navigation">
@@ -120,33 +120,33 @@
 				<tbody>
 					<tr>
 						<td>Wahlberechtigte</td>
-						<td id="thisElectionVoters">36518</td>
-						<td id="votersDiff">+1351</td>
+						<td id="thisElectionVoters"></td>
+						<td id="votersDiff"></td>
 					</tr>
 					<tr>
 						<td>Abgegebene Stimmen</td>
-						<td id="thisElectionVotes">5201</td>
-						<td id="votesDiff">-987</td>
+						<td id="thisElectionVotes"></td>
+						<td id="votesDiff"></td>
 					</tr>
 					<tr>
 						<td>Ungültige Stimmen</td>
-						<td id="thisElectionInvalidVotes">36</td>
-						<td id="invalidVotesDiff">-47</td>
+						<td id="thisElectionInvalidVotes"></td>
+						<td id="invalidVotesDiff"></td>
 					</tr>
 					<tr>
 						<td>Gültige Stimmen</td>
-						<td id="thisElectionValidVotes">5165</td>
-						<td id="validVotesDiff">-940</td>
+						<td id="thisElectionValidVotes"></td>
+						<td id="validVotesDiff"></td>
 					</tr>
 					<tr>
 						<td>Enthaltungen</td>
-						<td id="thisElectionAbstentions">74</td>
-						<td id="abstentionsDiff">-224</td>
+						<td id="thisElectionAbstentions"></td>
+						<td id="abstentionsDiff"></td>
 					</tr>
 					<tr>
 						<td>Wahlbeteiligung</td>
-						<td id="thisElectionTurnout">14.24 %</td>
-						<td id="turnoutDiff">-3.36</td>
+						<td id="thisElectionTurnout"></td>
+						<td id="turnoutDiff"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -402,7 +402,6 @@
 				sum += Math.round(v / factor);
 			}
 			return sum;
-			console.log(sum);
 		}
 
 		function getDiagramData() {
@@ -423,14 +422,14 @@
 
 		function createDiagram() {
 
+			$('#diagram').empty();
+
 			var w = 900, //width
 				h = 380, //height
 				r = 300, //radius
 
-				//data = [{ 'color': '#0087c1', 'value': 9, 'label': 'RCDS' }, { 'color': '#e30513', 'value': 12, 'label': 'JUSOS' }, { 'color': '#ffff00', 'value': 6, 'label': 'LHG' }, { 'color': '#ff0000', 'value': 3, 'label': 'LUST' }, { 'color': '#b91023', 'value': 2, 'label': 'LISTE' }, { 'color': '#ff00ff', 'value': 3, 'label': 'KULT' }, { 'color': '#339933', 'value': 7, 'label': 'GHGP' }, { 'color': '#ce291f', 'value': 1, 'label': 'SDS' }];
 				data = getDiagramData();
 
-			console.log(data);
 
 			var vis = d3.select("#diagram")
 				.append("svg:svg") //create the SVG element inside the <body>
