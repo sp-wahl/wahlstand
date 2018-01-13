@@ -54,7 +54,7 @@
 			text-align: center;
 		}
 
-		#content{
+		#content {
 			margin-top: 1em;
 		}
 	</style>
@@ -99,7 +99,11 @@
 
 	<div id='content' class='container'>
 
-		<div class="alert alert-danger text-center" id="notice-top"><strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis. <strong>Achtung!</strong> </div>
+		<div class="alert alert-danger text-center" id="notice-top">
+			<strong>Achtung!</strong>
+			Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+			<strong>Achtung!</strong>
+		</div>
 
 		<h1>Sitzverteilung</h1>
 		<div id='diagram'></div>
@@ -368,7 +372,11 @@
 			for (v of lists.values()) {
 				totalvotes += v;
 			}
-			let factor = Math.floor(totalvotes / (seats + 1));
+			if (totalvotes == 0) {
+				return lists;
+			}
+
+			let factor = 1;
 
 			while (calculateSeatSum(lists.values(), factor) > seats) {
 				factor += 1;
@@ -384,7 +392,7 @@
 			for (k of lists.keys()) {
 				result.set(k, Math.round(result.get(k) / factor));
 			}
-			console.log(factor);
+			console.log("STLGS factor =", factor);
 			return result;
 		}
 
@@ -566,7 +574,7 @@
 			}
 			if (number > 0) {
 				return "<span class='text-success'>+" + number + "</span>";
-			} else if(number == 0){
+			} else if (number == 0) {
 				return "<span>±" + number + "</span>";
 			} else {
 				return "<span class='text-danger'>" + number + "</span>";

@@ -224,6 +224,9 @@ IYSSE</textarea>
 			for (let b = 0; b < ballotcount; b++) {
 				for (let l = 0; l < (listcount + 2); l++) {
 					let value = $('#votes-' + b + '-' + l).val();
+					if(value === undefined){
+						value = "";
+					}
 					votes.push(value);
 				}
 			}
@@ -234,6 +237,9 @@ IYSSE</textarea>
 			for (let b = 0; b < ballotcount + 1; b++) {
 				for (let l = 0; l < (listcount + 3); l++) {
 					let value = $('#lastElectionVotes-' + b + '-' + l).val();
+					if(value === undefined){
+						value = "";
+					}
 					lastElectionVotes.push(value);
 				}
 			}

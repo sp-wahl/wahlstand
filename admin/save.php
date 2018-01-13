@@ -1,6 +1,6 @@
 <?php 
 
-if(isset($_POST['lists']) && isset($_POST['ballots']) && isset($_POST['votes'])){
+if(isset($_POST['lists']) && isset($_POST['ballots']) && isset($_POST['votes']) && isset($_POST['colours']) && isset($_POST['meta'])){
 	$success = file_put_contents("../data/data.json", json_encode($_POST,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
 	if($success === false){
 		echo '{"status":"write_error"}';
