@@ -57,6 +57,40 @@
 		#content {
 			margin-top: 1em;
 		}
+
+		#indicator.spinning {
+			display: block;
+			-webkit-animation: spin 2s infinite linear;
+			-moz-animation: spin 2s infinite linear;
+			animation: spin 2s infinite linear;
+		}
+
+		@-moz-keyframes spin {
+			from {
+				-moz-transform: rotate(0deg);
+			}
+			to {
+				-moz-transform: rotate(360deg);
+			}
+		}
+
+		@-webkit-keyframes spin {
+			from {
+				-webkit-transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
 	</style>
 </head>
 
@@ -74,25 +108,19 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="index.html">Übersicht</a>
-				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tabs.html">Urnenergebnisse</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">raw</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">
+					<div class="nav-link disabled">
 						<small>Letzte Aktualisierung:
 							<span id="lastSaveTimestamp">-</span>
 						</small>
-					</a>
+					</div>
 				</li>
 			</ul>
-
+			<div class="form-inline my-2 my-lg-0">
+				<button id="indicator-button" class="btn my-2 my-sm-0" onclick="toggleRefresh()">
+					<span id="indicator">🔃</span>
+				</button>
+			</div>
 		</div>
 	</nav>
 
@@ -199,6 +227,29 @@
 	<script type="text/javascript">
 
 		var data = null;
+		var refreshInterval = null;
+		var lastTimestamp = "";
+
+		function toggleRefresh() {
+			$('#indicator').toggleClass('spinning');
+			$('#indicator-button').toggleClass('btn-success');
+			if ($('#indicator').hasClass('spinning')) {
+				refreshInterval = setInterval(function () {
+					checkIfDataHasChanged();
+				}, 5000);
+			} else {
+				clearInterval(refreshInterval);
+				refreshInterval = null;
+			}
+		}
+
+		function checkIfDataHasChanged() {
+			$.getJSON("data/timestamp.json", function (result) {
+				if (lastTimestamp != result.last_update) {
+					reloadData();
+				}
+			});
+		}
 
 		function clearTables() {
 			$('#ballotResultTable thead tr').empty();
@@ -484,6 +535,7 @@
 		function reloadData() {
 			$.getJSON("data/data.json", function (result) {
 				data = result;
+				lastTimestamp = result.timestamp;
 
 				clearTables();
 
@@ -492,7 +544,6 @@
 				$('#lastSaveTimestamp').text(dateString(result.timestamp));
 
 				createDiagram();
-
 
 				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
 				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
@@ -543,7 +594,7 @@
 					le_ballot_index++;
 				}
 
-				$('#thisElectionVoters').text(result.thisElectionVoters);
+				$('#thisElectionVoters').text(result.meta.thisElectionVoters);
 				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
 				$('#votersDiff').html(prefixNumber(votersDiff));
 				$('#thisElectionVotes').text(getTotalVotes());
@@ -583,6 +634,7 @@
 		$(function () {
 			$.ajaxSetup({ cache: false });
 			reloadData();
+			toggleRefresh();
 
 			$(window).resize(function () {
 				var g = $('#diagramsvg');
