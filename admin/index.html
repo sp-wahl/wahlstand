@@ -55,6 +55,7 @@
 					</div>
 					<div class="card-body">
 						<button class="btn btn-primary" onclick="saveData()">Speichern</button>
+						<mark>Strg+S</mark>
 						<br>
 						<span class="text-right" id="lastSaveTimestamp"></span>
 
@@ -364,6 +365,13 @@ IYSSE</textarea>
 		$(function () {
 			$.ajaxSetup({ cache: false });
 			reloadData();
+			$(document).on('keydown', function (event) {
+				console.log("pressed");
+				if ((event.ctrlKey || event.metaKey) && event.keyCode == 83) {
+					event.preventDefault();
+					saveData();
+				}
+			});
 		});
 
 
