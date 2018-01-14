@@ -36,22 +36,26 @@
 			text-align: right;
 		}
 
+		#summaryTable tr th,
+		#ballotDeltaTable tr th,
+		#ballotResultTable tr th,
+		#listSummaryTable tr th,
 		#summaryTable tr td,
 		#ballotDeltaTable tr td,
-		#ballotResultTable tr td {
+		#ballotResultTable tr td,
+		#listSummaryTable tr td {
 			text-align: right;
 		}
 
+		#summaryTable tr th:first-child,
+		#ballotDeltaTable tr th:first-child,
+		#ballotResultTable tr th:first-child,
+		#listSummaryTable tr th:first-child,
 		#summaryTable tr td:first-child,
 		#ballotDeltaTable tr td:first-child,
-		#ballotResultTable tr td:first-child {
+		#ballotResultTable tr td:first-child,
+		#listSummaryTable tr td:first-child {
 			text-align: left;
-		}
-
-		#summaryTable tr th,
-		#ballotDeltaTable tr th,
-		#ballotResultTable tr th {
-			text-align: center;
 		}
 
 		#content {
@@ -180,6 +184,20 @@
 			</table>
 		</div>
 
+		<div class='col-6 offset-3'>
+			<table class='table table-hover table-sm' id="listSummaryTable">
+				<thead>
+					<tr>
+						<th>Liste</th>
+						<th>Stimmen</th>
+						<th>+/-</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
 		<h1>Urnenergebnisse</h1>
 
 		<table class='table table-hover table-sm' id="ballotResultTable">
@@ -256,6 +274,7 @@
 			$('#ballotResultTable tbody').empty();
 			$('#ballotDeltaTable thead tr').empty();
 			$('#ballotDeltaTable tbody').empty();
+			$('#listSummaryTable tbody').empty();
 		}
 
 		function setdownload(text, name, type) {
@@ -613,6 +632,13 @@
 				let turnoutDiff = getTurnout() - getLastElectionTurnout();
 				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
 
+				let thisElectionListVotes = getVotesForLists();
+				let lastElectionListVotes = getLastElectionVotesForLists();
+				for (list of result.lists) {
+					let votes = thisElectionListVotes.get(list);
+					let diff = votes - lastElectionListVotes.get(list);
+					$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
+				}
 
 
 			});
