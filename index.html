@@ -280,12 +280,16 @@
 			});
 		}
 
-		function clearTables() {
-			$('#ballotResultTable thead tr').empty();
-			$('#ballotResultTable tbody').empty();
-			$('#ballotDeltaTable thead tr').empty();
-			$('#ballotDeltaTable tbody').empty();
-			$('#listSummaryTable tbody').empty();
+		function markStaleTableData() {
+			$('#ballotResultTable thead tr th').addClass('remove');
+			$('#ballotResultTable tbody tr').addClass('remove');
+			$('#ballotDeltaTable thead tr th').addClass('remove');
+			$('#ballotDeltaTable tbody td').addClass('remove');
+			$('#listSummaryTable tbody td').addClass('remove');
+		}
+
+		function removeStaleTableData() {
+			$('.remove').remove();
 		}
 
 		function setdownload(text, name, type) {
@@ -503,7 +507,7 @@
 
 		function createDiagram() {
 
-			$('#diagram').empty();
+			$('#diagram svg').addClass('remove');
 
 			var w = $('#diagram').width(), //width
 				r = w / 3, //radius
@@ -559,6 +563,7 @@
 					return "middle";
 				}) //center the text on it's origin
 				.text(function (d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
+			$('#diagram svg.remove').remove();
 			setdownload($('#diagram').html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
 		}
 
@@ -567,7 +572,7 @@
 				data = result;
 				lastTimestamp = result.timestamp;
 
-				clearTables();
+				markStaleTableData();
 
 				$('.thisElectionName').text(result.meta.thisElectionName);
 				$('.lastElectionName').text(result.meta.lastElectionName);
@@ -651,7 +656,7 @@
 					$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
 				}
 
-
+				removeStaleTableData();
 			});
 		}
 
