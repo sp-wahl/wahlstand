@@ -7,6 +7,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
+		#loading,
+		#content {
+			display: none;
+		}
+
+		.card {
+			margin-top: 1rem;
+		}
+
 		#diagram {
 			max-width: 100%;
 			margin-left: auto;
@@ -136,6 +145,19 @@
 	</nav>
 
 
+	<div id='loading' class='container'>
+		<!-- <img src="img/load.gif"> -->
+		<div class="card">
+			<h5 class="card-header">Noch ein wenig Geduld…</h5>
+			<img class="card-img-top" src="img/load.gif" alt="Card image cap">
+			<div class="card-body">
+				<p class="card-text">
+					Bislang sind leider noch keine vorläufigen Auszählergebnisse verfügbar.<br> 
+					<span id="updateNoticeText">Diese Seite wird sich selbsttätig aktualisieren, sobald die ersten vorläufigen Ergebnisse veröffentlicht werden.</span>
+				</p>
+			</div>
+		</div>
+	</div>
 	<div id='content' class='container-fluid'>
 		<div class='col-xl-8 offset-xl-2 col-lg-10 offset-lg-1'>
 
@@ -266,9 +288,11 @@
 				refreshInterval = setInterval(function () {
 					checkIfDataHasChanged();
 				}, 5000);
+				$('#updateNoticeText').show();
 			} else {
 				clearInterval(refreshInterval);
 				refreshInterval = null;
+				$('#updateNoticeText').hide();
 			}
 		}
 
@@ -567,96 +591,112 @@
 			setdownload($('#diagram').html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
 		}
 
+		function displayStatistics() {
+			$('#loading').hide();
+			$('#content').show();
+		}
+
+		function displayLoading() {
+			$('#loading').show();
+			$('#content').hide();
+		}
+
 		function reloadData() {
 			$.getJSON("data/data.json", function (result) {
 				data = result;
 				lastTimestamp = result.timestamp;
 
-				markStaleTableData();
-
 				$('.thisElectionName').text(result.meta.thisElectionName);
 				$('.lastElectionName').text(result.meta.lastElectionName);
 				$('#lastSaveTimestamp').text(dateString(result.timestamp));
 
-				createDiagram();
+				if (getTotalVotes() > 0) {
+					displayStatistics();
 
-				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
-				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+					markStaleTableData();
 
-				$('#ballotResultTable thead tr').append('<th>Urne</th>');
-				for (l of result.lists) {
-					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
-				}
-				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
+					createDiagram();
 
-				let ballot_index = 0;
-				for (b of result.ballots) {
-					$('#ballotResultTable tbody').append('<tr></tr>');
-					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let list_index = 0;
-					for (let i = 0; i < (result.lists.length + 2); i++) {
-						let index = ballot_index * (result.lists.length + 2) + list_index;
-						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
-						list_index++;
+					$('#thisElectionVoters').val(result.meta.thisElectionVoters);
+					$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+
+					$('#ballotResultTable thead tr').append('<th>Urne</th>');
+					for (l of result.lists) {
+						$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
 					}
-					ballot_index++;
-				}
+					$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+					$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
 
-				$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
-				for (l of result.lists) {
-					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
-				}
-				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
-
-				let le_ballot_index = 0;
-				let le_ballots = result.ballots.slice();
-				for (b of le_ballots) {
-					$('#ballotDeltaTable tbody').append('<tr></tr>');
-					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
-					let le_list_index = 0;
-					for (let i = 0; i < (result.lists.length + 2); i++) {
-						let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
-						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
-						let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
-						let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
-						let table_value = prefixNumber(value - le_value);
-						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
-						le_list_index++;
+					let ballot_index = 0;
+					for (b of result.ballots) {
+						$('#ballotResultTable tbody').append('<tr></tr>');
+						$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+						let list_index = 0;
+						for (let i = 0; i < (result.lists.length + 2); i++) {
+							let index = ballot_index * (result.lists.length + 2) + list_index;
+							let value = (index < result.votes.length) ? result.votes[index] : "";
+							$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
+							list_index++;
+						}
+						ballot_index++;
 					}
-					le_ballot_index++;
+
+					$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
+					for (l of result.lists) {
+						$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
+					}
+					$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
+					$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
+
+					let le_ballot_index = 0;
+					let le_ballots = result.ballots.slice();
+					for (b of le_ballots) {
+						$('#ballotDeltaTable tbody').append('<tr></tr>');
+						$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
+						let le_list_index = 0;
+						for (let i = 0; i < (result.lists.length + 2); i++) {
+							let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+							let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
+							let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+							let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
+							let table_value = prefixNumber(value - le_value);
+							$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
+							le_list_index++;
+						}
+						le_ballot_index++;
+					}
+
+					$('#thisElectionVoters').text(result.meta.thisElectionVoters);
+					let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
+					$('#votersDiff').html(prefixNumber(votersDiff));
+					$('#thisElectionVotes').text(getTotalVotes());
+					let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
+					$('#votesDiff').html(prefixNumber(votesDiff));
+					$('#thisElectionInvalidVotes').text(getInvalidVotes());
+					let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
+					$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
+					$('#thisElectionValidVotes').text(getValidVotes());
+					let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
+					$('#validVotesDiff').html(prefixNumber(validVotesDiff));
+					$('#thisElectionAbstentions').text(getAbstentions());
+					let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
+					$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
+					$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
+					let turnoutDiff = getTurnout() - getLastElectionTurnout();
+					$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
+
+					let thisElectionListVotes = getVotesForLists();
+					let lastElectionListVotes = getLastElectionVotesForLists();
+					for (list of result.lists) {
+						let votes = thisElectionListVotes.get(list);
+						let diff = votes - lastElectionListVotes.get(list);
+						$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
+					}
+
+					removeStaleTableData();
+				} else {
+					displayLoading();
 				}
-
-				$('#thisElectionVoters').text(result.meta.thisElectionVoters);
-				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
-				$('#votersDiff').html(prefixNumber(votersDiff));
-				$('#thisElectionVotes').text(getTotalVotes());
-				let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
-				$('#votesDiff').html(prefixNumber(votesDiff));
-				$('#thisElectionInvalidVotes').text(getInvalidVotes());
-				let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
-				$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
-				$('#thisElectionValidVotes').text(getValidVotes());
-				let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
-				$('#validVotesDiff').html(prefixNumber(validVotesDiff));
-				$('#thisElectionAbstentions').text(getAbstentions());
-				let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
-				$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
-				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
-				let turnoutDiff = getTurnout() - getLastElectionTurnout();
-				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
-
-				let thisElectionListVotes = getVotesForLists();
-				let lastElectionListVotes = getLastElectionVotesForLists();
-				for (list of result.lists) {
-					let votes = thisElectionListVotes.get(list);
-					let diff = votes - lastElectionListVotes.get(list);
-					$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
-				}
-
-				removeStaleTableData();
 			});
 		}
 
