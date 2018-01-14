@@ -8,14 +8,15 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		#diagram {
-			max-width: 900px;
+			max-width: 100%;
 			margin-left: auto;
 			margin-right: auto;
-			margin-top: 3em;
-			/*border: 1px solid gray;
-		border-radius: 5px;*/
 			padding: 5px;
 			text-align: center;
+		}
+
+		#diagramsvg {
+			max-width: 100%;
 		}
 
 		h1 {
@@ -27,9 +28,15 @@
 		}
 
 		.slice text {
-			font-size: 13pt;
+			font-size: 1em;
 			font-family: Arial;
 			font-weight: bold;
+		}
+
+		@media only screen and (max-width: 720px) {
+			.slice text {
+				font-size: .5em;
+			}
 		}
 
 		.table .list {
@@ -129,112 +136,116 @@
 	</nav>
 
 
-	<div id='content' class='container'>
+	<div id='content' class='container-fluid'>
+		<div class='col-xl-8 offset-xl-2 col-lg-10 offset-lg-1'>
 
-		<div class="alert alert-danger text-center" id="notice-top">
-			<strong>Achtung!</strong>
-			Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
-			<strong>Achtung!</strong>
+			<div class="alert alert-danger text-center" id="notice-top">
+				<strong>Achtung!</strong>
+				Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+				<strong>Achtung!</strong>
+			</div>
+
+			<h1>Sitzverteilung</h1>
+			<div id='diagram'></div>
+			<p class="text-right">
+				<small>
+					<a id="dldiagram">Diagramm als svg-Datei herunterladen</a>
+				</small>
+			</p>
+
+			<h1>Gesamtergebnis</h1>
+
+			<div class='col-md-6 offset-md-3'>
+				<table class='table table-hover table-sm' id="summaryTable">
+					<tbody>
+						<tr>
+							<td>Wahlberechtigte</td>
+							<td id="thisElectionVoters"></td>
+							<td id="votersDiff"></td>
+						</tr>
+						<tr>
+							<td>Abgegebene Stimmen</td>
+							<td id="thisElectionVotes"></td>
+							<td id="votesDiff"></td>
+						</tr>
+						<tr>
+							<td>Ungültige Stimmen</td>
+							<td id="thisElectionInvalidVotes"></td>
+							<td id="invalidVotesDiff"></td>
+						</tr>
+						<tr>
+							<td>Gültige Stimmen</td>
+							<td id="thisElectionValidVotes"></td>
+							<td id="validVotesDiff"></td>
+						</tr>
+						<tr>
+							<td>Enthaltungen</td>
+							<td id="thisElectionAbstentions"></td>
+							<td id="abstentionsDiff"></td>
+						</tr>
+						<tr>
+							<td>Wahlbeteiligung</td>
+							<td id="thisElectionTurnout"></td>
+							<td id="turnoutDiff"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class='col-md-6 offset-md-3 table-responsive'>
+				<table class='table table-hover table-sm' id="listSummaryTable">
+					<thead>
+						<tr>
+							<th>Liste</th>
+							<th>Stimmen</th>
+							<th>+/-</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+			<h1>Urnenergebnisse</h1>
+			<div class='col-12 table-responsive'>
+				<table class='table table-hover table-sm' id="ballotResultTable">
+					<thead>
+						<tr>
+							<th>Urne</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+			<h1>Gewinne/Verluste
+				<small>(zu&nbsp;
+					<span class="lastElectionName">-</span>)</small>
+			</h1>
+			<div class='col-12 table-responsive'>
+				<table class='table table-hover table-sm' id="ballotDeltaTable">
+					<thead>
+						<tr>
+							<th>Urne</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="alert alert-danger text-center" id="notice-bottom">
+				<strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+				<strong>Achtung!</strong>
+			</div>
 		</div>
 
-		<h1>Sitzverteilung</h1>
-		<div id='diagram'></div>
-		<p class="text-right">
-			<small>
-				<a id="dldiagram">Diagramm als svg-Datei herunterladen</a>
-			</small>
-		</p>
-
-		<h1>Gesamtergebnis</h1>
-
-		<div class='col-6 offset-3'>
-			<table class='table table-hover table-sm' id="summaryTable">
-				<tbody>
-					<tr>
-						<td>Wahlberechtigte</td>
-						<td id="thisElectionVoters"></td>
-						<td id="votersDiff"></td>
-					</tr>
-					<tr>
-						<td>Abgegebene Stimmen</td>
-						<td id="thisElectionVotes"></td>
-						<td id="votesDiff"></td>
-					</tr>
-					<tr>
-						<td>Ungültige Stimmen</td>
-						<td id="thisElectionInvalidVotes"></td>
-						<td id="invalidVotesDiff"></td>
-					</tr>
-					<tr>
-						<td>Gültige Stimmen</td>
-						<td id="thisElectionValidVotes"></td>
-						<td id="validVotesDiff"></td>
-					</tr>
-					<tr>
-						<td>Enthaltungen</td>
-						<td id="thisElectionAbstentions"></td>
-						<td id="abstentionsDiff"></td>
-					</tr>
-					<tr>
-						<td>Wahlbeteiligung</td>
-						<td id="thisElectionTurnout"></td>
-						<td id="turnoutDiff"></td>
-					</tr>
-				</tbody>
-			</table>
+		<div>
+			<p class="text-center">
+				<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
+				<p>
 		</div>
-
-		<div class='col-6 offset-3'>
-			<table class='table table-hover table-sm' id="listSummaryTable">
-				<thead>
-					<tr>
-						<th>Liste</th>
-						<th>Stimmen</th>
-						<th>+/-</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-
-		<h1>Urnenergebnisse</h1>
-
-		<table class='table table-hover table-sm' id="ballotResultTable">
-			<thead>
-				<tr>
-					<th>Urne</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-
-		<h1>Gewinne/Verluste
-			<small>(zu
-				<span class="lastElectionName">-</span>)</small>
-		</h1>
-
-		<table class='table table-hover table-sm' id="ballotDeltaTable">
-			<thead>
-				<tr>
-					<th>Urne</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-
-		<div class="alert alert-danger text-center" id="notice-bottom">
-			<strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
-			<strong>Achtung!</strong>
-		</div>
-	</div>
-
-	<div>
-		<p class="text-center">
-			<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
-			<p>
 	</div>
 
 
@@ -494,19 +505,19 @@
 
 			$('#diagram').empty();
 
-			var w = 900, //width
-				h = 380, //height
-				r = 300, //radius
+			var w = $('#diagram').width(), //width
+				r = w / 3, //radius
+				h = r * 4 / 3, //height
 
 				data = getDiagramData();
-
 
 			var vis = d3.select("#diagram")
 				.append("svg:svg") //create the SVG element inside the <body>
 				.attr("id", "diagramsvg")
+				.attr("viewBox", "0 0 " + w + " " + h)
+				.attr("preserveAspectRatio", "xMinYMin meet")
 				.data([data]) //associate our data with the document
 				.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
-				.attr("height", h)
 				.append("svg:g") //make a group to hold our pie chart
 				//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
 				.attr("transform", "translate(" + w / 2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
@@ -661,14 +672,6 @@
 			$.ajaxSetup({ cache: false });
 			reloadData();
 			toggleRefresh();
-
-			$(window).resize(function () {
-				var g = $('#diagramsvg');
-				divwidth = $('#diagram').width() - 40;
-				svgwidth = g.width();
-				scale = divwidth / svgwidth;
-				g.attr("transform", "scale(" + scale + ")");
-			});
 		});
 
 		function dateString(timestamp) {
