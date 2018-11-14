@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 	<title>wahlstand</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
 
 		.slice text {
 			font-size: 1em;
-			font-family: Arial;
+			font-family: Arial, serif;
 			font-weight: bold;
 		}
 
@@ -117,630 +117,638 @@
 <body>
 
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="./">wahlstand
-			<span class="thisElectionName"></span>
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-		 aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="./">wahlstand
+		<span class="thisElectionName"></span>
+	</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+	        aria-controls="navbarSupportedContent"
+	        aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
 
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<div class="nav-link disabled">
-						<small>Letzte Aktualisierung:
-							<span id="lastSaveTimestamp">-</span>
-						</small>
-					</div>
-				</li>
-			</ul>
-			<div class="form-inline my-2 my-lg-0">
-				<button id="indicator-button" class="btn my-2 my-sm-0" onclick="toggleRefresh()">
-					<span id="indicator">🔃</span>
-				</button>
-			</div>
-		</div>
-	</nav>
-
-
-	<div id='loading' class='container'>
-		<!-- <img src="img/load.gif"> -->
-		<div class="card">
-			<h5 class="card-header">Noch ein wenig Geduld…</h5>
-			<img class="card-img-top" src="img/load.gif" alt="Card image cap">
-			<div class="card-body">
-				<p class="card-text">
-					Bislang sind leider noch keine vorläufigen Auszählergebnisse verfügbar.<br> 
-					<span id="updateNoticeText">Diese Seite wird sich selbsttätig aktualisieren, sobald die ersten vorläufigen Ergebnisse veröffentlicht werden.</span>
-				</p>
-			</div>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<div class="nav-link disabled">
+					<small>Letzte Aktualisierung:
+						<span id="lastSaveTimestamp">-</span>
+					</small>
+				</div>
+			</li>
+		</ul>
+		<div class="form-inline my-2 my-lg-0">
+			<button id="indicator-button" class="btn my-2 my-sm-0" onclick="toggleRefresh()">
+				<span id="indicator">🔃</span>
+			</button>
 		</div>
 	</div>
-	<div id='content' class='container-fluid'>
-		<div class='col-xl-8 offset-xl-2 col-lg-10 offset-lg-1'>
+</nav>
 
-			<div class="alert alert-danger text-center" id="notice-top">
-				<strong>Achtung!</strong>
-				Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
-				<strong>Achtung!</strong>
-			</div>
 
-			<h1>Sitzverteilung</h1>
-			<div id='diagram'></div>
-			<p class="text-right">
-				<small>
-					<a id="dldiagram">Diagramm als svg-Datei herunterladen</a>
-				</small>
+<div id='loading' class='container'>
+	<!-- <img src="img/load.gif"> -->
+	<div class="card">
+		<h5 class="card-header">Noch ein wenig Geduld…</h5>
+		<img class="card-img-top" src="img/load.gif" alt="Card image cap">
+		<div class="card-body">
+			<p class="card-text">
+				Bislang sind leider noch keine vorläufigen Auszählergebnisse verfügbar.<br>
+				<span id="updateNoticeText">Diese Seite wird sich selbsttätig aktualisieren, sobald die ersten vorläufigen Ergebnisse veröffentlicht werden.</span>
 			</p>
+		</div>
+	</div>
+</div>
+<div id='content' class='container-fluid'>
+	<div class='col-xl-8 offset-xl-2 col-lg-10 offset-lg-1'>
 
-			<h1>Gesamtergebnis</h1>
-
-			<div class='col-md-6 offset-md-3'>
-				<table class='table table-hover table-sm' id="summaryTable">
-					<tbody>
-						<tr>
-							<td>Wahlberechtigte</td>
-							<td id="thisElectionVoters"></td>
-							<td id="votersDiff"></td>
-						</tr>
-						<tr>
-							<td>Abgegebene Stimmen</td>
-							<td id="thisElectionVotes"></td>
-							<td id="votesDiff"></td>
-						</tr>
-						<tr>
-							<td>Ungültige Stimmen</td>
-							<td id="thisElectionInvalidVotes"></td>
-							<td id="invalidVotesDiff"></td>
-						</tr>
-						<tr>
-							<td>Gültige Stimmen</td>
-							<td id="thisElectionValidVotes"></td>
-							<td id="validVotesDiff"></td>
-						</tr>
-						<tr>
-							<td>Enthaltungen</td>
-							<td id="thisElectionAbstentions"></td>
-							<td id="abstentionsDiff"></td>
-						</tr>
-						<tr>
-							<td>Wahlbeteiligung</td>
-							<td id="thisElectionTurnout"></td>
-							<td id="turnoutDiff"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<div class='col-md-6 offset-md-3 table-responsive'>
-				<table class='table table-hover table-sm' id="listSummaryTable">
-					<thead>
-						<tr>
-							<th>Liste</th>
-							<th>Stimmen</th>
-							<th>+/-</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-
-			<h1>Urnenergebnisse</h1>
-			<div class='col-12 table-responsive'>
-				<table class='table table-hover table-sm' id="ballotResultTable">
-					<thead>
-						<tr>
-							<th>Urne</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-
-			<h1>Gewinne/Verluste
-				<small>(zu&nbsp;
-					<span class="lastElectionName">-</span>)</small>
-			</h1>
-			<div class='col-12 table-responsive'>
-				<table class='table table-hover table-sm' id="ballotDeltaTable">
-					<thead>
-						<tr>
-							<th>Urne</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-
-			<div class="alert alert-danger text-center" id="notice-bottom">
-				<strong>Achtung!</strong> Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
-				<strong>Achtung!</strong>
-			</div>
+		<div class="alert alert-danger text-center" id="notice-top">
+			<strong>Achtung!</strong>
+			Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+			<strong>Achtung!</strong>
 		</div>
 
-		<div>
-			<p class="text-center">
-				<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
-				<p>
+		<h1>Sitzverteilung</h1>
+		<div id='diagram'></div>
+		<p class="text-right">
+			<small>
+				<a id="dldiagram">Diagramm als svg-Datei herunterladen</a>
+			</small>
+		</p>
+
+		<h1>Gesamtergebnis</h1>
+
+		<div class='col-md-6 offset-md-3'>
+			<table class='table table-hover table-sm' id="summaryTable">
+				<tbody>
+				<tr>
+					<td>Wahlberechtigte</td>
+					<td id="thisElectionVoters"></td>
+					<td id="votersDiff"></td>
+				</tr>
+				<tr>
+					<td>Abgegebene Stimmen</td>
+					<td id="thisElectionVotes"></td>
+					<td id="votesDiff"></td>
+				</tr>
+				<tr>
+					<td>Ungültige Stimmen</td>
+					<td id="thisElectionInvalidVotes"></td>
+					<td id="invalidVotesDiff"></td>
+				</tr>
+				<tr>
+					<td>Gültige Stimmen</td>
+					<td id="thisElectionValidVotes"></td>
+					<td id="validVotesDiff"></td>
+				</tr>
+				<tr>
+					<td>Enthaltungen</td>
+					<td id="thisElectionAbstentions"></td>
+					<td id="abstentionsDiff"></td>
+				</tr>
+				<tr>
+					<td>Wahlbeteiligung</td>
+					<td id="thisElectionTurnout"></td>
+					<td id="turnoutDiff"></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class='col-md-6 offset-md-3 table-responsive'>
+			<table class='table table-hover table-sm' id="listSummaryTable">
+				<thead>
+				<tr>
+					<th>Liste</th>
+					<th>Stimmen</th>
+					<th>+/-</th>
+				</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+		<h1>Urnenergebnisse</h1>
+		<div class='col-12 table-responsive'>
+			<table class='table table-hover table-sm' id="ballotResultTable">
+				<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+		<h1>Gewinne/Verluste
+			<small>(zu&nbsp;<span class="lastElectionName">-</span>)</small>
+		</h1>
+		<div class='col-12 table-responsive'>
+			<table class='table table-hover table-sm' id="ballotDeltaTable">
+				<thead>
+				<tr>
+					<th>Urne</th>
+				</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="alert alert-danger text-center" id="notice-bottom">
+			<strong>Achtung!</strong>
+			Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
+			<strong>Achtung!</strong>
 		</div>
 	</div>
 
+	<div>
+		<p class="text-center">
+			<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
+		<p>
+	</div>
+</div>
 
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/d3.min.js"></script>
-	<script src="js/funk.js"></script>
-	<script type="text/javascript">
 
-		var data = null;
-		var refreshInterval = null;
-		var lastTimestamp = "";
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/funk.js"></script>
+<script type="text/javascript">
 
-		function toggleRefresh() {
-			$('#indicator').toggleClass('spinning');
-			$('#indicator-button').toggleClass('btn-success');
-			if ($('#indicator').hasClass('spinning')) {
-				refreshInterval = setInterval(function () {
-					checkIfDataHasChanged();
-				}, 5000);
-				$('#updateNoticeText').show();
-			} else {
-				clearInterval(refreshInterval);
-				refreshInterval = null;
-				$('#updateNoticeText').hide();
+	var data = null;
+	var refreshInterval = null;
+	var lastTimestamp = "";
+
+	function toggleRefresh() {
+		$('#indicator').toggleClass('spinning');
+		$('#indicator-button').toggleClass('btn-success');
+		if ($('#indicator').hasClass('spinning')) {
+			refreshInterval = setInterval(function () {
+				checkIfDataHasChanged();
+			}, 5000);
+			$('#updateNoticeText').show();
+		} else {
+			clearInterval(refreshInterval);
+			refreshInterval = null;
+			$('#updateNoticeText').hide();
+		}
+	}
+
+	function checkIfDataHasChanged() {
+		$.getJSON("data/timestamp.json", function (result) {
+			if (lastTimestamp != result.last_update) {
+				reloadData();
 			}
-		}
-
-		function checkIfDataHasChanged() {
-			$.getJSON("data/timestamp.json", function (result) {
-				if (lastTimestamp != result.last_update) {
-					reloadData();
-				}
-			});
-		}
-
-		function markStaleTableData() {
-			$('#ballotResultTable thead tr th').addClass('remove');
-			$('#ballotResultTable tbody tr').addClass('remove');
-			$('#ballotDeltaTable thead tr th').addClass('remove');
-			$('#ballotDeltaTable tbody td').addClass('remove');
-			$('#listSummaryTable tbody td').addClass('remove');
-		}
-
-		function removeStaleTableData() {
-			$('.remove').remove();
-		}
-
-		function setdownload(text, name, type) {
-			var a = document.getElementById("dldiagram");
-			var file = new Blob([text], { type: type });
-			a.href = URL.createObjectURL(file);
-			a.download = name;
-		}
-
-		function getVotesForLists() {
-			let map = new Map();
-			for (l of data.lists) {
-				map.set(l, 0);
-			}
-			for (let b = 0; b < data.ballots.length; b++) {
-				for (let l = 0; l < data.lists.length; l++) {
-					let currentList = data.lists[l];
-					let voteIndex = b * (data.lists.length + 2) + l;
-					let votes = 0;
-					if (data.votes[voteIndex] != "") {
-						votes = parseInt(data.votes[voteIndex]);
-					}
-					map.set(currentList, (map.get(currentList) + votes))
-				}
-			}
-			return map;
-		}
-		function getAbstentions() {
-			let abstentions = 0;
-			for (let b = 0; b < data.ballots.length; b++) {
-				let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
-				let votes = 0;
-				if (data.votes[voteIndex] != "") {
-					votes = parseInt(data.votes[voteIndex]);
-				}
-				abstentions += votes;
-			}
-			return abstentions;
-		}
-
-		function getInvalidVotes() {
-			let invalidVotes = 0;
-			for (let b = 0; b < data.ballots.length; b++) {
-				let voteIndex = b * (data.lists.length + 2) + data.lists.length;
-				let votes = 0;
-				if (data.votes[voteIndex] != "") {
-					votes = parseInt(data.votes[voteIndex]);
-				}
-				invalidVotes += votes;
-			}
-			return invalidVotes;
-		}
-
-		function getTotalVotes() {
-			let sum = 0;
-			let listVotes = getVotesForLists();
-			for (v of listVotes.values()) {
-				sum += v;
-			}
-			sum += getAbstentions();
-			sum += getInvalidVotes();
-			return sum;
-		}
-
-		function getValidVotes() {
-			let sum = 0;
-			let listVotes = getVotesForLists();
-			for (v of listVotes.values()) {
-				sum += v;
-			}
-			sum += getAbstentions();
-			return sum;
-		}
-
-		function getTurnout() {
-			return getTotalVotes() / parseInt(data.meta.thisElectionVoters) * 100;
-		}
-
-		function getLastElectionVotesForLists() {
-			let map = new Map();
-			for (l of data.lists) {
-				map.set(l, 0);
-			}
-			for (let b = 0; b < data.ballots.length + 1; b++) {
-				for (let l = 0; l < data.lists.length; l++) {
-					let currentList = data.lists[l];
-					let voteIndex = b * (data.lists.length + 3) + l;
-					let votes = 0;
-					if (data.lastElectionVotes[voteIndex] != "") {
-						votes = parseInt(data.lastElectionVotes[voteIndex]);
-					}
-					map.set(currentList, (map.get(currentList) + votes))
-				}
-			}
-			return map;
-		}
-		function getLastElectionAbstentions() {
-			let abstentions = 0;
-			for (let b = 0; b < data.ballots.length; b++) {
-				let voteIndex = b * (data.lists.length + 3) + data.lists.length + 1;
-				let votes = 0;
-				if (data.lastElectionVotes[voteIndex] != "") {
-					votes = parseInt(data.lastElectionVotes[voteIndex]);
-				}
-				abstentions += votes;
-			}
-			return abstentions;
-		}
-
-		function getLastElectionInvalidVotes() {
-			let invalidVotes = 0;
-			for (let b = 0; b < data.ballots.length; b++) {
-				let voteIndex = b * (data.lists.length + 3) + data.lists.length;
-				let votes = 0;
-				if (data.lastElectionVotes[voteIndex] != "") {
-					votes = parseInt(data.lastElectionVotes[voteIndex]);
-				}
-				invalidVotes += votes;
-			}
-			return invalidVotes;
-		}
-
-		function getLastElectionOtherVotes() {
-			let otherVotes = 0;
-			for (let b = 0; b < data.ballots.length; b++) {
-				let voteIndex = b * (data.lists.length + 3) + data.lists.length + 2;
-				let votes = 0;
-				if (data.lastElectionVotes[voteIndex] != "") {
-					votes = parseInt(data.lastElectionVotes[voteIndex]);
-				}
-				otherVotes += votes;
-			}
-			return otherVotes;
-		}
-
-		function getLastElectionTotalVotes() {
-			let sum = 0;
-			let listVotes = getLastElectionVotesForLists();
-			for (v of listVotes.values()) {
-				sum += v;
-			}
-			sum += getLastElectionAbstentions();
-			sum += getLastElectionInvalidVotes();
-			sum += getLastElectionOtherVotes();
-			return sum;
-		}
-
-		function getLastElectionValidVotes() {
-			let sum = 0;
-			let listVotes = getLastElectionVotesForLists();
-			for (v of listVotes.values()) {
-				sum += v;
-			}
-			sum += getLastElectionAbstentions();
-			sum += getLastElectionOtherVotes();
-			return sum;
-		}
-
-		function getLastElectionTurnout() {
-			return getLastElectionTotalVotes() / parseInt(data.meta.lastElectionVoters) * 100;
-		}
-
-		function stlgs(seats, lists) {
-			let totalvotes = 0;
-			for (v of lists.values()) {
-				totalvotes += v;
-			}
-			if (totalvotes == 0) {
-				return lists;
-			}
-
-			let factor = 1;
-
-			while (calculateSeatSum(lists.values(), factor) > seats) {
-				factor += 1;
-			}
-			while (calculateSeatSum(lists.values(), factor) < seats) {
-				factor -= 0.1;
-			}
-			while (calculateSeatSum(lists.values(), factor) > seats) {
-				factor += 0.01;
-			}
-
-			let result = new Map(lists);
-			for (k of lists.keys()) {
-				result.set(k, Math.round(result.get(k) / factor));
-			}
-			console.log("STLGS factor =", factor);
-			return result;
-		}
-
-		function calculateSeatSum(listvotes, factor) {
-			let sum = 0;
-			for (v of listvotes) {
-				sum += Math.round(v / factor);
-			}
-			return sum;
-		}
-
-		function getDiagramData() {
-			let votesForLists = getVotesForLists();
-			let seats = stlgs(43, votesForLists);
-			let diagramData = [];
-			for (let i = 0; i < data.lists.length; i++) {
-				let l = new Object();
-				l.color = data.colours[i];
-				l.label = data.lists[i];
-				l.value = seats.get(data.lists[i]);
-				diagramData.push(l);
-			}
-			return diagramData;
-		}
-
-
-
-		function createDiagram() {
-
-			$('#diagram svg').addClass('remove');
-
-			var w = $('#diagram').width(), //width
-				r = w / 3, //radius
-				h = r * 4 / 3, //height
-
-				data = getDiagramData();
-
-			var vis = d3.select("#diagram")
-				.append("svg:svg") //create the SVG element inside the <body>
-				.attr("id", "diagramsvg")
-				.attr("viewBox", "0 0 " + w + " " + h)
-				.attr("preserveAspectRatio", "xMinYMin meet")
-				.data([data]) //associate our data with the document
-				.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
-				.append("svg:g") //make a group to hold our pie chart
-				//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
-				.attr("transform", "translate(" + w / 2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
-
-			var arc = d3.arc() //this will create <path> elements for us using arc data
-				.outerRadius(r)
-				.innerRadius(2 * r / 5);
-
-			var pie = d3.pie() //this will create arc data for us given a list of values
-				.value(function (d) { return d.value; })
-				.sort(null); //we must tell it out to access the value of each element in our data array
-
-			pie.startAngle(-Math.PI / 2);
-			pie.endAngle(Math.PI / 2);
-
-			var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
-				.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
-				.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
-				.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-				.attr("class", "slice"); //allow us to style things in the slices (like text)
-			arcs.append("svg:path")
-				.attr("fill", function (d, i) { return d.data.color; }) //set the color for each slice to be chosen from the color function defined above
-				.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-			arcs.append("svg:text") //add a label to each slice
-				.attr("transform", function (d) { //set the label's origin to the center of the arc
-					//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
-					var c = arc.centroid(d),
-						x = c[0],
-						y = c[1],
-						// pythagorean theorem for hypotenuse
-						h = Math.sqrt(x * x + y * y);
-					return "translate(" + (x / h * r * 1.1) + ',' + (y / h * r * 1.1 + 5) + ")";
-				})
-				.attr("text-anchor", function (d) {
-					var c = arc.centroid(d),
-						x = c[0];
-					if (x < -1 / 4 * r) return "end";
-					if (x > 1 / 4 * r) return "start";
-					return "middle";
-				}) //center the text on it's origin
-				.text(function (d, i) { return data[i].label + " [" + data[i].value + "]"; }); //get the label from our original data array
-			$('#diagram svg.remove').remove();
-			setdownload($('#diagram').html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
-		}
-
-		function displayStatistics() {
-			$('#loading').hide();
-			$('#content').show();
-		}
-
-		function displayLoading() {
-			$('#loading').show();
-			$('#content').hide();
-		}
-
-		function reloadData() {
-			$.getJSON("data/data.json", function (result) {
-				data = result;
-				lastTimestamp = result.timestamp;
-
-				$('.thisElectionName').text(result.meta.thisElectionName);
-				$('.lastElectionName').text(result.meta.lastElectionName);
-				$('#lastSaveTimestamp').text(dateString(result.timestamp));
-
-				if (getTotalVotes() > 0) {
-					displayStatistics();
-
-					markStaleTableData();
-
-					createDiagram();
-
-					$('#thisElectionVoters').val(result.meta.thisElectionVoters);
-					$('#lastElectionVoters').val(result.meta.lastElectionVoters);
-
-					$('#ballotResultTable thead tr').append('<th>Urne</th>');
-					for (l of result.lists) {
-						$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
-					}
-					$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-					$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
-
-					let ballot_index = 0;
-					for (b of result.ballots) {
-						$('#ballotResultTable tbody').append('<tr></tr>');
-						$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-						let list_index = 0;
-						for (let i = 0; i < (result.lists.length + 2); i++) {
-							let index = ballot_index * (result.lists.length + 2) + list_index;
-							let value = (index < result.votes.length) ? result.votes[index] : "";
-							$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
-							list_index++;
-						}
-						ballot_index++;
-					}
-
-					$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
-					for (l of result.lists) {
-						$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
-					}
-					$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
-					$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
-
-					let le_ballot_index = 0;
-					let le_ballots = result.ballots.slice();
-					for (b of le_ballots) {
-						$('#ballotDeltaTable tbody').append('<tr></tr>');
-						$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
-						let le_list_index = 0;
-						for (let i = 0; i < (result.lists.length + 2); i++) {
-							let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
-							let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
-							let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
-							let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
-							let table_value = prefixNumber(value - le_value);
-							$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
-							le_list_index++;
-						}
-						le_ballot_index++;
-					}
-
-					$('#thisElectionVoters').text(result.meta.thisElectionVoters);
-					let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
-					$('#votersDiff').html(prefixNumber(votersDiff));
-					$('#thisElectionVotes').text(getTotalVotes());
-					let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
-					$('#votesDiff').html(prefixNumber(votesDiff));
-					$('#thisElectionInvalidVotes').text(getInvalidVotes());
-					let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
-					$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
-					$('#thisElectionValidVotes').text(getValidVotes());
-					let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
-					$('#validVotesDiff').html(prefixNumber(validVotesDiff));
-					$('#thisElectionAbstentions').text(getAbstentions());
-					let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
-					$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
-					$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
-					let turnoutDiff = getTurnout() - getLastElectionTurnout();
-					$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
-
-					let thisElectionListVotes = getVotesForLists();
-					let lastElectionListVotes = getLastElectionVotesForLists();
-					for (list of result.lists) {
-						let votes = thisElectionListVotes.get(list);
-						let diff = votes - lastElectionListVotes.get(list);
-						$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
-					}
-
-					removeStaleTableData();
-				} else {
-					displayLoading();
-				}
-			});
-		}
-
-		function prefixNumber(number, isFloat) {
-			if (isFloat != undefined && isFloat) {
-				number = number.toFixed(2).replace('.', ',');
-			}
-			if (number > 0) {
-				return "<span class='text-success'>+" + number + "</span>";
-			} else if (number == 0) {
-				return "<span>±" + number + "</span>";
-			} else {
-				return "<span class='text-danger'>" + number + "</span>";
-			}
-		}
-
-		$(function () {
-			$.ajaxSetup({ cache: false });
-			reloadData();
-			toggleRefresh();
 		});
+	}
 
-		function dateString(timestamp) {
-			let value = parseInt(timestamp);
-			let datevalue = new Date(value);
+	function markStaleTableData() {
+		$('#ballotResultTable thead tr th').addClass('remove');
+		$('#ballotResultTable tbody tr').addClass('remove');
+		$('#ballotDeltaTable thead tr th').addClass('remove');
+		$('#ballotDeltaTable tbody td').addClass('remove');
+		$('#listSummaryTable tbody td').addClass('remove');
+	}
 
-			let year = datevalue.getFullYear();
-			let month = format2(datevalue.getMonth() + 1);
-			let dom = format2(datevalue.getDate());
-			let hours = format2(datevalue.getHours());
-			let minutes = format2(datevalue.getMinutes());
-			let seconds = format2(datevalue.getSeconds());
+	function removeStaleTableData() {
+		$('.remove').remove();
+	}
 
-			return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+	function setdownload(text, name, type) {
+		var a = document.getElementById("dldiagram");
+		var file = new Blob([text], {type: type});
+		a.href = URL.createObjectURL(file);
+		a.download = name;
+	}
+
+	function getVotesForLists() {
+		let map = new Map();
+		for (l of data.lists) {
+			map.set(l, 0);
 		}
-
-		function format2(value) {
-			if (value < 10) {
-				return "0" + value;
-			} else {
-				return "" + value;
+		for (let b = 0; b < data.ballots.length; b++) {
+			for (let l = 0; l < data.lists.length; l++) {
+				let currentList = data.lists[l];
+				let voteIndex = b * (data.lists.length + 2) + l;
+				let votes = 0;
+				if (data.votes[voteIndex] != "") {
+					votes = parseInt(data.votes[voteIndex]);
+				}
+				map.set(currentList, (map.get(currentList) + votes))
 			}
 		}
-	</script>
+		return map;
+	}
+
+	function getAbstentions() {
+		let abstentions = 0;
+		for (let b = 0; b < data.ballots.length; b++) {
+			let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
+			let votes = 0;
+			if (data.votes[voteIndex] != "") {
+				votes = parseInt(data.votes[voteIndex]);
+			}
+			abstentions += votes;
+		}
+		return abstentions;
+	}
+
+	function getInvalidVotes() {
+		let invalidVotes = 0;
+		for (let b = 0; b < data.ballots.length; b++) {
+			let voteIndex = b * (data.lists.length + 2) + data.lists.length;
+			let votes = 0;
+			if (data.votes[voteIndex] != "") {
+				votes = parseInt(data.votes[voteIndex]);
+			}
+			invalidVotes += votes;
+		}
+		return invalidVotes;
+	}
+
+	function getTotalVotes() {
+		let sum = 0;
+		let listVotes = getVotesForLists();
+		for (v of listVotes.values()) {
+			sum += v;
+		}
+		sum += getAbstentions();
+		sum += getInvalidVotes();
+		return sum;
+	}
+
+	function getValidVotes() {
+		let sum = 0;
+		let listVotes = getVotesForLists();
+		for (v of listVotes.values()) {
+			sum += v;
+		}
+		sum += getAbstentions();
+		return sum;
+	}
+
+	function getTurnout() {
+		return getTotalVotes() / parseInt(data.meta.thisElectionVoters) * 100;
+	}
+
+	function getLastElectionVotesForLists() {
+		let map = new Map();
+		for (l of data.lists) {
+			map.set(l, 0);
+		}
+		for (let b = 0; b < data.ballots.length + 1; b++) {
+			for (let l = 0; l < data.lists.length; l++) {
+				let currentList = data.lists[l];
+				let voteIndex = b * (data.lists.length + 3) + l;
+				let votes = 0;
+				if (data.lastElectionVotes[voteIndex] != "") {
+					votes = parseInt(data.lastElectionVotes[voteIndex]);
+				}
+				map.set(currentList, (map.get(currentList) + votes))
+			}
+		}
+		return map;
+	}
+
+	function getLastElectionAbstentions() {
+		let abstentions = 0;
+		for (let b = 0; b < data.ballots.length; b++) {
+			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 1;
+			let votes = 0;
+			if (data.lastElectionVotes[voteIndex] != "") {
+				votes = parseInt(data.lastElectionVotes[voteIndex]);
+			}
+			abstentions += votes;
+		}
+		return abstentions;
+	}
+
+	function getLastElectionInvalidVotes() {
+		let invalidVotes = 0;
+		for (let b = 0; b < data.ballots.length; b++) {
+			let voteIndex = b * (data.lists.length + 3) + data.lists.length;
+			let votes = 0;
+			if (data.lastElectionVotes[voteIndex] != "") {
+				votes = parseInt(data.lastElectionVotes[voteIndex]);
+			}
+			invalidVotes += votes;
+		}
+		return invalidVotes;
+	}
+
+	function getLastElectionOtherVotes() {
+		let otherVotes = 0;
+		for (let b = 0; b < data.ballots.length; b++) {
+			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 2;
+			let votes = 0;
+			if (data.lastElectionVotes[voteIndex] != "") {
+				votes = parseInt(data.lastElectionVotes[voteIndex]);
+			}
+			otherVotes += votes;
+		}
+		return otherVotes;
+	}
+
+	function getLastElectionTotalVotes() {
+		let sum = 0;
+		let listVotes = getLastElectionVotesForLists();
+		for (v of listVotes.values()) {
+			sum += v;
+		}
+		sum += getLastElectionAbstentions();
+		sum += getLastElectionInvalidVotes();
+		sum += getLastElectionOtherVotes();
+		return sum;
+	}
+
+	function getLastElectionValidVotes() {
+		let sum = 0;
+		let listVotes = getLastElectionVotesForLists();
+		for (v of listVotes.values()) {
+			sum += v;
+		}
+		sum += getLastElectionAbstentions();
+		sum += getLastElectionOtherVotes();
+		return sum;
+	}
+
+	function getLastElectionTurnout() {
+		return getLastElectionTotalVotes() / parseInt(data.meta.lastElectionVoters) * 100;
+	}
+
+	function stlgs(seats, lists) {
+		let totalvotes = 0;
+		for (v of lists.values()) {
+			totalvotes += v;
+		}
+		if (totalvotes == 0) {
+			return lists;
+		}
+
+		let factor = 1;
+
+		while (calculateSeatSum(lists.values(), factor) > seats) {
+			factor += 1;
+		}
+		while (calculateSeatSum(lists.values(), factor) < seats) {
+			factor -= 0.1;
+		}
+		while (calculateSeatSum(lists.values(), factor) > seats) {
+			factor += 0.01;
+		}
+
+		let result = new Map(lists);
+		for (k of lists.keys()) {
+			result.set(k, Math.round(result.get(k) / factor));
+		}
+		console.log("STLGS factor =", factor);
+		return result;
+	}
+
+	function calculateSeatSum(listvotes, factor) {
+		let sum = 0;
+		for (v of listvotes) {
+			sum += Math.round(v / factor);
+		}
+		return sum;
+	}
+
+	function getDiagramData() {
+		let votesForLists = getVotesForLists();
+		let seats = stlgs(43, votesForLists);
+		let diagramData = [];
+		for (let i = 0; i < data.lists.length; i++) {
+			let l = new Object();
+			l.color = data.colours[i];
+			l.label = data.lists[i];
+			l.value = seats.get(data.lists[i]);
+			diagramData.push(l);
+		}
+		return diagramData;
+	}
+
+
+	function createDiagram() {
+
+		$('#diagram svg').addClass('remove');
+
+		var w = $('#diagram').width(), //width
+			r = w / 3, //radius
+			h = r * 4 / 3, //height
+
+			data = getDiagramData();
+
+		var vis = d3.select("#diagram")
+			.append("svg:svg") //create the SVG element inside the <body>
+			.attr("id", "diagramsvg")
+			.attr("viewBox", "0 0 " + w + " " + h)
+			.attr("preserveAspectRatio", "xMinYMin meet")
+			.data([data]) //associate our data with the document
+			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
+			.append("svg:g") //make a group to hold our pie chart
+			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
+			.attr("transform", "translate(" + w / 2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+
+		var arc = d3.arc() //this will create <path> elements for us using arc data
+			.outerRadius(r)
+			.innerRadius(2 * r / 5);
+
+		var pie = d3.pie() //this will create arc data for us given a list of values
+			.value(function (d) {
+				return d.value;
+			})
+			.sort(null); //we must tell it out to access the value of each element in our data array
+
+		pie.startAngle(-Math.PI / 2);
+		pie.endAngle(Math.PI / 2);
+
+		var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+			.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
+			.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
+			.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+			.attr("class", "slice"); //allow us to style things in the slices (like text)
+		arcs.append("svg:path")
+			.attr("fill", function (d, i) {
+				return d.data.color;
+			}) //set the color for each slice to be chosen from the color function defined above
+			.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+		arcs.append("svg:text") //add a label to each slice
+			.attr("transform", function (d) { //set the label's origin to the center of the arc
+				//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
+				var c = arc.centroid(d),
+					x = c[0],
+					y = c[1],
+					// pythagorean theorem for hypotenuse
+					h = Math.sqrt(x * x + y * y);
+				return "translate(" + (x / h * r * 1.1) + ',' + (y / h * r * 1.1 + 5) + ")";
+			})
+			.attr("text-anchor", function (d) {
+				var c = arc.centroid(d),
+					x = c[0];
+				if (x < -1 / 4 * r) return "end";
+				if (x > 1 / 4 * r) return "start";
+				return "middle";
+			}) //center the text on it's origin
+			.text(function (d, i) {
+				return data[i].label + " [" + data[i].value + "]";
+			}); //get the label from our original data array
+		$('#diagram svg.remove').remove();
+		setdownload($('#diagram').html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
+	}
+
+	function displayStatistics() {
+		$('#loading').hide();
+		$('#content').show();
+	}
+
+	function displayLoading() {
+		$('#loading').show();
+		$('#content').hide();
+	}
+
+	function reloadData() {
+		$.getJSON("data/data.json", function (result) {
+			data = result;
+			lastTimestamp = result.timestamp;
+
+			$('.thisElectionName').text(result.meta.thisElectionName);
+			$('.lastElectionName').text(result.meta.lastElectionName);
+			$('#lastSaveTimestamp').text(dateString(result.timestamp));
+
+			if (getTotalVotes() > 0) {
+				displayStatistics();
+
+				markStaleTableData();
+
+				createDiagram();
+
+				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
+				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+
+				$('#ballotResultTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
+
+				let ballot_index = 0;
+				for (b of result.ballots) {
+					$('#ballotResultTable tbody').append('<tr></tr>');
+					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+					let list_index = 0;
+					for (let i = 0; i < (result.lists.length + 2); i++) {
+						let index = ballot_index * (result.lists.length + 2) + list_index;
+						let value = (index < result.votes.length) ? result.votes[index] : "";
+						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
+						list_index++;
+					}
+					ballot_index++;
+				}
+
+				$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
+				for (l of result.lists) {
+					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
+				}
+				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
+
+				let le_ballot_index = 0;
+				let le_ballots = result.ballots.slice();
+				for (b of le_ballots) {
+					$('#ballotDeltaTable tbody').append('<tr></tr>');
+					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
+					let le_list_index = 0;
+					for (let i = 0; i < (result.lists.length + 2); i++) {
+						let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
+						let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+						let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
+						let table_value = prefixNumber(value - le_value);
+						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
+						le_list_index++;
+					}
+					le_ballot_index++;
+				}
+
+				$('#thisElectionVoters').text(result.meta.thisElectionVoters);
+				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
+				$('#votersDiff').html(prefixNumber(votersDiff));
+				$('#thisElectionVotes').text(getTotalVotes());
+				let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
+				$('#votesDiff').html(prefixNumber(votesDiff));
+				$('#thisElectionInvalidVotes').text(getInvalidVotes());
+				let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
+				$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
+				$('#thisElectionValidVotes').text(getValidVotes());
+				let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
+				$('#validVotesDiff').html(prefixNumber(validVotesDiff));
+				$('#thisElectionAbstentions').text(getAbstentions());
+				let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
+				$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
+				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
+				let turnoutDiff = getTurnout() - getLastElectionTurnout();
+				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
+
+				let thisElectionListVotes = getVotesForLists();
+				let lastElectionListVotes = getLastElectionVotesForLists();
+				for (list of result.lists) {
+					let votes = thisElectionListVotes.get(list);
+					let diff = votes - lastElectionListVotes.get(list);
+					$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
+				}
+
+				removeStaleTableData();
+			} else {
+				displayLoading();
+			}
+		});
+	}
+
+	function prefixNumber(number, isFloat) {
+		if (isFloat != undefined && isFloat) {
+			number = number.toFixed(2).replace('.', ',');
+		}
+		if (number > 0) {
+			return "<span class='text-success'>+" + number + "</span>";
+		} else if (number == 0) {
+			return "<span>±" + number + "</span>";
+		} else {
+			return "<span class='text-danger'>" + number + "</span>";
+		}
+	}
+
+	$(function () {
+		$.ajaxSetup({cache: false});
+		reloadData();
+		toggleRefresh();
+	});
+
+	function dateString(timestamp) {
+		let value = parseInt(timestamp);
+		let datevalue = new Date(value);
+
+		let year = datevalue.getFullYear();
+		let month = format2(datevalue.getMonth() + 1);
+		let dom = format2(datevalue.getDate());
+		let hours = format2(datevalue.getHours());
+		let minutes = format2(datevalue.getMinutes());
+		let seconds = format2(datevalue.getSeconds());
+
+		return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+	}
+
+	function format2(value) {
+		if (value < 10) {
+			return "0" + value;
+		} else {
+			return "" + value;
+		}
+	}
+</script>
 </body>
 
 </html>
