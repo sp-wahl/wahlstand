@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 	<title>wahlstand</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -44,48 +44,48 @@
 <body>
 
 
-	<div id='content' class='container-fluid'>
+<div id='content' class='container-fluid'>
 
-		<div class="row">
-			<div class="col-3">
+	<div class="row">
+		<div class="col-3">
 
-				<div class="card">
-					<div class="card-header">
-						Meta
-					</div>
-					<div class="card-body">
-						<button class="btn btn-primary" onclick="saveData()">Speichern</button>
-						<mark>Strg+S</mark>
-						<br>
-						<span class="text-right" id="lastSaveTimestamp"></span>
-
-						<hr>
-
-						<div class="form-group">
-							<label for="thisElectionName">Wahl(-name)</label>
-							<input type="text" class="form-control" id="thisElectionName" value="2018">
-						</div>
-						<div class="form-group">
-							<label for="thisElectionVoters">Wahlberechtigte</label>
-							<input type="number" class="form-control" id="thisElectionVoters" value="38000">
-						</div>
-						<div class="form-group">
-							<label for="lastElectionName">Wahl(-name) letzte Wahl</label>
-							<input type="text" class="form-control" id="lastElectionName" value="2017">
-						</div>
-						<div class="form-group">
-							<label for="lastElectionVoters">Wahlberechtigte letzte Wahl</label>
-							<input type="number" class="form-control" id="lastElectionVoters" value="36518">
-						</div>
-
-					</div>
+			<div class="card">
+				<div class="card-header">
+					Meta
 				</div>
+				<div class="card-body">
+					<button class="btn btn-primary" onclick="saveData()">Speichern</button>
+					<mark>Strg+S</mark>
+					<br>
+					<span class="text-right" id="lastSaveTimestamp"></span>
 
-				<div class="card">
-					<div class="card-header">
-						Urnen
+					<hr>
+
+					<div class="form-group">
+						<label for="thisElectionName">Wahl(-name)</label>
+						<input type="text" class="form-control" id="thisElectionName" value="2018">
 					</div>
-					<div class="card-body">
+					<div class="form-group">
+						<label for="thisElectionVoters">Wahlberechtigte</label>
+						<input type="number" class="form-control" id="thisElectionVoters" value="38000">
+					</div>
+					<div class="form-group">
+						<label for="lastElectionName">Wahl(-name) letzte Wahl</label>
+						<input type="text" class="form-control" id="lastElectionName" value="2017">
+					</div>
+					<div class="form-group">
+						<label for="lastElectionVoters">Wahlberechtigte letzte Wahl</label>
+						<input type="number" class="form-control" id="lastElectionVoters" value="36518">
+					</div>
+
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					Urnen
+				</div>
+				<div class="card-body">
 						<textarea id="urnen" rows="30">Juridicum
 Juridicum
 Mensa Nassestraße 1
@@ -112,14 +112,14 @@ Venusberg
 Physik / IGW
 Psychologie
 Wahlbüro (Briefwahl)</textarea>
-					</div>
 				</div>
+			</div>
 
-				<div class="card">
-					<div class="card-header">
-						Listen
-					</div>
-					<div class="card-body">
+			<div class="card">
+				<div class="card-header">
+					Listen
+				</div>
+				<div class="card-body">
 						<textarea id="listen" rows="10">JUSOS
 RCDS
 LHG
@@ -127,15 +127,15 @@ LUST
 SDS
 GHG
 IYSSE</textarea>
-					</div>
 				</div>
+			</div>
 
 
-				<div class="card">
-					<div class="card-header">
-						Farben
-					</div>
-					<div class="card-body">
+			<div class="card">
+				<div class="card-header">
+					Farben
+				</div>
+				<div class="card-body">
 						<textarea id="colours" rows="10">#e30513
 #0087c1
 #ffff00
@@ -143,293 +143,300 @@ IYSSE</textarea>
 #ce291f
 #339933
 #8a2be2</textarea>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-9">
-				<div class="card">
-					<div class="card-header">
-						Stimmen
-					</div>
-					<div class="card-body">
-						<table class='table table-hover table-sm' id="ballotResultTable">
-							<thead>
-								<tr>
-									<th>Urne</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<div class="card" id="plebiscite">
-					<div class="card-header">
-						Urabstimmung
-					</div>
-					<div class="card-body">
-						<table class='table table-hover table-sm' id="plebisciteResultTable">
-							<thead>
-								<tr>
-									<th>Urne</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<div class="card">
-					<div class="card-header">
-						Stimmen (letzte Wahl)
-					</div>
-					<div class="card-body">
-						<table class='table table-hover table-sm' id="lastElectionballotResultTable">
-							<thead>
-								<tr>
-									<th>Urne</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
 				</div>
 			</div>
 		</div>
 
-		<div>
-			<p class="text-center">
-				<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
-				<p>
-		</div>
+		<div class="col-9">
+			<div class="card">
+				<div class="card-header">
+					Stimmen
+				</div>
+				<div class="card-body">
+					<table class='table table-hover table-sm' id="ballotResultTable">
+						<thead>
+						<tr>
+							<th>Urne</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
 
+			<div class="card" id="plebiscite">
+				<div class="card-header">
+					Urabstimmung
+				</div>
+				<div class="card-body">
+					<table class='table table-hover table-sm' id="plebisciteResultTable">
+						<thead>
+						<tr>
+							<th>Urne</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					Stimmen (letzte Wahl)
+				</div>
+				<div class="card-body">
+					<table class='table table-hover table-sm' id="lastElectionballotResultTable">
+						<thead>
+						<tr>
+							<th>Urne</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<!-- $('.votes').each(function(){$(this).val(Math.floor(Math.random()*100))}) -->
+	<div>
+		<p class="text-center">
+			<a href="https://github.com/HSZemi/wahlstand">Der wahlstand ist Open-Source-Software</a>
+		<p>
+	</div>
+
+</div>
+
+<!-- $('.votes').each(function(){$(this).val(Math.floor(Math.random()*100))}) -->
 
 
-	<script src="../js/jquery-3.2.1.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script type="text/javascript">
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
 
-		function getMeta() {
-			let meta = Object();
-			meta.thisElectionName = $('#thisElectionName').val();
-			meta.thisElectionVoters = $('#thisElectionVoters').val();
-			meta.lastElectionName = $('#lastElectionName').val();
-			meta.lastElectionVoters = $('#lastElectionVoters').val();
-			return meta;
-		}
+	function getMeta() {
+		let meta = Object();
+		meta.thisElectionName = $('#thisElectionName').val();
+		meta.thisElectionVoters = $('#thisElectionVoters').val();
+		meta.lastElectionName = $('#lastElectionName').val();
+		meta.lastElectionVoters = $('#lastElectionVoters').val();
+		return meta;
+	}
 
-		function getBallots() {
-			let ballots = $('#urnen').val().split('\n');
-			return ballots;
-		}
-		function getLists() {
-			let lists = $('#listen').val().split('\n');
-			return lists;
-		}
-		function getColours() {
-			let colours = $('#colours').val().split('\n');
-			return colours;
-		}
-		function getVotes(listcount, ballotcount) {
-			let votes = [];
-			for (let b = 0; b < ballotcount; b++) {
-				for (let l = 0; l < (listcount + 2); l++) {
-					let value = $('#votes-' + b + '-' + l).val();
-					if (value === undefined) {
-						value = "";
-					}
-					votes.push(value);
+	function getBallots() {
+		let ballots = $('#urnen').val().split('\n');
+		return ballots;
+	}
+
+	function getLists() {
+		let lists = $('#listen').val().split('\n');
+		return lists;
+	}
+
+	function getColours() {
+		let colours = $('#colours').val().split('\n');
+		return colours;
+	}
+
+	function getVotes(listcount, ballotcount) {
+		let votes = [];
+		for (let b = 0; b < ballotcount; b++) {
+			for (let l = 0; l < (listcount + 2); l++) {
+				let value = $('#votes-' + b + '-' + l).val();
+				if (value === undefined) {
+					value = "";
 				}
+				votes.push(value);
 			}
-			return votes;
 		}
-		function getPlebiscite(ballotcount) {
-			let plebiscite = [];
-			for (let b = 0; b < ballotcount; b++) {
-				for (let l = 0; l < 4; l++) {
-					let value = $('#plebiscite-' + b + '-' + l).val();
-					if (value === undefined) {
-						value = "";
-					}
-					plebiscite.push(value);
+		return votes;
+	}
+
+	function getPlebiscite(ballotcount) {
+		let plebiscite = [];
+		for (let b = 0; b < ballotcount; b++) {
+			for (let l = 0; l < 4; l++) {
+				let value = $('#plebiscite-' + b + '-' + l).val();
+				if (value === undefined) {
+					value = "";
 				}
+				plebiscite.push(value);
 			}
-			return plebiscite;
 		}
-		function getLastElectionVotes(listcount, ballotcount) {
-			let lastElectionVotes = [];
-			for (let b = 0; b < ballotcount + 1; b++) {
-				for (let l = 0; l < (listcount + 3); l++) {
-					let value = $('#lastElectionVotes-' + b + '-' + l).val();
-					if (value === undefined) {
-						value = "";
-					}
-					lastElectionVotes.push(value);
+		return plebiscite;
+	}
+
+	function getLastElectionVotes(listcount, ballotcount) {
+		let lastElectionVotes = [];
+		for (let b = 0; b < ballotcount + 1; b++) {
+			for (let l = 0; l < (listcount + 3); l++) {
+				let value = $('#lastElectionVotes-' + b + '-' + l).val();
+				if (value === undefined) {
+					value = "";
 				}
+				lastElectionVotes.push(value);
 			}
-			return lastElectionVotes;
 		}
+		return lastElectionVotes;
+	}
 
-		function gatherData() {
-			let data = {};
-			data.timestamp = Date.now();
-			data.ballots = getBallots();
-			data.lists = getLists();
-			data.colours = getColours();
-			data.votes = getVotes(data.lists.length, data.ballots.length);
-			data.plebiscite = getPlebiscite(data.ballots.length);
-			data.lastElectionVotes = getLastElectionVotes(data.lists.length, data.ballots.length);
-			data.meta = getMeta();
-			return data;
-		}
+	function gatherData() {
+		let data = {};
+		data.timestamp = Date.now();
+		data.ballots = getBallots();
+		data.lists = getLists();
+		data.colours = getColours();
+		data.votes = getVotes(data.lists.length, data.ballots.length);
+		data.plebiscite = getPlebiscite(data.ballots.length);
+		data.lastElectionVotes = getLastElectionVotes(data.lists.length, data.ballots.length);
+		data.meta = getMeta();
+		return data;
+	}
 
-		function saveData() {
-			let data = gatherData();
-			$.post('save.php', data, function (result) {
-				if (result.status === "ok") {
-					alert("Gespeichert.");
-					reloadData();
-				} else {
-					alert("Ein Fehler ist aufgetreten. Die Änderungen wurden nicht gespeichert. Fehlercode: " + result.status);
-				}
-			}, 'json');
-		}
-
-		function clearTables() {
-			$('#ballotResultTable thead tr').empty();
-			$('#ballotResultTable tbody tr').empty();
-			$('#plebisciteResultTable tbody tr').empty();
-			$('#plebisciteResultTable thead tr').empty();
-			$('#lastElectionballotResultTable thead tr').empty();
-			$('#lastElectionballotResultTable tbody tr').empty();
-		}
-
-		function dateString(timestamp) {
-			let value = parseInt(timestamp);
-			let datevalue = new Date(value);
-
-			let year = datevalue.getFullYear();
-			let month = format2(datevalue.getMonth() + 1);
-			let dom = format2(datevalue.getDate());
-			let hours = format2(datevalue.getHours());
-			let minutes = format2(datevalue.getMinutes());
-			let seconds = format2(datevalue.getSeconds());
-
-			return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
-		}
-
-		function format2(value) {
-			if (value < 10) {
-				return "0" + value;
+	function saveData() {
+		let data = gatherData();
+		$.post('save.php', data, function (result) {
+			if (result.status === "ok") {
+				alert("Gespeichert.");
+				reloadData();
 			} else {
-				return "" + value;
+				alert("Ein Fehler ist aufgetreten. Die Änderungen wurden nicht gespeichert. Fehlercode: " + result.status);
 			}
+		}, 'json');
+	}
+
+	function clearTables() {
+		$('#ballotResultTable thead tr').empty();
+		$('#ballotResultTable tbody tr').empty();
+		$('#plebisciteResultTable tbody tr').empty();
+		$('#plebisciteResultTable thead tr').empty();
+		$('#lastElectionballotResultTable thead tr').empty();
+		$('#lastElectionballotResultTable tbody tr').empty();
+	}
+
+	function dateString(timestamp) {
+		let value = parseInt(timestamp);
+		let datevalue = new Date(value);
+
+		let year = datevalue.getFullYear();
+		let month = format2(datevalue.getMonth() + 1);
+		let dom = format2(datevalue.getDate());
+		let hours = format2(datevalue.getHours());
+		let minutes = format2(datevalue.getMinutes());
+		let seconds = format2(datevalue.getSeconds());
+
+		return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+	}
+
+	function format2(value) {
+		if (value < 10) {
+			return "0" + value;
+		} else {
+			return "" + value;
 		}
+	}
 
-		function reloadData() {
-			$.getJSON("../data/data.json", function (result) {
-				clearTables();
+	function reloadData() {
+		$.getJSON("../data/data.json", function (result) {
+			clearTables();
 
-				$('#lastSaveTimestamp').text(dateString(result.timestamp));
+			$('#lastSaveTimestamp').text(dateString(result.timestamp));
 
-				$('#listen').val(result.lists.join("\n"));
-				$('#urnen').val(result.ballots.join("\n"));
-				$('#thisElectionName').val(result.meta.thisElectionName);
-				$('#thisElectionVoters').val(result.meta.thisElectionVoters);
-				$('#lastElectionName').val(result.meta.lastElectionName);
-				$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+			$('#listen').val(result.lists.join("\n"));
+			$('#urnen').val(result.ballots.join("\n"));
+			$('#thisElectionName').val(result.meta.thisElectionName);
+			$('#thisElectionVoters').val(result.meta.thisElectionVoters);
+			$('#lastElectionName').val(result.meta.lastElectionName);
+			$('#lastElectionVoters').val(result.meta.lastElectionVoters);
 
-				$('#ballotResultTable thead tr').append('<th>Urne</th>');
-				for (let l of result.lists) {
-					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
+			$('#ballotResultTable thead tr').append('<th>Urne</th>');
+			for (let l of result.lists) {
+				$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
+			}
+			$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+			$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
+
+			let ballot_index = 0;
+			for (let b of result.ballots) {
+				$('#ballotResultTable tbody').append('<tr></tr>');
+				$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+				let list_index = 0;
+				for (let i = 0; i < (result.lists.length + 2); i++) {
+					let index = ballot_index * (result.lists.length + 2) + list_index;
+					let value = (index < result.votes.length) ? result.votes[index] : "";
+					$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
+					list_index++;
 				}
-				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
+				ballot_index++;
+			}
 
-				let ballot_index = 0;
-				for (let b of result.ballots) {
-					$('#ballotResultTable tbody').append('<tr></tr>');
-					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let list_index = 0;
-					for (let i = 0; i < (result.lists.length + 2); i++) {
-						let index = ballot_index * (result.lists.length + 2) + list_index;
-						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
-						list_index++;
-					}
-					ballot_index++;
+			$('#plebisciteResultTable thead tr').append('<th>Urne</th>');
+
+			$('#plebisciteResultTable thead tr').append('<th>Ja</th>');
+			$('#plebisciteResultTable thead tr').append('<th>Nein</th>');
+			$('#plebisciteResultTable thead tr').append('<th>Ungültig</th>');
+			$('#plebisciteResultTable thead tr').append('<th>Enthaltung</th>');
+
+			ballot_index = 0;
+			for (let b of result.ballots) {
+				$('#plebisciteResultTable tbody').append('<tr></tr>');
+				$('#plebisciteResultTable tbody tr:last').append('<td>' + b + '</td>');
+				let list_index = 0;
+				for (let i = 0; i < 4; i++) {
+					let index = ballot_index * 4 + list_index;
+					let value = (index < result.plebiscite.length) ? result.plebiscite[index] : "";
+					$('#plebisciteResultTable tbody tr:last').append('<td><input class="votes" type="number" id="plebiscite-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
+					list_index++;
 				}
+				ballot_index++;
+			}
 
-				$('#plebisciteResultTable thead tr').append('<th>Urne</th>');
+			$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
+			for (l of result.lists) {
+				$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
+			}
+			$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
+			$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
+			$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
 
-				$('#plebisciteResultTable thead tr').append('<th>Ja</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Nein</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Ungültig</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Enthaltung</th>');
-
-				ballot_index = 0;
-				for (let b of result.ballots) {
-					$('#plebisciteResultTable tbody').append('<tr></tr>');
-					$('#plebisciteResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let list_index = 0;
-					for (let i = 0; i < 4; i++) {
-						let index = ballot_index * 4 + list_index;
-						let value = (index < result.plebiscite.length) ? result.plebiscite[index] : "";
-						$('#plebisciteResultTable tbody tr:last').append('<td><input class="votes" type="number" id="plebiscite-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
-						list_index++;
-					}
-					ballot_index++;
+			let le_ballot_index = 0;
+			let le_ballots = result.ballots.slice();
+			le_ballots.push("SONSTIGE");
+			for (b of le_ballots) {
+				$('#lastElectionballotResultTable tbody').append('<tr></tr>');
+				$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
+				let le_list_index = 0;
+				for (let i = 0; i < (result.lists.length + 3); i++) {
+					let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+					let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
+					$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+					le_list_index++;
 				}
+				le_ballot_index++;
+			}
 
-				$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
-				for (l of result.lists) {
-					$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
-				}
-				$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
-				$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
-
-				let le_ballot_index = 0;
-				let le_ballots = result.ballots.slice();
-				le_ballots.push("SONSTIGE");
-				for (b of le_ballots) {
-					$('#lastElectionballotResultTable tbody').append('<tr></tr>');
-					$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let le_list_index = 0;
-					for (let i = 0; i < (result.lists.length + 3); i++) {
-						let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
-						let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
-						$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
-						le_list_index++;
-					}
-					le_ballot_index++;
-				}
-
-				$('input.votes').on('input', function () { $(this).addClass('changed') });
-			});
-		}
-
-		$(function () {
-			$.ajaxSetup({ cache: false });
-			reloadData();
-			$(document).on('keydown', function (event) {
-				console.log("pressed");
-				if ((event.ctrlKey || event.metaKey) && event.keyCode === 83) {
-					event.preventDefault();
-					saveData();
-				}
+			$('input.votes').on('input', function () {
+				$(this).addClass('changed')
 			});
 		});
+	}
+
+	$(function () {
+		$.ajaxSetup({cache: false});
+		reloadData();
+		$(document).on('keydown', function (event) {
+			console.log("pressed");
+			if ((event.ctrlKey || event.metaKey) && event.keyCode === 83) {
+				event.preventDefault();
+				saveData();
+			}
+		});
+	});
 
 
-	</script>
+</script>
 </body>
 
 </html>
