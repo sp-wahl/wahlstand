@@ -147,7 +147,6 @@
 
 
 <div id='loading' class='container'>
-	<!-- <img src="img/load.gif"> -->
 	<div class="card">
 		<h5 class="card-header">Noch ein wenig Geduld…</h5>
 		<img class="card-img-top" src="img/load.gif" alt="Card image cap">
@@ -299,7 +298,7 @@
 
 	function checkIfDataHasChanged() {
 		$.getJSON("data/timestamp.json", function (result) {
-			if (lastTimestamp != result.last_update) {
+			if (lastTimestamp !== result.last_update) {
 				reloadData();
 			}
 		});
@@ -334,7 +333,7 @@
 				let currentList = data.lists[l];
 				let voteIndex = b * (data.lists.length + 2) + l;
 				let votes = 0;
-				if (data.votes[voteIndex] != "") {
+				if (data.votes[voteIndex] !== "") {
 					votes = parseInt(data.votes[voteIndex]);
 				}
 				map.set(currentList, (map.get(currentList) + votes))
@@ -348,7 +347,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
 			let votes = 0;
-			if (data.votes[voteIndex] != "") {
+			if (data.votes[voteIndex] !== "") {
 				votes = parseInt(data.votes[voteIndex]);
 			}
 			abstentions += votes;
@@ -361,7 +360,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			let voteIndex = b * (data.lists.length + 2) + data.lists.length;
 			let votes = 0;
-			if (data.votes[voteIndex] != "") {
+			if (data.votes[voteIndex] !== "") {
 				votes = parseInt(data.votes[voteIndex]);
 			}
 			invalidVotes += votes;
@@ -404,7 +403,7 @@
 				let currentList = data.lists[l];
 				let voteIndex = b * (data.lists.length + 3) + l;
 				let votes = 0;
-				if (data.lastElectionVotes[voteIndex] != "") {
+				if (data.lastElectionVotes[voteIndex] !== "") {
 					votes = parseInt(data.lastElectionVotes[voteIndex]);
 				}
 				map.set(currentList, (map.get(currentList) + votes))
@@ -418,7 +417,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 1;
 			let votes = 0;
-			if (data.lastElectionVotes[voteIndex] != "") {
+			if (data.lastElectionVotes[voteIndex] !== "") {
 				votes = parseInt(data.lastElectionVotes[voteIndex]);
 			}
 			abstentions += votes;
@@ -431,7 +430,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			let voteIndex = b * (data.lists.length + 3) + data.lists.length;
 			let votes = 0;
-			if (data.lastElectionVotes[voteIndex] != "") {
+			if (data.lastElectionVotes[voteIndex] !== "") {
 				votes = parseInt(data.lastElectionVotes[voteIndex]);
 			}
 			invalidVotes += votes;
@@ -444,7 +443,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 2;
 			let votes = 0;
-			if (data.lastElectionVotes[voteIndex] != "") {
+			if (data.lastElectionVotes[voteIndex] !== "") {
 				votes = parseInt(data.lastElectionVotes[voteIndex]);
 			}
 			otherVotes += votes;
@@ -484,7 +483,7 @@
 		for (v of lists.values()) {
 			totalvotes += v;
 		}
-		if (totalvotes == 0) {
+		if (totalvotes === 0) {
 			return lists;
 		}
 
@@ -521,7 +520,7 @@
 		let seats = stlgs(43, votesForLists);
 		let diagramData = [];
 		for (let i = 0; i < data.lists.length; i++) {
-			let l = new Object();
+			let l = {};
 			l.color = data.colours[i];
 			l.label = data.lists[i];
 			l.value = seats.get(data.lists[i]);
@@ -550,7 +549,7 @@
 			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
 			.append("svg:g") //make a group to hold our pie chart
 			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
-			.attr("transform", "translate(" + w / 2 + "," + h + ")") //move the center of the pie chart from 0, 0 to radius, radius
+			.attr("transform", "translate(" + w / 2 + "," + h + ")"); //move the center of the pie chart from 0, 0 to radius, radius
 
 		var arc = d3.arc() //this will create <path> elements for us using arc data
 			.outerRadius(r)
@@ -664,9 +663,9 @@
 					let le_list_index = 0;
 					for (let i = 0; i < (result.lists.length + 2); i++) {
 						let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
-						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] == "" ? 0 : result.lastElectionVotes[le_index]) : 0;
+						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
 						let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
-						let value = (index < result.votes.length) ? parseInt(result.votes[index] == "" ? 0 : result.votes[index]) : 0;
+						let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
 						let table_value = prefixNumber(value - le_value);
 						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
 						le_list_index++;
@@ -709,12 +708,12 @@
 	}
 
 	function prefixNumber(number, isFloat) {
-		if (isFloat != undefined && isFloat) {
+		if (isFloat !== undefined && isFloat) {
 			number = number.toFixed(2).replace('.', ',');
 		}
 		if (number > 0) {
 			return "<span class='text-success'>+" + number + "</span>";
-		} else if (number == 0) {
+		} else if (number === 0) {
 			return "<span>±" + number + "</span>";
 		} else {
 			return "<span class='text-danger'>" + number + "</span>";
