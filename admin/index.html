@@ -226,7 +226,7 @@ IYSSE</textarea>
 	function getVotes(listcount, ballotcount) {
 		let votes = [];
 		for (let b = 0; b < ballotcount; b++) {
-			for (let l = 0; l < (listcount + 2); l++) {
+			for (let l = 0; l < (listcount + 1); l++) {
 				let value = $('#votes-' + b + '-' + l).val();
 				if (value === undefined) {
 					value = "";
@@ -240,7 +240,7 @@ IYSSE</textarea>
 	function getLastElectionVotes(listcount, ballotcount) {
 		let lastElectionVotes = [];
 		for (let b = 0; b < ballotcount + 1; b++) {
-			for (let l = 0; l < (listcount + 3); l++) {
+			for (let l = 0; l < (listcount + 2); l++) {
 				let value = $('#lastElectionVotes-' + b + '-' + l).val();
 				if (value === undefined) {
 					value = "";
@@ -322,15 +322,14 @@ IYSSE</textarea>
 				$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
 			}
 			$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-			$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
 
 			let ballot_index = 0;
 			for (let b of result.ballots) {
 				$('#ballotResultTable tbody').append('<tr></tr>');
 				$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 				let list_index = 0;
-				for (let i = 0; i < (result.lists.length + 2); i++) {
-					let index = ballot_index * (result.lists.length + 2) + list_index;
+				for (let i = 0; i < (result.lists.length + 1); i++) {
+					let index = ballot_index * (result.lists.length + 1) + list_index;
 					let value = (index < result.votes.length) ? result.votes[index] : "";
 					$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
 					list_index++;
@@ -343,7 +342,6 @@ IYSSE</textarea>
 				$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
 			}
 			$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
-			$('#lastElectionballotResultTable thead tr').append('<th>Enthaltung</th>');
 			$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
 
 			let le_ballot_index = 0;
@@ -353,8 +351,8 @@ IYSSE</textarea>
 				$('#lastElectionballotResultTable tbody').append('<tr></tr>');
 				$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 				let le_list_index = 0;
-				for (let i = 0; i < (result.lists.length + 3); i++) {
-					let index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+				for (let i = 0; i < (result.lists.length + 2); i++) {
+					let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
 					let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
 					$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
 					le_list_index++;

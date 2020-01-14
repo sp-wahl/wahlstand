@@ -201,11 +201,6 @@
 					<td id="validVotesDiff"></td>
 				</tr>
 				<tr>
-					<td>Enthaltungen</td>
-					<td id="thisElectionAbstentions"></td>
-					<td id="abstentionsDiff"></td>
-				</tr>
-				<tr>
 					<td>Wahlbeteiligung</td>
 					<td id="thisElectionTurnout"></td>
 					<td id="turnoutDiff"></td>
@@ -333,7 +328,7 @@
 		for (let b = 0; b < data.ballots.length; b++) {
 			for (let l = 0; l < data.lists.length; l++) {
 				let currentList = data.lists[l];
-				let voteIndex = b * (data.lists.length + 2) + l;
+				let voteIndex = b * (data.lists.length + 1) + l;
 				let votes = 0;
 				if (data.votes[voteIndex] !== "") {
 					votes = parseInt(data.votes[voteIndex]);
@@ -344,23 +339,10 @@
 		return map;
 	}
 
-	function getAbstentions() {
-		let abstentions = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
-			let votes = 0;
-			if (data.votes[voteIndex] !== "") {
-				votes = parseInt(data.votes[voteIndex]);
-			}
-			abstentions += votes;
-		}
-		return abstentions;
-	}
-
 	function getInvalidVotes() {
 		let invalidVotes = 0;
 		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * (data.lists.length + 2) + data.lists.length;
+			let voteIndex = b * (data.lists.length + 1) + data.lists.length;
 			let votes = 0;
 			if (data.votes[voteIndex] !== "") {
 				votes = parseInt(data.votes[voteIndex]);
@@ -373,10 +355,9 @@
 	function getTotalVotes() {
 		let sum = 0;
 		let listVotes = getVotesForLists();
-		for (v of listVotes.values()) {
+		for (let v of listVotes.values()) {
 			sum += v;
 		}
-		sum += getAbstentions();
 		sum += getInvalidVotes();
 		return sum;
 	}
@@ -387,7 +368,6 @@
 		for (v of listVotes.values()) {
 			sum += v;
 		}
-		sum += getAbstentions();
 		return sum;
 	}
 
@@ -403,7 +383,7 @@
 		for (let b = 0; b < data.ballots.length + 1; b++) {
 			for (let l = 0; l < data.lists.length; l++) {
 				let currentList = data.lists[l];
-				let voteIndex = b * (data.lists.length + 3) + l;
+				let voteIndex = b * (data.lists.length + 2) + l;
 				let votes = 0;
 				if (data.lastElectionVotes[voteIndex] !== "") {
 					votes = parseInt(data.lastElectionVotes[voteIndex]);
@@ -414,23 +394,10 @@
 		return map;
 	}
 
-	function getLastElectionAbstentions() {
-		let abstentions = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 1;
-			let votes = 0;
-			if (data.lastElectionVotes[voteIndex] !== "") {
-				votes = parseInt(data.lastElectionVotes[voteIndex]);
-			}
-			abstentions += votes;
-		}
-		return abstentions;
-	}
-
 	function getLastElectionInvalidVotes() {
 		let invalidVotes = 0;
 		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * (data.lists.length + 3) + data.lists.length;
+			let voteIndex = b * (data.lists.length + 2) + data.lists.length;
 			let votes = 0;
 			if (data.lastElectionVotes[voteIndex] !== "") {
 				votes = parseInt(data.lastElectionVotes[voteIndex]);
@@ -443,7 +410,7 @@
 	function getLastElectionOtherVotes() {
 		let otherVotes = 0;
 		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * (data.lists.length + 3) + data.lists.length + 2;
+			let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
 			let votes = 0;
 			if (data.lastElectionVotes[voteIndex] !== "") {
 				votes = parseInt(data.lastElectionVotes[voteIndex]);
@@ -459,7 +426,6 @@
 		for (v of listVotes.values()) {
 			sum += v;
 		}
-		sum += getLastElectionAbstentions();
 		sum += getLastElectionInvalidVotes();
 		sum += getLastElectionOtherVotes();
 		return sum;
@@ -468,10 +434,9 @@
 	function getLastElectionValidVotes() {
 		let sum = 0;
 		let listVotes = getLastElectionVotesForLists();
-		for (v of listVotes.values()) {
+		for (let v of listVotes.values()) {
 			sum += v;
 		}
-		sum += getLastElectionAbstentions();
 		sum += getLastElectionOtherVotes();
 		return sum;
 	}
@@ -632,15 +597,14 @@
 					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
 				}
 				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotResultTable thead tr').append('<th>Enthaltung</th>');
 
 				let ballot_index = 0;
 				for (b of result.ballots) {
 					$('#ballotResultTable tbody').append('<tr></tr>');
 					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 					let list_index = 0;
-					for (let i = 0; i < (result.lists.length + 2); i++) {
-						let index = ballot_index * (result.lists.length + 2) + list_index;
+					for (let i = 0; i < (result.lists.length + 1); i++) {
+						let index = ballot_index * (result.lists.length + 1) + list_index;
 						let value = (index < result.votes.length) ? result.votes[index] : "";
 						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
 						list_index++;
@@ -653,7 +617,6 @@
 					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
 				}
 				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotDeltaTable thead tr').append('<th>Enthaltung</th>');
 
 				let le_ballot_index = 0;
 				let le_ballots = result.ballots.slice();
@@ -661,10 +624,10 @@
 					$('#ballotDeltaTable tbody').append('<tr></tr>');
 					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
 					let le_list_index = 0;
-					for (let i = 0; i < (result.lists.length + 2); i++) {
-						let le_index = le_ballot_index * (result.lists.length + 3) + le_list_index;
+					for (let i = 0; i < (result.lists.length + 1); i++) {
+						let le_index = le_ballot_index * (result.lists.length + 2) + le_list_index;
 						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
-						let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+						let index = le_ballot_index * (result.lists.length + 1) + le_list_index;
 						let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
 						let table_value = prefixNumber(value - le_value);
 						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
@@ -685,9 +648,6 @@
 				$('#thisElectionValidVotes').text(getValidVotes());
 				let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
 				$('#validVotesDiff').html(prefixNumber(validVotesDiff));
-				$('#thisElectionAbstentions').text(getAbstentions());
-				let abstentionsDiff = getAbstentions() - getLastElectionAbstentions();
-				$('#abstentionsDiff').html(prefixNumber(abstentionsDiff));
 				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
 				let turnoutDiff = getTurnout() - getLastElectionTurnout();
 				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
