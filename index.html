@@ -396,7 +396,7 @@
 
 	function getLastElectionInvalidVotes() {
 		let invalidVotes = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
+		for (let b = 0; b < (data.ballots.length + 1); b++) {
 			let voteIndex = b * (data.lists.length + 2) + data.lists.length;
 			let votes = 0;
 			if (data.lastElectionVotes[voteIndex] !== "") {
@@ -409,7 +409,7 @@
 
 	function getLastElectionOtherVotes() {
 		let otherVotes = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
+		for (let b = 0; b < (data.ballots.length + 1); b++) {
 			let voteIndex = b * (data.lists.length + 2) + data.lists.length + 1;
 			let votes = 0;
 			if (data.lastElectionVotes[voteIndex] !== "") {
