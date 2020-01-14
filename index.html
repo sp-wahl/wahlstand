@@ -256,68 +256,6 @@
 			</table>
 		</div>
 
-		<hr>
-
-		<h1>Urabstimmung</h1>
-		<div id='plebiscitediagram'></div>
-		<p class="text-right">
-			<small>
-				<a id="plebiscitediagramdl">Diagramm als svg-Datei herunterladen</a>
-			</small>
-		</p>
-
-
-		<div class='col-md-4 offset-md-4'>
-			<table class='table table-hover table-sm' id="plebisciteSummaryTable">
-				<tbody>
-				<tr>
-					<td>Wahlberechtigte</td>
-					<td id="plebisciteVoters"></td>
-				</tr>
-				<tr>
-					<td>Abgegebene Stimmen</td>
-					<td id="plebisciteVotes"></td>
-				</tr>
-				<tr>
-					<td>Gültige Stimmen</td>
-					<td id="plebisciteValidVotes"></td>
-				</tr>
-				<tr>
-					<td>Ja</td>
-					<td id="plebisciteYes"></td>
-				</tr>
-				<tr>
-					<td>Nein</td>
-					<td id="plebisciteNo"></td>
-				</tr>
-				<tr>
-					<td>Enthaltungen</td>
-					<td id="plebisciteAbstentions"></td>
-				</tr>
-				<tr>
-					<td>Ungültige Stimmen</td>
-					<td id="plebisciteInvalidVotes"></td>
-				</tr>
-				<tr>
-					<td>Wahlbeteiligung</td>
-					<td id="plebisciteTurnout"></td>
-				</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class='col-md-6 offset-md-3 table-responsive'>
-			<table class='table table-hover table-sm' id="plebisciteResultTable">
-				<thead>
-				<tr>
-					<th>Urne</th>
-				</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-
 		<div class="alert alert-danger text-center" id="notice-bottom">
 			<strong>Achtung!</strong>
 			Alle Angaben auf dieser Seite sind ohne Gewähr. Verbindlich ist allein das amtliche Endergebnis.
@@ -406,26 +344,6 @@
 		return map;
 	}
 
-	function getVotesForPlebiscite() {
-		let lists = ["Ja", "Nein"];
-		let map = new Map();
-		for (let l of lists) {
-			map.set(l, 0);
-		}
-		for (let b = 0; b < data.ballots.length; b++) {
-			for (let l = 0; l < lists.length; l++) {
-				let currentList = lists[l];
-				let voteIndex = b * (lists.length + 2) + l;
-				let votes = 0;
-				if (data.plebiscite[voteIndex] !== "") {
-					votes = parseInt(data.plebiscite[voteIndex]);
-				}
-				map.set(currentList, (map.get(currentList) + votes))
-			}
-		}
-		return map;
-	}
-
 	function getAbstentions() {
 		let abstentions = 0;
 		for (let b = 0; b < data.ballots.length; b++) {
@@ -433,19 +351,6 @@
 			let votes = 0;
 			if (data.votes[voteIndex] !== "") {
 				votes = parseInt(data.votes[voteIndex]);
-			}
-			abstentions += votes;
-		}
-		return abstentions;
-	}
-
-	function getPlebisciteAbstentions() {
-		let abstentions = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * 4 + 3;
-			let votes = 0;
-			if (data.plebiscite[voteIndex] !== "") {
-				votes = parseInt(data.plebiscite[voteIndex]);
 			}
 			abstentions += votes;
 		}
@@ -465,45 +370,6 @@
 		return invalidVotes;
 	}
 
-	function getPlebisciteInvalidVotes() {
-		let invalidVotes = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * 4 + 2;
-			let votes = 0;
-			if (data.plebiscite[voteIndex] !== "") {
-				votes = parseInt(data.plebiscite[voteIndex]);
-			}
-			invalidVotes += votes;
-		}
-		return invalidVotes;
-	}
-
-	function getPlebisciteNo() {
-		let no = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * 4 + 1;
-			let votes = 0;
-			if (data.plebiscite[voteIndex] !== "") {
-				votes = parseInt(data.plebiscite[voteIndex]);
-			}
-			no += votes;
-		}
-		return no;
-	}
-
-	function getPlebisciteYes() {
-		let yes = 0;
-		for (let b = 0; b < data.ballots.length; b++) {
-			let voteIndex = b * 4;
-			let votes = 0;
-			if (data.plebiscite[voteIndex] !== "") {
-				votes = parseInt(data.plebiscite[voteIndex]);
-			}
-			yes += votes;
-		}
-		return yes;
-	}
-
 	function getTotalVotes() {
 		let sum = 0;
 		let listVotes = getVotesForLists();
@@ -512,15 +378,6 @@
 		}
 		sum += getAbstentions();
 		sum += getInvalidVotes();
-		return sum;
-	}
-
-	function getPlebisciteTotalVotes() {
-		let sum = 0;
-		sum += getPlebisciteYes();
-		sum += getPlebisciteNo();
-		sum += getPlebisciteAbstentions();
-		sum += getPlebisciteInvalidVotes();
 		return sum;
 	}
 
@@ -534,20 +391,8 @@
 		return sum;
 	}
 
-	function getPlebisciteValidVotes() {
-		let sum = 0;
-		sum += getPlebisciteYes();
-		sum += getPlebisciteNo();
-		sum += getPlebisciteAbstentions();
-		return sum;
-	}
-
 	function getTurnout() {
 		return getTotalVotes() / parseInt(data.meta.thisElectionVoters) * 100;
-	}
-
-	function getPlebisciteTurnout() {
-		return getPlebisciteTotalVotes() / parseInt(data.meta.thisElectionVoters) * 100;
 	}
 
 	function getLastElectionVotesForLists() {
@@ -687,22 +532,6 @@
 		return diagramData;
 	}
 
-	function getPlebisciteDiagramData() {
-		let votesForLists = getVotesForPlebiscite();
-		let diagramData = [];
-		let lists = ["Ja", "Nein"];
-		let colours = ["#00cc00","#3366cc" ];
-		for (let i = 0; i < lists.length; i++) {
-			let l = {};
-			l.color = colours[i];
-			l.label = lists[i];
-			l.value = votesForLists.get(lists[i]);
-			diagramData.push(l);
-		}
-		diagramData.thisElectionName = data.meta.thisElectionName;
-		return diagramData;
-	}
-
 
 	function createDiagram(targetId, data) {
 		$('#' + targetId + ' svg').addClass('remove');
@@ -796,7 +625,6 @@
 				markStaleTableData();
 
 				createDiagram('diagram', getDiagramData());
-				createDiagram('plebiscitediagram', getPlebisciteDiagramData());
 
 
 				$('#ballotResultTable thead tr').append('<th>Urne</th>');
@@ -845,27 +673,6 @@
 					le_ballot_index++;
 				}
 
-				$('#plebisciteResultTable thead tr').append('<th>Urne</th>');
-
-				$('#plebisciteResultTable thead tr').append('<th>Ja</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Nein</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Ungültig</th>');
-				$('#plebisciteResultTable thead tr').append('<th>Enthaltung</th>');
-
-				ballot_index = 0;
-				for (b of result.ballots) {
-					$('#plebisciteResultTable tbody').append('<tr></tr>');
-					$('#plebisciteResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let list_index = 0;
-					for (let i = 0; i < 4; i++) {
-						let index = ballot_index * 4 + list_index;
-						let value = (index < result.plebiscite.length) ? result.plebiscite[index] : "";
-						$('#plebisciteResultTable tbody tr:last').append('<td><span class="votes" id="plebiscite-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
-						list_index++;
-					}
-					ballot_index++;
-				}
-
 				$('#thisElectionVoters').text(result.meta.thisElectionVoters);
 				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
 				$('#votersDiff').html(prefixNumber(votersDiff));
@@ -884,15 +691,6 @@
 				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
 				let turnoutDiff = getTurnout() - getLastElectionTurnout();
 				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
-
-				$('#plebisciteVoters').text(result.meta.thisElectionVoters);
-				$('#plebisciteVotes').text(getPlebisciteTotalVotes());
-				$('#plebisciteInvalidVotes').text(getPlebisciteInvalidVotes());
-				$('#plebisciteValidVotes').text(getPlebisciteValidVotes());
-				$('#plebisciteYes').text(getPlebisciteYes());
-				$('#plebisciteNo').text(getPlebisciteNo());
-				$('#plebisciteAbstentions').text(getPlebisciteAbstentions());
-				$('#plebisciteTurnout').text(getPlebisciteTurnout().toFixed(2).replace('.', ',') + " %");
 
 				let thisElectionListVotes = getVotesForLists();
 				let lastElectionListVotes = getLastElectionVotesForLists();

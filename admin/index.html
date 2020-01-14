@@ -165,23 +165,6 @@ IYSSE</textarea>
 				</div>
 			</div>
 
-			<div class="card" id="plebiscite">
-				<div class="card-header">
-					Urabstimmung
-				</div>
-				<div class="card-body">
-					<table class='table table-hover table-sm' id="plebisciteResultTable">
-						<thead>
-						<tr>
-							<th>Urne</th>
-						</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-			</div>
-
 			<div class="card">
 				<div class="card-header">
 					Stimmen (letzte Wahl)
@@ -254,20 +237,6 @@ IYSSE</textarea>
 		return votes;
 	}
 
-	function getPlebiscite(ballotcount) {
-		let plebiscite = [];
-		for (let b = 0; b < ballotcount; b++) {
-			for (let l = 0; l < 4; l++) {
-				let value = $('#plebiscite-' + b + '-' + l).val();
-				if (value === undefined) {
-					value = "";
-				}
-				plebiscite.push(value);
-			}
-		}
-		return plebiscite;
-	}
-
 	function getLastElectionVotes(listcount, ballotcount) {
 		let lastElectionVotes = [];
 		for (let b = 0; b < ballotcount + 1; b++) {
@@ -289,7 +258,6 @@ IYSSE</textarea>
 		data.lists = getLists();
 		data.colours = getColours();
 		data.votes = getVotes(data.lists.length, data.ballots.length);
-		data.plebiscite = getPlebiscite(data.ballots.length);
 		data.lastElectionVotes = getLastElectionVotes(data.lists.length, data.ballots.length);
 		data.meta = getMeta();
 		return data;
@@ -310,8 +278,6 @@ IYSSE</textarea>
 	function clearTables() {
 		$('#ballotResultTable thead tr').empty();
 		$('#ballotResultTable tbody tr').empty();
-		$('#plebisciteResultTable tbody tr').empty();
-		$('#plebisciteResultTable thead tr').empty();
 		$('#lastElectionballotResultTable thead tr').empty();
 		$('#lastElectionballotResultTable tbody tr').empty();
 	}
@@ -367,27 +333,6 @@ IYSSE</textarea>
 					let index = ballot_index * (result.lists.length + 2) + list_index;
 					let value = (index < result.votes.length) ? result.votes[index] : "";
 					$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
-					list_index++;
-				}
-				ballot_index++;
-			}
-
-			$('#plebisciteResultTable thead tr').append('<th>Urne</th>');
-
-			$('#plebisciteResultTable thead tr').append('<th>Ja</th>');
-			$('#plebisciteResultTable thead tr').append('<th>Nein</th>');
-			$('#plebisciteResultTable thead tr').append('<th>Ungültig</th>');
-			$('#plebisciteResultTable thead tr').append('<th>Enthaltung</th>');
-
-			ballot_index = 0;
-			for (let b of result.ballots) {
-				$('#plebisciteResultTable tbody').append('<tr></tr>');
-				$('#plebisciteResultTable tbody tr:last').append('<td>' + b + '</td>');
-				let list_index = 0;
-				for (let i = 0; i < 4; i++) {
-					let index = ballot_index * 4 + list_index;
-					let value = (index < result.plebiscite.length) ? result.plebiscite[index] : "";
-					$('#plebisciteResultTable tbody tr:last').append('<td><input class="votes" type="number" id="plebiscite-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
 					list_index++;
 				}
 				ballot_index++;
