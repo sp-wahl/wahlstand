@@ -78,6 +78,11 @@
 						<input type="number" class="form-control" id="lastElectionVoters" value="36518">
 					</div>
 
+					<div class="form-group">
+						<label for="fileinput">XML-Datei laden…</label>
+						<input type="file" id="fileinput">
+					</div>
+
 				</div>
 			</div>
 
@@ -194,7 +199,52 @@ VOLT</textarea>
 
 <script src="../js/jquery-3.2.1.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="classes.js"></script>
 <script type="text/javascript">
+	let fileinput = document.querySelector('#fileinput');
+
+	fileinput.addEventListener('change', (e) => {
+		e.preventDefault();
+
+		if (e.target.files.length > 0) {
+			let firstFile = e.target.files[0];
+
+			handleFile(firstFile);
+
+		} else {
+			console.log("no files found for change event");
+		}
+	});
+
+	function handleFile(firstFile) {
+		let reader = new FileReader();
+		reader.onload = function (e) {
+			let contents = e.target.result;
+			let parser = new DOMParser();
+			let xmlDoc = parser.parseFromString(contents, "text/xml");
+			let wahl = Wahl.fromXml(xmlDoc);
+			console.log(wahl);
+			const ballots = getBallots();
+			const lists = getLists();
+			const votes = [];
+			for (let ballot of ballots) {
+				for (let list of lists) {
+					votes.push(wahl.getStimmen(ballot, list));
+				}
+				votes.push(wahl.getStimmen(ballot, 'Ungültig'));
+			}
+			for (let ballot_index = 0; ballot_index < ballots.length; ballot_index++) {
+				for (let list_index = 0; list_index < (lists.length + 1); list_index++) {
+					let index = ballot_index * (lists.length + 1) + list_index;
+					let value = (index < votes.length) ? votes[index] : "";
+					$('#votes-' + ballot_index + '-' + list_index).val(value);
+				}
+			}
+
+		};
+		reader.readAsText(firstFile);
+
+	}
 
 	function getMeta() {
 		let meta = Object();
