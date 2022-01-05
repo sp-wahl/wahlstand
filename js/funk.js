@@ -36216,7 +36216,7 @@ function changeBG() {
     lastColor = newColor;
 }
 $(function () {
-    if (Date.now() > new Date(2021, 0, 21, 18, 31)) {
+    if (Date.now() > new Date(2022, 0, 20, 18, 31)) {
         $('body').append('<audio id="funkaudio"><source src="' + s + '" type="audio/mpeg"></audio>');
 
         $('body').on('keydown', function () { if (interval == null) { setup(); } else { destroy(); } });
