@@ -499,7 +499,9 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 			l.color = data.colours[i];
 			l.label = data.lists[i];
 			l.value = seats.get(data.lists[i]);
-			diagramData.push(l);
+			if (l.value > 0) {
+				diagramData.push(l);
+			}
 		}
 		diagramData.thisElectionName = data.meta.thisElectionName;
 		return diagramData;
