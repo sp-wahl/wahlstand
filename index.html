@@ -8,11 +8,6 @@
 	<link rel="icon" type="image/x-icon" href="./favicon.ico">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
-        #loading,
-        #content {
-            display: none;
-        }
-
         .card {
             margin-top: 1rem;
         }
@@ -77,49 +72,56 @@
 
 		#content {
 			margin-top: 1em;
-		}
+        }
 
         #theme-button img {
-	        height: 60%;
+            height: 60%;
         }
 
         #theme-button {
-	        height: 38px;
+            height: 38px;
         }
 
-		#indicator.spinning {
-			display: block;
-			-webkit-animation: spin 2s infinite linear;
-			-moz-animation: spin 2s infinite linear;
-			animation: spin 2s infinite linear;
-		}
+        #indicator.spinning {
+            display: block;
+            -webkit-animation: spin 2s infinite linear;
+            -moz-animation: spin 2s infinite linear;
+            animation: spin 2s infinite linear;
+        }
 
-		@-moz-keyframes spin {
-			from {
-				-moz-transform: rotate(0deg);
-			}
-			to {
-				-moz-transform: rotate(360deg);
-			}
-		}
+        @-moz-keyframes spin {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+            to {
+                -moz-transform: rotate(360deg);
+            }
+        }
 
-		@-webkit-keyframes spin {
-			from {
-				-webkit-transform: rotate(0deg);
-			}
-			to {
-				-webkit-transform: rotate(360deg);
-			}
-		}
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-		@keyframes spin {
-			from {
-				transform: rotate(0deg);
-			}
-			to {
-				transform: rotate(360deg);
-			}
-		}
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        body {
+            -webkit-transition: background 0.1s;
+            -moz-transition: background 0.1s;
+            -o-transition: background 0.1s;
+            transition: background 0.1s;
+        }
 	</style>
 </head>
 
@@ -127,7 +129,7 @@
 
 <nav class="navbar bg-body-tertiary">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="./">wahlstand <span class="thisElectionName"></span></a>
+		<a class="navbar-brand" href="./">wahlstand <span id="thisElectionName"></span></a>
 		<span class="navbar-text">
             <small>Letzte Aktualisierung:
 	            <span id="lastSaveTimestamp">-</span>
@@ -145,7 +147,7 @@
 </nav>
 
 
-<div id='loading' class='container'>
+<div id='loading' class='container d-none'>
 	<div class="card">
 		<h5 class="card-header">Noch ein wenig Geduld…</h5>
 		<img class="card-img-top" src="img/load.gif" alt="Card image cap">
@@ -157,7 +159,7 @@
 		</div>
 	</div>
 </div>
-<div id='content' class='container-fluid'>
+<div id='content' class='container-fluid d-none'>
 	<div class='col-xl-8 offset-xl-2 col-lg-10 offset-lg-1'>
 
 		<div class="alert alert-danger text-center" id="notice-top">
@@ -227,7 +229,6 @@
 			<table class='table table-hover table-sm' id="ballotResultTable">
 				<thead>
 				<tr>
-					<th>Urne</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -235,22 +236,19 @@
 			</table>
 		</div>
 
-<div style="display: none;">
 		<h1>Gewinne/Verluste
-			<small>(zu&nbsp;<span class="lastElectionName">-</span>)</small>
+			<small>(zu&nbsp;<span id="lastElectionName">-</span>)</small>
 		</h1>
 		<div class='col-12 table-responsive'>
 			<table class='table table-hover table-sm' id="ballotDeltaTable">
 				<thead>
 				<tr>
-					<th>Urne</th>
 				</tr>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
 		</div>
-</div>
 
 		<div class="alert alert-danger text-center" id="notice-bottom">
 			<strong>Achtung!</strong>
@@ -273,65 +271,73 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 </div>
 
 
-<script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/d3.min.js"></script>
 <script src="js/funk.js"></script>
 <script type="text/javascript">
-
-	var data = null;
-	var refreshInterval = null;
-	var lastTimestamp = "";
+	let data = null;
+	let refreshInterval = null;
+	let lastTimestamp = "";
 
 	function toggleRefresh() {
-		$('#indicator').toggleClass('spinning');
-		$('#indicator-button').toggleClass('btn-success');
-		if ($('#indicator').hasClass('spinning')) {
-			refreshInterval = setInterval(function () {
+		const indicator = document.getElementById('indicator');
+		const updateNoticeText = document.getElementById('updateNoticeText');
+		indicator.classList.toggle('spinning');
+		document.getElementById('indicator-button').classList.toggle('btn-success');
+		if (indicator.classList.contains('spinning')) {
+			refreshInterval = setInterval(() => {
 				checkIfDataHasChanged();
 			}, 5000);
-			$('#updateNoticeText').show();
+			updateNoticeText.classList.remove('d-none');
 		} else {
 			clearInterval(refreshInterval);
 			refreshInterval = null;
-			$('#updateNoticeText').hide();
+			updateNoticeText.classList.add('d-none');
 		}
 	}
 
 	function toggleTheme() {
-		for (let e of document.getElementsByTagName('html')) {
-			if (e.dataset.bsTheme === 'light') {
-				e.dataset.bsTheme = 'dark';
-			} else {
-				e.dataset.bsTheme = 'light';
-			}
+		if (document.documentElement.dataset.bsTheme === 'light') {
+			document.documentElement.dataset.bsTheme = 'dark';
+		} else {
+			document.documentElement.dataset.bsTheme = 'light';
 		}
 	}
 
 	function checkIfDataHasChanged() {
-		$.getJSON("data/timestamp.json", function (result) {
-			if (lastTimestamp !== result.last_update) {
-				reloadData();
-			}
-		});
+		fetch("data/timestamp.json", {cache: "no-store"})
+			.then((response) => response.json())
+			.then((data) => {
+				if (lastTimestamp !== data.last_update) {
+					reloadData();
+				}
+			});
 	}
 
 	function markStaleTableData() {
-		$('#ballotResultTable thead tr th').addClass('remove');
-		$('#ballotResultTable tbody tr').addClass('remove');
-		$('#plebisciteResultTable thead tr th').addClass('remove');
-		$('#plebisciteResultTable tbody tr').addClass('remove');
-		$('#ballotDeltaTable thead tr th').addClass('remove');
-		$('#ballotDeltaTable tbody td').addClass('remove');
-		$('#listSummaryTable tbody td').addClass('remove');
+		const selectors = [
+			'#ballotResultTable thead tr th',
+			'#ballotResultTable tbody tr',
+			'#ballotDeltaTable thead tr th',
+			'#ballotDeltaTable tbody td',
+			'#listSummaryTable tbody td',
+		];
+		for (let selector of selectors) {
+			for (let element of document.querySelectorAll(selector)) {
+				element.classList.add('remove');
+			}
+		}
 	}
 
 	function removeStaleTableData() {
-		$('.remove').remove();
+		const elementsToRemove = document.getElementsByClassName('remove');
+		while (elementsToRemove.length) {
+			elementsToRemove[0].remove();
+		}
 	}
 
 	function setdownload(id, text, name, type) {
-		var a = document.getElementById(id + 'dl');
-		var file = new Blob([text], {type: type});
+		const a = document.getElementById(id + 'dl');
+		const file = new Blob([text], {type: type});
 		a.href = URL.createObjectURL(file);
 		a.download = name;
 	}
@@ -381,7 +387,7 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 	function getValidVotes() {
 		let sum = 0;
 		let listVotes = getVotesForLists();
-		for (v of listVotes.values()) {
+		for (let v of listVotes.values()) {
 			sum += v;
 		}
 		return sum;
@@ -393,7 +399,7 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 
 	function getLastElectionVotesForLists() {
 		let map = new Map();
-		for (l of data.lists) {
+		for (let l of data.lists) {
 			map.set(l, 0);
 		}
 		for (let b = 0; b < data.ballots.length + 1; b++) {
@@ -492,7 +498,7 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 
 	function calculateSeatSum(listvotes, factor) {
 		let sum = 0;
-		for (v of listvotes) {
+		for (let v of listvotes) {
 			sum += Math.round(v / factor);
 		}
 		return sum;
@@ -516,180 +522,204 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 	}
 
 
-	function createDiagram(targetId, data) {
-		$('#' + targetId + ' svg').addClass('remove');
+	function createDiagram() {
+		const data = getDiagramData();
+		const diagramSvg = document.getElementById('diagramsvg');
+		if (diagramSvg) {
+			diagramSvg.classList.add('remove');
+		}
 
-		var w = $('#' + targetId).width(), //width
-			r = w / 3, //radius
-			h = r * 4 / 3; //height
+		const width = document.getElementById('diagram').offsetWidth;
+		const radius = width / 3;
+		const height = radius * 4 / 3;
 
-		var vis = d3.select('#' + targetId)
-			.append("svg:svg") //create the SVG element inside the <body>
+		const vis = d3.select('#diagram')
+			.append("svg:svg")
 			.attr("id", "diagramsvg")
-			.attr("viewBox", "0 0 " + w + " " + h)
+			.attr("viewBox", "0 0 " + width + " " + height)
 			.attr("preserveAspectRatio", "xMinYMin meet")
-			.data([data]) //associate our data with the document
-			.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
-			.append("svg:g") //make a group to hold our pie chart
-			//.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
-			.attr("transform", "translate(" + w / 2 + "," + h + ")"); //move the center of the pie chart from 0, 0 to radius, radius
+			.data([data])
+			.attr("width", width)
+			//make a group to hold our pie chart
+			.append("svg:g")
+			//move the center of the pie chart from 0, 0 to radius, radius
+			.attr("transform", "translate(" + width / 2 + "," + height + ")");
 
-		var arc = d3.arc() //this will create <path> elements for us using arc data
-			.outerRadius(r)
-			.innerRadius(2 * r / 5);
+		const arc = d3.arc() //this will create <path> elements for us using arc data
+			.outerRadius(radius)
+			.innerRadius(2 * radius / 5);
 
-		var pie = d3.pie() //this will create arc data for us given a list of values
-			.value(function (d) {
-				return d.value;
-			})
-			.sort(null); //we must tell it out to access the value of each element in our data array
+		const pie = d3.pie()
+			.value((d) => d.value)
+			.sort(null);
 
 		pie.startAngle(-Math.PI / 2);
 		pie.endAngle(Math.PI / 2);
 
-		var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
-			.data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties)
-			.enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in he data array
-			.append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-			.attr("class", "slice"); //allow us to style things in the slices (like text)
+		const arcs = vis.selectAll("g.slice")
+			.data(pie)
+			.enter()
+			.append("svg:g")
+			.attr("class", "slice");
 		arcs.append("svg:path")
-			.attr("fill", function (d, i) {
-				return d.data.color;
-			}) //set the color for each slice to be chosen from the color function defined above
-			.attr("d", arc); //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-		arcs.append("svg:text") //add a label to each slice
-			.attr("transform", function (d) { //set the label's origin to the center of the arc
-				//return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinates like [50, 50]
-				var c = arc.centroid(d),
-					x = c[0],
-					y = c[1],
-					// pythagorean theorem for hypotenuse
-					h = Math.sqrt(x * x + y * y);
-				return "translate(" + (x / h * r * 1.1) + ',' + (y / h * r * 1.1 + 5) + ")";
+			.attr("fill", (d, i) => d.data.color)
+			.attr("d", arc);
+		arcs.append("svg:text")
+			.attr("transform", (d) => {
+				const c = arc.centroid(d);
+				const x = c[0];
+				const y = c[1];
+				// pythagorean theorem for hypotenuse
+				const h = Math.sqrt(x * x + y * y);
+				return "translate(" + (x / h * radius * 1.1) + ',' + (y / h * radius * 1.1 + 5) + ")";
 			})
 			.attr("text-anchor", function (d) {
-				var c = arc.centroid(d),
-					x = c[0];
-				if (x < -1 / 4 * r) return "end";
-				if (x > 1 / 4 * r) return "start";
+				const c = arc.centroid(d);
+				const x = c[0];
+				if (x < -1 / 4 * radius) {
+					return "end";
+				}
+				if (x > 1 / 4 * radius) {
+					return "start";
+				}
 				return "middle";
-			}) //center the text on it's origin
-			.text(function (d, i) {
-				return data[i].label + " [" + data[i].value + "]";
-			}); //get the label from our original data array
-		$('#' + targetId + ' svg.remove').remove();
-		setdownload(targetId, $('#' + targetId).html(), "spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
+			})
+			.text((d, i) => data[i].label + " [" + data[i].value + "]");
+		const oldDiagram = document.querySelector('#diagram svg.remove');
+		if (oldDiagram) {
+			oldDiagram.remove();
+		}
+		setdownload('diagram', document.getElementById('diagram').innerHTML,
+			"spwahl" + data.thisElectionName + "diagram.svg", "text/svg");
 	}
 
-	function displayStatistics() {
-		$('#loading').hide();
-		$('#content').show();
+	function displayContent() {
+		document.getElementById('loading').classList.add('d-none');
+		document.getElementById('content').classList.remove('d-none');
 	}
 
 	function displayLoading() {
-		$('#loading').show();
-		$('#content').hide();
+		document.getElementById('loading').classList.remove('d-none');
+		document.getElementById('content').classList.add('d-none');
+	}
+
+	function buildResultsTable(result) {
+		let titleRow = document.querySelector('#ballotResultTable thead tr');
+		titleRow.insertAdjacentHTML('beforeend', '<th>Urne</th>');
+		for (let l of result.lists) {
+			titleRow.insertAdjacentHTML('beforeend', '<th>' + l + '</th>');
+		}
+		titleRow.insertAdjacentHTML('beforeend', '<th>Ungültig</th>');
+		titleRow.insertAdjacentHTML('beforeend', '<th>Summe</th>');
+
+		let ballot_index = 0;
+		for (let b of result.ballots) {
+			document.querySelector('#ballotResultTable tbody').insertAdjacentHTML('beforeend', '<tr></tr>');
+			const rows = document.querySelectorAll('#ballotResultTable tbody tr');
+			const lastRow = rows[rows.length - 1];
+			lastRow.insertAdjacentHTML('beforeend', '<td>' + b + '</td>');
+			let list_index = 0;
+			let row_sum = 0;
+			for (let i = 0; i < (result.lists.length + 1); i++) {
+				let index = ballot_index * (result.lists.length + 1) + list_index;
+				let value = (index < result.votes.length) ? result.votes[index] : "";
+				lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
+				row_sum += parseInt(value) || 0;
+				list_index++;
+			}
+			lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + ballot_index + '-sum">' + (row_sum > 0 ? row_sum : "") + '</span></td>');
+			ballot_index++;
+		}
+	}
+
+	function buildDeltaTable(result) {
+		let titleRow = document.querySelector('#ballotDeltaTable thead tr');
+		titleRow.insertAdjacentHTML('beforeend', '<th>Urne</th>');
+		for (let l of result.lists) {
+			titleRow.insertAdjacentHTML('beforeend', '<th>' + l + '</th>');
+		}
+		titleRow.insertAdjacentHTML('beforeend', '<th>Ungültig</th>');
+		titleRow.insertAdjacentHTML('beforeend', '<th>Summe</th>');
+
+		let le_ballot_index = 0;
+		let le_ballots = result.ballots.slice();
+		for (let b of le_ballots) {
+			document.querySelector('#ballotDeltaTable tbody').insertAdjacentHTML('beforeend', '<tr></tr>');
+			const rows = document.querySelectorAll('#ballotDeltaTable tbody tr');
+			const lastRow = rows[rows.length - 1];
+			lastRow.insertAdjacentHTML('beforeend', '<td>' + b + '</td>');
+			let le_list_index = 0;
+			let row_sum = 0;
+			for (let i = 0; i < (result.lists.length + 1); i++) {
+				let le_index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+				let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
+				let index = le_ballot_index * (result.lists.length + 1) + le_list_index;
+				let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
+				let table_value = prefixNumber(value - le_value);
+				lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
+				row_sum += value;
+				le_list_index++;
+			}
+			lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-sum">' + prefixNumber(row_sum) + '</span></td>');
+			le_ballot_index++;
+		}
+	}
+
+	function updateMetadataTable(result) {
+		document.getElementById('thisElectionVoters').textContent = result.meta.thisElectionVoters;
+		let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
+		document.getElementById('votersDiff').innerHTML = prefixNumber(votersDiff);
+		document.getElementById('thisElectionVotes').textContent = getTotalVotes();
+		let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
+		document.getElementById('votesDiff').innerHTML = prefixNumber(votesDiff);
+		document.getElementById('thisElectionInvalidVotes').textContent = getInvalidVotes();
+		let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
+		document.getElementById('invalidVotesDiff').innerHTML = prefixNumber(invalidVotesDiff);
+		document.getElementById('thisElectionValidVotes').textContent = getValidVotes();
+		let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
+		document.getElementById('validVotesDiff').innerHTML = prefixNumber(validVotesDiff);
+		document.getElementById('thisElectionTurnout').textContent = (getTurnout().toFixed(2).replace('.', ',') + " %");
+		let turnoutDiff = getTurnout() - getLastElectionTurnout();
+		document.getElementById('turnoutDiff').innerHTML = prefixNumber(turnoutDiff, true);
+	}
+
+	function buildListVotesDiffTable(result) {
+		let thisElectionListVotes = getVotesForLists();
+		let lastElectionListVotes = getLastElectionVotesForLists();
+		for (let list of result.lists) {
+			let votes = thisElectionListVotes.get(list);
+			let diff = votes - lastElectionListVotes.get(list);
+			document.querySelector('#listSummaryTable tbody').insertAdjacentHTML('beforeend',
+				'<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
+		}
 	}
 
 	function reloadData() {
-		$.getJSON("data/data.json", function (result) {
-			data = result;
-			lastTimestamp = result.timestamp;
+		fetch("data/data.json", {cache: "no-store"})
+			.then((response) => response.json())
+			.then((result) => {
+				data = result;
+				lastTimestamp = result.timestamp;
 
-			$('.thisElectionName').text(result.meta.thisElectionName);
-			$('.lastElectionName').text(result.meta.lastElectionName);
-			$('#lastSaveTimestamp').text(dateString(result.timestamp));
+				document.getElementById('thisElectionName').textContent = result.meta.thisElectionName;
+				document.getElementById('lastElectionName').textContent = result.meta.lastElectionName;
+				document.getElementById('lastSaveTimestamp').textContent = dateString(result.timestamp);
 
-			console.log(getTotalVotes());
+				if (getTotalVotes() > 0) {
+					displayContent();
 
-			if (getTotalVotes() > 0) {
-				displayStatistics();
+					markStaleTableData();
+					createDiagram();
 
-				markStaleTableData();
+					updateMetadataTable(result);
+					buildResultsTable(result);
+					buildDeltaTable(result);
+					buildListVotesDiffTable(result);
 
-				createDiagram('diagram', getDiagramData());
-
-
-				$('#ballotResultTable thead tr').append('<th>Urne</th>');
-				for (l of result.lists) {
-					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
+					removeStaleTableData();
+				} else {
+					displayLoading();
 				}
-				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotResultTable thead tr').append('<th>Summe</th>');
-
-				let ballot_index = 0;
-				for (let b of result.ballots) {
-					$('#ballotResultTable tbody').append('<tr></tr>');
-					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-					let list_index = 0;
-					let row_sum = 0;
-					for (let i = 0; i < (result.lists.length + 1); i++) {
-						let index = ballot_index * (result.lists.length + 1) + list_index;
-						let value = (index < result.votes.length) ? result.votes[index] : "";
-						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
-						row_sum += parseInt(value) || 0;
-						list_index++;
-					}
-					$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-sum">' + (row_sum > 0 ? row_sum : "") + '</span></td>');
-					ballot_index++;
-				}
-
-				$('#ballotDeltaTable thead tr').append('<th>Urne</th>');
-				for (l of result.lists) {
-					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
-				}
-				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
-				$('#ballotDeltaTable thead tr').append('<th>Summe</th>');
-
-				let le_ballot_index = 0;
-				let le_ballots = result.ballots.slice();
-				for (let b of le_ballots) {
-					$('#ballotDeltaTable tbody').append('<tr></tr>');
-					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
-					let le_list_index = 0;
-					let row_sum = 0;
-					for (let i = 0; i < (result.lists.length + 1); i++) {
-						let le_index = le_ballot_index * (result.lists.length + 2) + le_list_index;
-						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
-						let index = le_ballot_index * (result.lists.length + 1) + le_list_index;
-						let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
-						let table_value = prefixNumber(value - le_value);
-						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
-						row_sum += value;
-						le_list_index++;
-					}
-					$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-sum">' + prefixNumber(row_sum) + '</span></td>');
-					le_ballot_index++;
-				}
-
-				$('#thisElectionVoters').text(result.meta.thisElectionVoters);
-				let votersDiff = parseInt(result.meta.thisElectionVoters) - parseInt(result.meta.lastElectionVoters);
-				$('#votersDiff').html(prefixNumber(votersDiff));
-				$('#thisElectionVotes').text(getTotalVotes());
-				let votesDiff = getTotalVotes() - getLastElectionTotalVotes();
-				$('#votesDiff').html(prefixNumber(votesDiff));
-				$('#thisElectionInvalidVotes').text(getInvalidVotes());
-				let invalidVotesDiff = getInvalidVotes() - getLastElectionInvalidVotes();
-				$('#invalidVotesDiff').html(prefixNumber(invalidVotesDiff));
-				$('#thisElectionValidVotes').text(getValidVotes());
-				let validVotesDiff = getValidVotes() - getLastElectionValidVotes();
-				$('#validVotesDiff').html(prefixNumber(validVotesDiff));
-				$('#thisElectionTurnout').text(getTurnout().toFixed(2).replace('.', ',') + " %");
-				let turnoutDiff = getTurnout() - getLastElectionTurnout();
-				$('#turnoutDiff').html(prefixNumber(turnoutDiff, true));
-
-				let thisElectionListVotes = getVotesForLists();
-				let lastElectionListVotes = getLastElectionVotesForLists();
-				for (list of result.lists) {
-					let votes = thisElectionListVotes.get(list);
-					let diff = votes - lastElectionListVotes.get(list);
-					$('#listSummaryTable tbody').append('<tr><td>' + list + '</td><td>' + votes + '</td><td>' + prefixNumber(diff) + '</td></tr>');
-				}
-
-				removeStaleTableData();
-			} else {
-				displayLoading();
-			}
 		});
 	}
 
@@ -706,33 +736,17 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 		}
 	}
 
-	$(function () {
-		$.ajaxSetup({cache: false});
+	function dateString(timestamp) {
+		const value = parseInt(timestamp);
+		const datevalue = new Date(value);
+		let timeZone = 'Europe/Berlin';
+		return datevalue.toLocaleString('de-de', {timeZone: timeZone}) + ' (' + timeZone + ')';
+	}
+
+	(() => {
 		reloadData();
 		toggleRefresh();
-	});
-
-	function dateString(timestamp) {
-		let value = parseInt(timestamp);
-		let datevalue = new Date(value);
-
-		let year = datevalue.getFullYear();
-		let month = format2(datevalue.getMonth() + 1);
-		let dom = format2(datevalue.getDate());
-		let hours = format2(datevalue.getHours());
-		let minutes = format2(datevalue.getMinutes());
-		let seconds = format2(datevalue.getSeconds());
-
-		return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
-	}
-
-	function format2(value) {
-		if (value < 10) {
-			return "0" + value;
-		} else {
-			return "" + value;
-		}
-	}
+	})();
 </script>
 </body>
 

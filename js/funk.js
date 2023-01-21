@@ -1,4 +1,4 @@
-var s = "data:audio/mpeg;base64,SUQzAgAAAAAREVRUMgAAFABXaG8gTGlrZXMgdG8gUGFydHkAVFAxAAAPAEtldmluIE1hY0xlb2QA\
+const s = "data:audio/mpeg;base64,SUQzAgAAAAAREVRUMgAAFABXaG8gTGlrZXMgdG8gUGFydHkAVFAxAAAPAEtldmluIE1hY0xlb2QA\
 VENNAAAPAEtldmluIE1hY0xlb2QAVFlFAAAGADIwMTIAVEJQAAAFADExNwBUQ08AAAUAKDQpAENP\
 TQAAEABlbmdpVHVuUEdBUAAwAABURU4AAA8AaVR1bmVzIDEwLjYuMQBDT00AAGgAZW5naVR1bk5P\
 Uk0AIDAwMDAxMDY2IDAwMDAxMDBGIDAwMDBBQjdDIDAwMDA5MUMyIDAwMDNEQTFGIDAwMDJFRTM0\
@@ -36187,8 +36187,8 @@ qqqqqqqqqqqqqv/zhGRUAAABpAAAAAAAAANIAAAAAKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\
 qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\
 qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\
 qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg==";
-var lastColor = "";
-var interval = null;
+let lastColor = "";
+let interval = null;
 function setup() {
     interval = setInterval(function () { changeBG(); }, 514);
     document.getElementById('funkaudio').play();
@@ -36199,7 +36199,7 @@ function destroy() {
         clearInterval(interval);
         interval = null;
         document.getElementById('funkaudio').pause();
-        $('body').css('background-color', '');
+        document.body.style.backgroundColor = '';
         document.getElementById('notice-music').classList.add('d-none');
     }
 }
@@ -36208,19 +36208,19 @@ function changeBG() {
     while (newColor === lastColor) {
         newColor = d3.schemeCategory10[Math.floor(Math.random() * 10)];
     }
-    $('body').css({
-        "background": newColor,
-        "-webkit-transition": "background 0.1s",
-        "-moz-transition": "background 0.1s",
-        "-o-transition": "background 0.1s",
-        "transition": "background 0.1s"
-    });
+	document.body.style.backgroundColor = newColor;
     lastColor = newColor;
 }
-$(function () {
-    if (Date.now() > new Date(2023, 0, 19, 18, 31)) {
-        $('body').append('<audio id="funkaudio"><source src="' + s + '" type="audio/mpeg"></audio>');
+(() => {
+	if (Date.now() > new Date(2024, 0, 18, 18, 31)) {
+		document.body.insertAdjacentHTML('beforeend', '<audio id="funkaudio"><source src="' + s + '" type="audio/mpeg"></audio>');
 
-        $('body').on('keydown', function () { if (interval == null) { setup(); } else { destroy(); } });
-    }
-});
+		document.addEventListener('keydown', () => {
+			if (interval == null) {
+				setup();
+			} else {
+				destroy();
+			}
+		});
+	}
+})();

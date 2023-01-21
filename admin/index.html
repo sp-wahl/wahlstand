@@ -194,10 +194,7 @@ VOLT</textarea>
 
 </div>
 
-<!-- $('.votes').each(function(){$(this).val(Math.floor(Math.random()*100))}) -->
 
-
-<script src="../js/jquery-3.2.1.min.js"></script>
 <script src="classes.js"></script>
 <script type="text/javascript">
 	let fileinput = document.querySelector('#fileinput');
@@ -236,7 +233,7 @@ VOLT</textarea>
 				for (let list_index = 0; list_index < (lists.length + 1); list_index++) {
 					let index = ballot_index * (lists.length + 1) + list_index;
 					let value = (index < votes.length) ? votes[index] : "";
-					$('#votes-' + ballot_index + '-' + list_index).val(value);
+					document.getElementById('votes-' + ballot_index + '-' + list_index).value = value;
 				}
 			}
 
@@ -247,35 +244,33 @@ VOLT</textarea>
 
 	function getMeta() {
 		let meta = Object();
-		meta.thisElectionName = $('#thisElectionName').val();
-		meta.thisElectionVoters = $('#thisElectionVoters').val();
-		meta.lastElectionName = $('#lastElectionName').val();
-		meta.lastElectionVoters = $('#lastElectionVoters').val();
+		meta.thisElectionName = document.getElementById('thisElectionName').value;
+		meta.thisElectionVoters = document.getElementById('thisElectionVoters').value;
+		meta.lastElectionName = document.getElementById('lastElectionName').value;
+		meta.lastElectionVoters = document.getElementById('lastElectionVoters').value;
 		return meta;
 	}
 
 	function getBallots() {
-		let ballots = $('#urnen').val().split('\n');
-		return ballots;
+		return document.getElementById('urnen').value.split('\n');
 	}
 
 	function getLists() {
-		let lists = $('#listen').val().split('\n');
-		return lists;
+		return document.getElementById('listen').value.split('\n');
 	}
 
 	function getColours() {
-		let colours = $('#colours').val().split('\n');
-		return colours;
+		return document.getElementById('colours').value.split('\n');
 	}
 
 	function getVotes(listcount, ballotcount) {
 		let votes = [];
 		for (let b = 0; b < ballotcount; b++) {
 			for (let l = 0; l < (listcount + 1); l++) {
-				let value = $('#votes-' + b + '-' + l).val();
-				if (value === undefined) {
-					value = "";
+				let node = document.getElementById('votes-' + b + '-' + l);
+				let value = "";
+				if (node && node.value) {
+					value = node.value;
 				}
 				votes.push(value);
 			}
@@ -287,9 +282,10 @@ VOLT</textarea>
 		let lastElectionVotes = [];
 		for (let b = 0; b < ballotcount + 1; b++) {
 			for (let l = 0; l < (listcount + 2); l++) {
-				let value = $('#lastElectionVotes-' + b + '-' + l).val();
-				if (value === undefined) {
-					value = "";
+				let node = document.getElementById('lastElectionVotes-' + b + '-' + l)
+				let value = "";
+				if (node && node.value) {
+					value = node.value;
 				}
 				lastElectionVotes.push(value);
 			}
@@ -311,119 +307,134 @@ VOLT</textarea>
 
 	function saveData() {
 		let data = gatherData();
-		$.post('save.php', data, function (result) {
-			if (result.status === "ok") {
-				alert("Gespeichert.");
-				reloadData();
-			} else {
-				alert("Ein Fehler ist aufgetreten. Die Änderungen wurden nicht gespeichert. Fehlercode: " + result.status);
-			}
-		}, 'json');
+		fetch('save.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data)
+		}).then((response) => response.json())
+			.then((result) => {
+				if (result.status === "ok") {
+					alert("Gespeichert.");
+					reloadData();
+				} else {
+					alert("Ein Fehler ist aufgetreten. Die Änderungen wurden nicht gespeichert. Fehlercode: " + result.status);
+				}
+			});
 	}
 
 	function clearTables() {
-		$('#ballotResultTable thead tr').empty();
-		$('#ballotResultTable tbody tr').empty();
-		$('#lastElectionballotResultTable thead tr').empty();
-		$('#lastElectionballotResultTable tbody tr').empty();
+		const selectors = [
+			'#ballotResultTable thead tr',
+			'#ballotResultTable tbody tr',
+			'#lastElectionballotResultTable thead tr',
+			'#lastElectionballotResultTable tbody tr',
+		];
+		for (let selector of selectors) {
+			const elements = document.querySelectorAll(selector);
+			for (let element of elements) {
+				element.innerHTML = '';
+			}
+		}
 	}
 
 	function dateString(timestamp) {
-		let value = parseInt(timestamp);
-		let datevalue = new Date(value);
-
-		let year = datevalue.getFullYear();
-		let month = format2(datevalue.getMonth() + 1);
-		let dom = format2(datevalue.getDate());
-		let hours = format2(datevalue.getHours());
-		let minutes = format2(datevalue.getMinutes());
-		let seconds = format2(datevalue.getSeconds());
-
-		return dom + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds;
+		const value = parseInt(timestamp);
+		const datevalue = new Date(value);
+		let timeZone = 'Europe/Berlin';
+		return datevalue.toLocaleString('de-de', {timeZone: timeZone}) + ' (' + timeZone + ')';
 	}
 
-	function format2(value) {
-		if (value < 10) {
-			return "0" + value;
-		} else {
-			return "" + value;
+	function buildResultsTable(result) {
+		const thead = document.querySelector('#ballotResultTable thead tr');
+		thead.insertAdjacentHTML('beforeend', '<th>Urne</th>');
+		for (let l of result.lists) {
+			thead.insertAdjacentHTML('beforeend', '<th>' + l + '</th>');
+		}
+		thead.insertAdjacentHTML('beforeend', '<th>Ungültig</th>');
+
+		let ballot_index = 0;
+		for (let b of result.ballots) {
+			document.querySelector('#ballotResultTable tbody').insertAdjacentHTML('beforeend', '<tr></tr>');
+			const rows = document.querySelectorAll('#ballotResultTable tbody tr');
+			const lastRow = rows[rows.length - 1];
+			lastRow.insertAdjacentHTML('beforeend', '<td>' + b + '</td>');
+			let list_index = 0;
+			for (let i = 0; i < (result.lists.length + 1); i++) {
+				let index = ballot_index * (result.lists.length + 1) + list_index;
+				let value = (index < result.votes.length) ? result.votes[index] : "";
+				lastRow.insertAdjacentHTML('beforeend', '<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
+				list_index++;
+			}
+			ballot_index++;
+		}
+	}
+
+	function buildLastElectionResultsTable(result) {
+		const thead = document.querySelector('#lastElectionballotResultTable thead tr');
+		thead.insertAdjacentHTML('beforeend', '<th>Urne</th>');
+		for (let l of result.lists) {
+			thead.insertAdjacentHTML('beforeend', '<th>' + l + '</th>');
+		}
+		thead.insertAdjacentHTML('beforeend', '<th>Ungültig</th>');
+		thead.insertAdjacentHTML('beforeend', '<th>SONSTIGE</th>');
+
+		let le_ballot_index = 0;
+		let le_ballots = result.ballots.slice();
+		le_ballots.push("SONSTIGE");
+		for (let b of le_ballots) {
+			document.querySelector('#lastElectionballotResultTable tbody').insertAdjacentHTML('beforeend', '<tr></tr>');
+			const rows = document.querySelectorAll('#lastElectionballotResultTable tbody tr');
+			const lastRow = rows[rows.length - 1];
+			lastRow.insertAdjacentHTML('beforeend', '<td>' + b + '</td>');
+			let le_list_index = 0;
+			for (let i = 0; i < (result.lists.length + 2); i++) {
+				let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
+				let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
+				lastRow.insertAdjacentHTML('beforeend', '<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
+				le_list_index++;
+			}
+			le_ballot_index++;
 		}
 	}
 
 	function reloadData() {
-		$.getJSON("../data/data.json", function (result) {
-			clearTables();
+		fetch("../data/data.json", {cache: "no-store"})
+			.then((response) => response.json())
+			.then((result) => {
+				clearTables();
 
-			$('#lastSaveTimestamp').text(dateString(result.timestamp));
+				document.getElementById('lastSaveTimestamp').textContent = dateString(result.timestamp);
 
-			$('#listen').val(result.lists.join("\n"));
-			$('#urnen').val(result.ballots.join("\n"));
-			$('#colours').val(result.colours.join("\n"));
-			$('#thisElectionName').val(result.meta.thisElectionName);
-			$('#thisElectionVoters').val(result.meta.thisElectionVoters);
-			$('#lastElectionName').val(result.meta.lastElectionName);
-			$('#lastElectionVoters').val(result.meta.lastElectionVoters);
+				document.getElementById('listen').value = result.lists.join("\n");
+				document.getElementById('urnen').value = result.ballots.join("\n");
+				document.getElementById('colours').value = result.colours.join("\n");
+				document.getElementById('thisElectionName').value = result.meta.thisElectionName;
+				document.getElementById('thisElectionVoters').value = result.meta.thisElectionVoters;
+				document.getElementById('lastElectionName').value = result.meta.lastElectionName;
+				document.getElementById('lastElectionVoters').value = result.meta.lastElectionVoters;
 
-			$('#ballotResultTable thead tr').append('<th>Urne</th>');
-			for (let l of result.lists) {
-				$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
-			}
-			$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+				buildResultsTable(result);
+				buildLastElectionResultsTable(result);
 
-			let ballot_index = 0;
-			for (let b of result.ballots) {
-				$('#ballotResultTable tbody').append('<tr></tr>');
-				$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-				let list_index = 0;
-				for (let i = 0; i < (result.lists.length + 1); i++) {
-					let index = ballot_index * (result.lists.length + 1) + list_index;
-					let value = (index < result.votes.length) ? result.votes[index] : "";
-					$('#ballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="votes-' + ballot_index + '-' + list_index + '" value="' + value + '"></td>');
-					list_index++;
+				for (let element of document.querySelectorAll('input.votes')) {
+					element.addEventListener('input', (event) => {
+						event.target.classList.add('changed');
+					});
 				}
-				ballot_index++;
-			}
-
-			$('#lastElectionballotResultTable thead tr').append('<th>Urne</th>');
-			for (l of result.lists) {
-				$('#lastElectionballotResultTable thead tr').append('<th>' + l + '</th>');
-			}
-			$('#lastElectionballotResultTable thead tr').append('<th>Ungültig</th>');
-			$('#lastElectionballotResultTable thead tr').append('<th>SONSTIGE</th>');
-
-			let le_ballot_index = 0;
-			let le_ballots = result.ballots.slice();
-			le_ballots.push("SONSTIGE");
-			for (b of le_ballots) {
-				$('#lastElectionballotResultTable tbody').append('<tr></tr>');
-				$('#lastElectionballotResultTable tbody tr:last').append('<td>' + b + '</td>');
-				let le_list_index = 0;
-				for (let i = 0; i < (result.lists.length + 2); i++) {
-					let index = le_ballot_index * (result.lists.length + 2) + le_list_index;
-					let value = (index < result.lastElectionVotes.length) ? result.lastElectionVotes[index] : "";
-					$('#lastElectionballotResultTable tbody tr:last').append('<td><input class="votes" type="number" id="lastElectionVotes-' + le_ballot_index + '-' + le_list_index + '" value="' + value + '"></td>');
-					le_list_index++;
-				}
-				le_ballot_index++;
-			}
-
-			$('input.votes').on('input', function () {
-				$(this).addClass('changed')
 			});
-		});
 	}
 
-	$(function () {
-		$.ajaxSetup({cache: false});
+	(() => {
 		reloadData();
-		$(document).on('keydown', function (event) {
-			console.log("pressed");
+		document.addEventListener('keydown', (event) => {
 			if ((event.ctrlKey || event.metaKey) && event.keyCode === 83) {
 				event.preventDefault();
 				saveData();
 			}
 		});
-	});
+	})();
 
 
 </script>
