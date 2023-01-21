@@ -607,18 +607,22 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 					$('#ballotResultTable thead tr').append('<th>' + l + '</th>');
 				}
 				$('#ballotResultTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotResultTable thead tr').append('<th>Summe</th>');
 
 				let ballot_index = 0;
-				for (b of result.ballots) {
+				for (let b of result.ballots) {
 					$('#ballotResultTable tbody').append('<tr></tr>');
 					$('#ballotResultTable tbody tr:last').append('<td>' + b + '</td>');
 					let list_index = 0;
+					let row_sum = 0;
 					for (let i = 0; i < (result.lists.length + 1); i++) {
 						let index = ballot_index * (result.lists.length + 1) + list_index;
 						let value = (index < result.votes.length) ? result.votes[index] : "";
 						$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-' + list_index + '">' + value + '</span></td>');
+						row_sum += parseInt(value) || 0;
 						list_index++;
 					}
+					$('#ballotResultTable tbody tr:last').append('<td><span class="votes" id="votes-' + ballot_index + '-sum">' + (row_sum > 0 ? row_sum : "") + '</span></td>');
 					ballot_index++;
 				}
 
@@ -627,13 +631,15 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 					$('#ballotDeltaTable thead tr').append('<th>' + l + '</th>');
 				}
 				$('#ballotDeltaTable thead tr').append('<th>Ungültig</th>');
+				$('#ballotDeltaTable thead tr').append('<th>Summe</th>');
 
 				let le_ballot_index = 0;
 				let le_ballots = result.ballots.slice();
-				for (b of le_ballots) {
+				for (let b of le_ballots) {
 					$('#ballotDeltaTable tbody').append('<tr></tr>');
 					$('#ballotDeltaTable tbody tr:last').append('<td>' + b + '</td>');
 					let le_list_index = 0;
+					let row_sum = 0;
 					for (let i = 0; i < (result.lists.length + 1); i++) {
 						let le_index = le_ballot_index * (result.lists.length + 2) + le_list_index;
 						let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
@@ -641,8 +647,10 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 						let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
 						let table_value = prefixNumber(value - le_value);
 						$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
+						row_sum += value;
 						le_list_index++;
 					}
+					$('#ballotDeltaTable tbody tr:last').append('<td><span class="votes" id="votes-' + le_ballot_index + '-sum">' + prefixNumber(row_sum) + '</span></td>');
 					le_ballot_index++;
 				}
 
