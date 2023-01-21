@@ -36199,7 +36199,7 @@ function destroy() {
         clearInterval(interval);
         interval = null;
         document.getElementById('funkaudio').pause();
-        $('body').css('background-color', 'white');
+        $('body').css('background-color', '');
         document.getElementById('notice-music').classList.add('d-none');
     }
 }
