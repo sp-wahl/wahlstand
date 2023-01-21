@@ -36191,7 +36191,8 @@ var lastColor = "";
 var interval = null;
 function setup() {
     interval = setInterval(function () { changeBG(); }, 514);
-    document.getElementById('funkaudio').play()
+    document.getElementById('funkaudio').play();
+    document.getElementById('notice-music').classList.remove('d-none');
 }
 function destroy() {
     if (interval != null) {
@@ -36199,6 +36200,7 @@ function destroy() {
         interval = null;
         document.getElementById('funkaudio').pause();
         $('body').css('background-color', 'white');
+        document.getElementById('notice-music').classList.add('d-none');
     }
 }
 function changeBG() {
