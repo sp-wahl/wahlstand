@@ -136,7 +136,11 @@
             </small>
         </span>
 		<div class="d-flex">
-			<button id="indicator-button" class="btn" onclick="toggleRefresh()">
+			<button id="notifications" class="btn ms-1" onclick="handleNotificationButton()">
+				Update-Benachrichtigung einschalten
+			</button>
+
+			<button id="indicator-button" class="btn ms-1" onclick="toggleRefresh()">
 				<span id="indicator">🔃</span>
 			</button>
 			<button id="theme-button" class="btn btn-secondary ms-1" onclick="toggleTheme()">
@@ -300,6 +304,29 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 			document.documentElement.dataset.bsTheme = 'dark';
 		} else {
 			document.documentElement.dataset.bsTheme = 'light';
+		}
+	}
+
+	function toggleNotifications() {
+		const button = document.getElementById('notifications');
+		if (button.classList.contains('btn-success')) {
+			button.classList.remove('btn-success');
+			button.innerText = 'Update-Benachrichtigungen deaktiviert';
+		} else {
+			button.classList.add('btn-success');
+			button.innerText = 'Update-Benachrichtigungen aktiv';
+		}
+	}
+
+	function handleNotificationButton() {
+		if (Notification?.permission === "granted") {
+			toggleNotifications();
+		} else if (Notification && Notification.permission !== "denied") {
+			Notification.requestPermission((status) => {
+				if (status === "granted") {
+					toggleNotifications();
+				}
+			});
 		}
 	}
 
@@ -698,6 +725,7 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 		fetch("data/data.json", {cache: "no-store"})
 			.then((response) => response.json())
 			.then((result) => {
+				const oldData = data;
 				data = result;
 				lastTimestamp = result.timestamp;
 
@@ -717,10 +745,74 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 					buildListVotesDiffTable(result);
 
 					removeStaleTableData();
+
+					const updates = determineUpdates(oldData);
+					highlightUpdatedRows(updates);
+					triggerNotification(updates);
+
 				} else {
 					displayLoading();
 				}
-		});
+			});
+	}
+
+	function triggerNotification(updates) {
+		if (!document.getElementById('notifications').classList.contains('btn-success')) {
+			return;
+		}
+		let body = '';
+		if (updates.new.length) {
+			const ballots = updates.new.map(index => data.ballots[index]);
+			body += '# Neu:\n' + ballots.join('\n') + '\n';
+		}
+		if (updates.changed.length) {
+			const ballots = updates.changed.map(index => data.ballots[index]);
+			body += '# Änderungen:\n' + ballots.join('\n') + '\n';
+		}
+		if (body) {
+			new Notification('Neue Ergebnisse! – wahlstand', {
+				body: body,
+				icon: './favicon.ico',
+				tag: lastTimestamp
+			});
+		}
+	}
+
+	function highlightUpdatedRows(updates) {
+		for (let index of updates.changed) {
+			document.querySelectorAll('#ballotResultTable tbody tr')[index].classList.add('bg-warning-subtle');
+		}
+		for (let index of updates.new) {
+			document.querySelectorAll('#ballotResultTable tbody tr')[index].classList.add('bg-success-subtle');
+		}
+	}
+
+	function determineUpdates(oldData) {
+		if (!oldData || (data.votes.length !== oldData.votes.length)) {
+			return {new: [], changed: []};
+		}
+		const ballotsWithNewVotes = [];
+		const ballotsWithChanges = [];
+		let ballot_index = 0;
+		for (let ballot of data.ballots) {
+			let list_index = 0;
+			for (let i = 0; i < (data.lists.length + 1); i++) {
+				let index = ballot_index * (data.lists.length + 1) + list_index;
+				let newValue = (index < data.votes.length) ? data.votes[index] : "";
+				let oldValue = (index < oldData.votes.length) ? oldData.votes[index] : "";
+				if (newValue !== oldValue) {
+					if (oldValue === "" && !ballotsWithNewVotes.includes(ballot_index)) {
+						ballotsWithNewVotes.push(ballot_index);
+					}
+					if (oldValue !== "" && !ballotsWithChanges.includes(ballot_index)) {
+						ballotsWithChanges.push(ballot_index);
+					}
+				}
+				list_index++;
+			}
+			ballot_index++;
+		}
+		return {new: ballotsWithNewVotes, changed: ballotsWithChanges};
 	}
 
 	function prefixNumber(number, isFloat) {
