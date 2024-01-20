@@ -685,17 +685,21 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 			lastRow.insertAdjacentHTML('beforeend', '<td>' + b + '</td>');
 			let le_list_index = 0;
 			let row_sum = 0;
+			let le_row_sum = 0;
 			for (let i = 0; i < (result.lists.length + 1); i++) {
 				let le_index = le_ballot_index * (result.lists.length + 2) + le_list_index;
 				let le_value = (le_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_index] === "" ? 0 : result.lastElectionVotes[le_index]) : 0;
 				let index = le_ballot_index * (result.lists.length + 1) + le_list_index;
 				let value = (index < result.votes.length) ? parseInt(result.votes[index] === "" ? 0 : result.votes[index]) : 0;
 				let table_value = prefixNumber(value - le_value);
-				lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '">' + table_value + '</span></td>');
+				lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-' + le_list_index + '-delta">' + table_value + '</span></td>');
 				row_sum += value;
+				le_row_sum += le_value;
 				le_list_index++;
 			}
-			lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-sum">' + prefixNumber(row_sum) + '</span></td>');
+			const le_other_index = le_ballot_index * (result.lists.length + 2) + result.lists.length + 1;
+			le_row_sum += (le_other_index < result.lastElectionVotes.length) ? parseInt(result.lastElectionVotes[le_other_index] === "" ? 0 : result.lastElectionVotes[le_other_index]) : 0;
+			lastRow.insertAdjacentHTML('beforeend', '<td><span class="votes" id="votes-' + le_ballot_index + '-sum-delta">' + prefixNumber(row_sum - le_row_sum) + '</span></td>');
 			le_ballot_index++;
 		}
 	}
