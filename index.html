@@ -828,15 +828,16 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 	}
 
 	function prefixNumber(number, isFloat) {
+		let stringValue = number.toString();
 		if (isFloat !== undefined && isFloat) {
-			number = number.toFixed(2).replace('.', ',');
+			stringValue = number.toFixed(2).replace('.', ',');
 		}
 		if (number > 0) {
-			return "<span class='text-success'>+" + number + "</span>";
+			return "<span class='text-success'>+" + stringValue + "</span>";
 		} else if (number === 0) {
-			return "<span>±" + number + "</span>";
+			return "<span>±" + stringValue + "</span>";
 		} else {
-			return "<span class='text-danger'>" + number + "</span>";
+			return "<span class='text-danger'>" + stringValue + "</span>";
 		}
 	}
 
