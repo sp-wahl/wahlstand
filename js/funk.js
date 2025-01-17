@@ -36211,16 +36211,18 @@ function changeBG() {
 	document.body.style.backgroundColor = newColor;
     lastColor = newColor;
 }
+function toggle() {
+	if (interval == null) {
+		setup();
+	} else {
+		destroy();
+	}
+}
+
 (() => {
 	if (Date.now() > new Date(2024, 0, 18, 18, 31)) {
 		document.body.insertAdjacentHTML('beforeend', '<audio id="funkaudio"><source src="' + s + '" type="audio/mpeg"></audio>');
 
-		document.addEventListener('keydown', () => {
-			if (interval == null) {
-				setup();
-			} else {
-				destroy();
-			}
-		});
+		document.addEventListener('keydown', toggle);
 	}
 })();
