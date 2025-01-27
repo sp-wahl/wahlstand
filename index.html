@@ -34,7 +34,7 @@
 
 		.slice text {
 			font-size: 1em;
-			font-family: Arial, serif;
+			font-family: Arial, sans-serif;
 			font-weight: bold;
 		}
 
@@ -780,6 +780,9 @@ http://creativecommons.org/licenses/by/3.0/</pre>
 				}
 				return "middle";
 			})
+			.attr("font-family", "Arial")
+			.attr("font-size", "12pt")
+			.attr("font-weight", "bold")
 			.text((d, i) => data[i].label + " [" + data[i].value + "]");
 		const oldDiagram = document.querySelector('#diagram svg.remove');
 		if (oldDiagram) {
