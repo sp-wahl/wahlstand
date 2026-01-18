@@ -36220,7 +36220,7 @@ function toggle() {
 }
 
 (() => {
-	if (Date.now() > new Date(2024, 0, 18, 18, 31)) {
+	if (Date.now() > new Date(2026, 0, 23, 11, 31)) {
 		document.body.insertAdjacentHTML('beforeend', '<audio id="funkaudio"><source src="' + s + '" type="audio/mpeg"></audio>');
 
 		document.addEventListener('keydown', toggle);
